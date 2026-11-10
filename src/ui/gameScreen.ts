@@ -2,6 +2,7 @@ import { focusDialog } from './dialog';
 import { sfx, soundEnabled, setSound } from './audio';
 import { MatgoGame, GameEvent } from '../engine/game';
 import { AI } from '../engine/ai';
+import { settle } from '../engine/scoring';
 import { Card } from '../engine/cards';
 import { Opponent } from '../data/opponents';
 import { cardEl, cardBackEl, cardUrl } from './cards';
@@ -96,6 +97,7 @@ export class GameScreen {
         case 'captured': case 'stealPi': case 'placed': case 'played':
           sfx(e.type === 'played' ? 'play' : 'draw');
           this.render();
+          this.animateCards(e);
           if (e.type === 'captured' && ['jjok','ttadak','stack','bomb'].includes(e.via)) this.flash(({jjok:'쪽!',ttadak:'따닥!',stack:'뻑 회수!',bomb:'폭탄!'} as Record<string,string>)[e.via]);
           if (e.type !== 'played') await delay(420);
           break;
@@ -118,6 +120,23 @@ export class GameScreen {
     }
   }
 
+  private animateCards(e: Extract<GameEvent,{type:'played'|'captured'|'placed'|'stealPi'}>) {
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    const center=(selector:string)=>{const r=this.el.querySelector(selector)?.getBoundingClientRect();return r?{x:r.x+r.width/2,y:r.y+r.height/2}:null;};
+    const floor=center('#floor');if(!floor)return;
+    const cards=e.type==='captured'?e.cards:[e.card];
+    const player=e.type==='stealPi'?e.to:e.player;
+    const destination=e.type==='captured'||e.type==='stealPi'?center(player===0?'.my-captured':'.opp-captured'):floor;
+    const origin=e.type==='played'?center(player===0?'#hand':'.opp-hand'):e.type==='placed'?center('.deck-pile'):floor;
+    if(!origin||!destination)return;
+    for(const [i,c] of cards.entries()){
+      const ghost=document.createElement('img');ghost.className='fx-card';ghost.src=cardUrl(c.id);ghost.alt='';
+      ghost.style.left=`${origin.x-28+i*7}px`;ghost.style.top=`${origin.y-42}px`;
+      ghost.style.setProperty('--flight-x',`${destination.x-origin.x}px`);ghost.style.setProperty('--flight-y',`${destination.y-origin.y}px`);ghost.style.setProperty('--flight-rot',`${(i-1)*7}deg`);
+      this.effectLayer.appendChild(ghost);setTimeout(()=>ghost.remove(),430);
+    }
+  }
+
   private flash(text: string) {
     const f = document.createElement('div');
     f.className = 'flash';
@@ -134,11 +153,14 @@ export class GameScreen {
   private showGoStop() {
     this.el.querySelector('.gostop-overlay')?.remove();
     const score = this.g.scoreOf(0).total;
+    const now=settle({winner:this.g.players[0].captured,loser:this.g.players[1].captured,goCount:this.g.players[0].goCount,loserGoCount:this.g.players[1].goCount,shakes:this.g.players[0].shakes,nagariCarry:this.g.nagariCarry});
     const ov = document.createElement('div');
     ov.className = 'gostop-overlay';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-label','고 또는 스톱 선택');
     ov.innerHTML = `<div class="gostop-panel">
       <div class="pts">${score}점</div>
       <div class="ask">고 하시겠습니까?</div>
+      <p class="stop-preview">지금 스톱하면 <strong>${now.finalScore}점</strong></p>
+      <p class="go-risk">${this.g.deck.length===0?'마지막 뒤집기입니다. 고를 하면 나가리로 끝납니다.':`남은 더미 ${this.g.deck.length}장 · 고를 한 뒤 상대가 먼저 나면 고박입니다.`}</p>
       <div class="row">
         <button class="btn go" data-a="go">고!</button>
         <button class="btn stop" data-a="stop">스톱!</button>

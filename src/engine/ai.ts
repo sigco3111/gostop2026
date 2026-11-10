@@ -102,6 +102,8 @@ export class AI {
   }
 
   decideGoStop(g: MatgoGame, p: number): boolean {
+    // With no draw remaining, another go can only turn a win into a draw.
+    if (this.level >= 2 && g.deck.length === 0) return false;
     const my = g.scoreOf(p).total;
     const opp = g.scoreOf(1 - p).total;
     const turnsLeft = g.players[0].hand.length + g.players[1].hand.length;

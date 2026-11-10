@@ -1,5 +1,6 @@
 import {describe,it,expect} from 'vitest';import {AI} from '../src/engine/ai';import {MatgoGame} from '../src/engine/game';import {buildDeck} from '../src/engine/cards';
 describe('공정한3단계AI',()=>{
+ it('숙련과 달인은 마지막 뒤집기 뒤 불가능한 추가 고를 하지 않는다',()=>{const g=new MatgoGame();for(const level of [2,3] as const)for(const random of [0,.5,.99])expect(new AI(level,()=>random).decideGoStop(g,0)).toBe(false);});
  it('달인은 상대 손패와 더미 순서를 바꿔도 같은 공개 정보에서 같은 결정을 한다',()=>{
   const g=new MatgoGame(()=>.382),a=new AI(3,()=>.5);g.deal();const first=a.decide(g,0);
   [g.players[1].hand[0],g.deck[0]]=[g.deck[0],g.players[1].hand[0]];g.deck.reverse();

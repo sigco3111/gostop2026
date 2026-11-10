@@ -27,7 +27,7 @@ export function guideScreen(back:()=>void):HTMLElement {
     for(const c of deck.filter(c=>c.month===m)){const card=cardEl(c);card.removeAttribute('role');card.removeAttribute('tabindex');section.querySelector('.deck-row')!.appendChild(card);}grid.appendChild(section);
    }
   }else if(tab==='rivals'){
-   content.innerHTML='<p class="guide-note">열두 개의 판, 열두 명의 고수. 인물을 눌러 전신 일러스트와 이야기를 보세요. 모두 오리지널 캐릭터입니다.</p><div class="rival-gallery"></div>';
+   content.innerHTML='<p class="guide-note">열두 개의 판, 열두 명의 고수. 인물을 눌러 전신 일러스트와 이야기를 보세요. 모두 오리지널 캐릭터입니다. 같은 난이도의 상대는 공통 AI 규칙을 사용하며 아래 배경은 이야기 설정입니다.</p><div class="rival-gallery"></div>';
    const gallery=content.querySelector('.rival-gallery')!;
    OPPONENTS.forEach((o,i)=>{const button=document.createElement('button');button.className='rival-entry';button.innerHTML=`<img loading="lazy" src="${BASE}assets/characters/fullbody/opp-${String(o.stage).padStart(2,'0')}.webp" alt="${o.name} 전신"><span>${o.stage}. ${o.name}</span><small>${o.title}</small>`;button.addEventListener('click',()=>openRival(i,button));gallery.appendChild(button);});
   }else if(tab==='credits'){
