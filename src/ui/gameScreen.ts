@@ -1,3 +1,4 @@
+import { focusDialog } from './dialog';
 import { sfx, soundEnabled, setSound } from './audio';
 import { MatgoGame, GameEvent } from '../engine/game';
 import { AI } from '../engine/ai';
@@ -21,6 +22,7 @@ export class GameScreen {
   private dbg() { (window as any).__game = this.g; }
   private ai: AI;
   private el!: HTMLElement;
+  private effectLayer!: HTMLElement;
   private busy = false;
   private awaitingUser = false;
   private selectedCard: Card | null = null;
@@ -44,6 +46,7 @@ export class GameScreen {
     this.el.style.backgroundPosition='center';
     this.root.innerHTML = '';
     this.root.appendChild(this.el);
+    this.effectLayer=document.createElement('div');this.effectLayer.className='fx-layer';this.effectLayer.setAttribute('aria-hidden','true');this.root.appendChild(this.effectLayer);
     const ev = this.g.deal(); this.dbg(); sfx('shuffle');
     this.render();
     await this.processEvents(ev);
@@ -119,11 +122,11 @@ export class GameScreen {
     const f = document.createElement('div');
     f.className = 'flash';
     f.textContent = text;
-    this.el.appendChild(f);
+    this.effectLayer.appendChild(f);
     if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
       const burst=document.createElement('div');burst.className='fx-burst';burst.setAttribute('aria-hidden','true');
       for(let i=0;i<10;i++){const sp=document.createElement('img');sp.src=`${BASE}assets/fx/${i%2?'spark':'star'}.png`;sp.style.setProperty('--angle',`${i*36}deg`);sp.style.setProperty('--travel',`${90+(i%3)*40}px`);burst.appendChild(sp);}
-      this.el.appendChild(burst);setTimeout(()=>burst.remove(),950);
+      this.effectLayer.appendChild(burst);setTimeout(()=>burst.remove(),950);
     }
     setTimeout(() => f.remove(), 950);
   }
@@ -147,12 +150,12 @@ export class GameScreen {
       await this.processEvents(ev);
       this.loop();
     }));
-    this.el.appendChild(ov);(ov.querySelector('.stop') as HTMLElement)?.focus();
+    this.el.appendChild(ov);focusDialog(ov,ov.querySelector<HTMLElement>('.stop'));
   }
 
   private showSettle(e: Extract<GameEvent, { type: 'gameOver' }>) {
     const ov = document.createElement('div');
-    ov.className = 'settle-overlay';
+    ov.className = 'settle-overlay';ov.setAttribute('aria-label','대국 결과');
     const winnerName = e.winner === 0 ? '나' : e.winner === 1 ? this.opponent.name : '없음';
     let rows = '';
     if (e.result) {
@@ -177,7 +180,24 @@ export class GameScreen {
     ov.querySelector('#settle-ok')!.addEventListener('click', () => {
       this.onEnd({ winner: e.winner as 0 | 1 | null, finalScore: e.result?.finalScore, reason: e.reason, multipliers: e.result?.multipliers, base: e.result?.base });
     });
-    this.el.appendChild(ov);
+    this.el.appendChild(ov);focusDialog(ov);
+  }
+
+  private showCaptured() {
+    if(this.g.over || this.g.turn!==0 || this.g.awaitingGoStop || this.g.awaitingChoice || this.busy)return;
+    const ov=document.createElement('div');ov.className='capture-overlay';ov.setAttribute('aria-label','먹은 패와 점수');
+    const panel=document.createElement('div');panel.className='capture-panel';
+    const close=document.createElement('button');close.className='btn small capture-close';close.textContent='판으로 돌아가기';
+    const dismiss=()=>{ov.remove();(this.el.querySelector('.capture-toggle') as HTMLElement)?.focus();};close.addEventListener('click',dismiss);panel.appendChild(close);
+    for(const player of [0,1] as const){
+      const heading=document.createElement('h3');const sc=this.g.scoreOf(player);heading.textContent=`${player===0?'나':this.opponent.name} · ${sc.total}점`;panel.appendChild(heading);
+      const detail=document.createElement('p');detail.textContent=`광 ${sc.counts.gwang}장 · 열끗 ${sc.counts.yeol}장 · 띠 ${sc.counts.tti}장 · 피 ${sc.counts.piUnits}장분`;panel.appendChild(detail);
+      const note=document.createElement('p');note.className='capture-note';note.textContent='현재 원점수입니다. 고·박·흔들기 배수는 마지막 정산에서 적용합니다.';panel.appendChild(note);
+      const grid=document.createElement('div');grid.className='captured-grid';
+      for(const card of this.g.players[player].captured.slice().sort((a,b)=>a.month-b.month||a.id-b.id)){const item=cardEl(card);item.removeAttribute('role');item.removeAttribute('tabindex');grid.appendChild(item);}
+      if(!grid.children.length)grid.textContent='아직 먹은 패가 없습니다.';panel.appendChild(grid);
+    }
+    ov.appendChild(panel);this.el.appendChild(ov);focusDialog(ov,close,dismiss);
   }
 
   private onHandClick(card: Card) {
@@ -233,6 +253,7 @@ export class GameScreen {
         <div class="score-pill">${this.opponent.name} <b>${oppScore.total}</b>점</div>
         <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
       </div>
+      <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':'내 차례 · 손패를 내세요'):`${this.opponent.name}의 차례`}</span><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button></div>
       <div class="table-area">
         <div class="opp-zone">
           <div class="opp-hand">${opp.hand.map(() => '<div class="card-back"></div>').join('')}</div>
@@ -248,6 +269,7 @@ export class GameScreen {
       </div>`;
 
     this.el.querySelector('.sound-toggle')?.addEventListener('click', () => {setSound(!soundEnabled());this.render();});
+    this.el.querySelector('.capture-toggle')?.addEventListener('click',()=>this.showCaptured());
     // 바닥
     const floorEl = this.el.querySelector('#floor')!;
     const byMonth = new Map<number, Card[]>();
@@ -292,11 +314,11 @@ export class GameScreen {
 
     // Pending flip choices must expose each physical card, not just a covered stack.
     if(g.awaitingChoice && g.turn===0){
-      const chooser=document.createElement('div');chooser.className='choice-overlay';
+      const chooser=document.createElement('div');chooser.className='choice-overlay';chooser.setAttribute('aria-label','가져올 패 선택');
       const label=document.createElement('div');label.textContent='가져올 패를 선택하세요';chooser.appendChild(label);
       const row=document.createElement('div');row.className='choice-row';
       g.awaitingChoice.forEach(c=>{const ce=cardEl(c,{big:true});ce.addEventListener('click',async()=>{if(this.busy)return;this.busy=true;try{const ev=g.choose(0,c.id);this.render();await this.processEvents(ev);await this.loop();}finally{this.busy=false;}});row.appendChild(ce);});
-      chooser.appendChild(row);this.el.appendChild(chooser);
+      chooser.appendChild(row);this.el.appendChild(chooser);focusDialog(chooser);
     }
     // 액션 바: 흔들기/폭탄
     const ab = this.el.querySelector('#actionbar')!;
