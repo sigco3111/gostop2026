@@ -1,3 +1,4 @@
+import { musicEnabled, setMusic } from './audio';
 import { guideScreen } from './guide';
 import { loadSave, store } from '../data/save';
 import { Tournament } from '../engine/tournament';
@@ -35,8 +36,9 @@ export class App {
         <button class="btn primary" id="m-scenario">시나리오 - 밑바닥에서 전설로</button>
         <button class="btn" id="m-tournament">토너먼트</button>
         <button class="btn" id="m-free">자유 대국</button>
-        <button class="btn small" id="m-guide">게임 방법 · 패 도감 · 기록</button>
+        <button class="btn small" id="m-guide">게임 방법 · 패 도감 · 기록</button><button class="btn small music-choice" id="m-music" aria-pressed="${musicEnabled()}">배경음악 ${musicEnabled()?'켬':'끔'}</button>
       </div></div>`;
+    el.querySelector('#m-music')!.addEventListener('click',()=>{setMusic(!musicEnabled());this.showTitle();(this.root.querySelector('#m-music') as HTMLElement)?.focus();});
     el.querySelector('#m-scenario')!.addEventListener('click', () => this.showScenario());
     el.querySelector('#m-tournament')!.addEventListener('click', () => this.showTournament());
     el.querySelector('#m-free')!.addEventListener('click', () => this.showFreePlay());

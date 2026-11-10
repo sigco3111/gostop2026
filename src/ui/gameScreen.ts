@@ -249,7 +249,7 @@ export class GameScreen {
         <img src="${BASE}${this.opponent.portrait}" alt="${this.opponent.name}">
         <div><div class="opp-name">${this.opponent.name}<span class="go-badge">${opp.goCount ? `고×${opp.goCount}` : ''}</span></div>
         <div class="opp-title">${this.opponent.title}</div></div>
-        <div class="spacer"></div><button class="sound-toggle" aria-label="효과음 켜기/끄기">${soundEnabled()?'소리 켬':'소리 끔'}</button>
+        <div class="spacer"></div><button class="sound-toggle" aria-label="소리 전체 켜기/끄기">${soundEnabled()?'소리 켬':'소리 끔'}</button>
         <div class="score-pill">${this.opponent.name} <b>${oppScore.total}</b>점</div>
         <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
       </div>

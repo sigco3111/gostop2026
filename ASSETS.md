@@ -22,7 +22,7 @@ GPL 3.0인 Whoosh 1/2(bart)는 제외.
 | 용도 | 팩 | 라이선스 | 제작 |
 | --- | --- | --- | --- |
 | 대국 중 긴장감 루프 | tension and distress | CC0 | allen yatsura |
-| 타이틀/메뉴 | Tragic ambient main menu | CC0 | Pompei2 |
+| 타이틀/메뉴 후보(미사용) | Tragic ambient main menu | CC0 선택 가능 | brandon75689 (HaelDB 제출), 원본 대조로 댓글 작성자 Pompei2 오기 정정 |
 
 ## 캐릭터/배경/키아트/화투패
 - 프로젝트 고유 아트: Instinct가 생성한 오리지널 일러스트(외부 팩 미사용).
@@ -36,3 +36,5 @@ GPL 3.0인 Whoosh 1/2(bart)는 제외.
 2026-11-10: Card Game sounds의 playcard/draw/shuffle WAV, Kenney UI Audio의 click4 OGG 채택. CC0 원본 페이지 및 팩 License.txt 확인. 작가 오기 수정(HaelDB). Particle Pack의 투명 spark/star PNG를 흔들기·고·쪽·따닥 등 특수 상황의 방사형 효과에 적용. 시스템의 움직임 줄이기 설정에서는 표시하지 않음. 나머지 후보는 미적용.
 
 2026-11-10 저녁: 장소8종을 추가 생성하여 단계별 배경12종으로 분리. 12종 접촉표와 실제 화면에서 검토. 캐릭터 원본은 초상 중심이며 기획의 전신 일러스트 목표와는 구분.
+
+18:30: tension and distress / allen yatsura 원본 페이지의 CC0 표기 대조 후 OGG로 변환, 낮은 음량의 선택형 루프로 적용. 처음에는 끔, 사용자가 켤 때만 재생, 백그라운드 탭·전체 소리 끔에서 정지. 청취 취향·실제 기기 음량 점검은 남음.
