@@ -1,0 +1,7 @@
+import puppeteer from'puppeteer-core';import{spawn}from'node:child_process';import{writeFileSync,mkdirSync}from'node:fs';
+const out='/downloads/multi-tab-save';mkdirSync(out,{recursive:true});const server=spawn('node',['node_modules/vite/bin/vite.js','preview','--port','4174'],{stdio:'ignore'});let b;const r={};
+try{b=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',args:['--no-sandbox']});const a=await b.newPage(),p=await b.newPage();for(const x of[a,p])await x.goto('http://localhost:4174/gostop2026/',{waitUntil:'networkidle0'});
+// Isolated storage fixture: model another tab having completed a game, not a gameplay claim.
+await a.evaluate(()=>localStorage.setItem('gostop2026-save-v1',JSON.stringify({version:1,clearedStages:[1,2],titles:['어둠의 판의 챔피언'],trophies:3,nagariCarry:4})));
+r.before=await a.evaluate(()=>JSON.parse(localStorage.getItem('gostop2026-save-v1')));await p.click('#m-scenario');r.after=await a.evaluate(()=>JSON.parse(localStorage.getItem('gostop2026-save-v1')));if(r.after.trophies!==3||r.after.nagariCarry!==4||JSON.stringify(r.after.clearedStages)!=='[1,2]')throw Error('stale tab erased saved progress');r.visible=await p.$eval('#scenario-screen',e=>e.innerText);if(await p.$$eval('.stage-card .cleared',e=>e.length)!==2)throw Error('stale UI not refreshed');await p.screenshot({path:`${out}/scenario.png`});console.log(JSON.stringify(r));
+}finally{writeFileSync(`${out}/report.json`,JSON.stringify(r,null,2));if(b)await b.close();server.kill();}

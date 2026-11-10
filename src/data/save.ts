@@ -12,4 +12,9 @@ export function parseSave(raw:string|null):SaveData{
  }catch{return freshSave();}
 }
 export function loadSave():SaveData{try{return parseSave(localStorage.getItem(SAVE_KEY));}catch{return freshSave();}}
-export function store(s:SaveData):boolean{try{localStorage.setItem(SAVE_KEY,JSON.stringify(s));return true;}catch{console.warn('진행 저장 불가: 이 브라우저에서 저장 공간을 사용할 수 없습니다.');return false;}}
+/** Preserve best progress from an older open tab; carry follows the selected stage. */
+export function mergeSave(candidate:SaveData,existing:SaveData):SaveData{
+ const a=parseSave(JSON.stringify(candidate)),b=parseSave(JSON.stringify(existing));
+ return parseSave(JSON.stringify({...a,clearedStages:a.clearedStages.length>=b.clearedStages.length?a.clearedStages:b.clearedStages,trophies:Math.max(a.trophies,b.trophies),nagariCarry:b.clearedStages.length>a.clearedStages.length?b.nagariCarry:a.nagariCarry}));
+}
+export function store(s:SaveData):boolean{try{const merged=mergeSave(s,loadSave());localStorage.setItem(SAVE_KEY,JSON.stringify(merged));Object.assign(s,merged);return true;}catch{console.warn('진행 저장 불가: 이 브라우저에서 저장 공간을 사용할 수 없습니다.');return false;}}

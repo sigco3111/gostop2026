@@ -1,7 +1,7 @@
 import { deckSettingsScreen } from './deckSettings';
 import { musicEnabled, setMusic } from './audio';
 import { guideScreen } from './guide';
-import { loadSave, store } from '../data/save';
+import { loadSave, mergeSave, store } from '../data/save';
 import { loadTournament, storeTournament } from '../data/tournamentSave';
 import { Tournament } from '../engine/tournament';
 import { Opponent, OPPONENTS } from '../data/opponents';
@@ -11,6 +11,8 @@ const BASE = import.meta.env.BASE_URL;
 export class App {
   private root: HTMLElement;
   private save = loadSave();
+  private saveAvailable = store(this.save);
+  private persistSave(){this.saveAvailable=store(this.save);}
   private keyboardNavigation = false;
 
   constructor() {
@@ -24,7 +26,7 @@ export class App {
     this.root.innerHTML = '';
     this.root.appendChild(el);
     if(this.keyboardNavigation){const target=el.matches('[role=button]')?el:el.querySelector<HTMLElement>('h2,button,[role=button]');if(target){if(!target.matches('button,[role=button]'))target.tabIndex=-1;target.focus();}}
-    if(!store(this.save)){const notice=document.createElement('div');notice.className='save-warning';notice.textContent='이 브라우저에서는 진행을 저장할 수 없습니다.';el.appendChild(notice);}
+    if(!this.saveAvailable){const notice=document.createElement('div');notice.className='save-warning';notice.textContent='이 브라우저에서는 진행을 저장할 수 없습니다.';el.appendChild(notice);}
   }
   private mk(id: string, cls = 'screen'): HTMLElement {
     const el = document.createElement('div');
@@ -33,6 +35,7 @@ export class App {
   }
 
   showTitle() {
+    this.save=mergeSave(loadSave(),this.save);
     const el = this.mk('title-screen');
     el.style.backgroundImage = `url(${BASE}assets/keyart.webp)`;
     el.innerHTML = `<div class="title-inner">
@@ -54,6 +57,7 @@ export class App {
   }
 
   showScenario() {
+    this.save=mergeSave(loadSave(),this.save);
     const el = this.mk('scenario-screen');
     const maxOpen = Math.max(1, ...this.save.clearedStages.map((s) => s + 1), 1);
     el.innerHTML = `<div class="screen-head"><h2>시나리오 - 밑바닥에서 전설로</h2><span class="sub">12인의 고수를 순서대로 꺾어라</span></div>
@@ -105,15 +109,15 @@ export class App {
           if (!this.save.clearedStages.includes(o.stage)) this.save.clearedStages.push(o.stage);
           if(o.stage===12&&!this.save.titles.includes('어둠의 판의 새 전설'))this.save.titles.push('어둠의 판의 새 전설');
           this.save.nagariCarry = 1;
-          store(this.save);
+          this.persistSave();
           this.showResultDialogue(o, 'lose', () => o.stage===12?this.showEnding():this.showScenario());
         } else if (r.winner === 1) {
           this.save.nagariCarry = 1;
-          store(this.save);
+          this.persistSave();
           this.showResultDialogue(o, 'win', () => this.showScenario());
         } else {
           this.save.nagariCarry = Math.min(8, (this.save.nagariCarry ?? 1) * 2);
-          store(this.save);
+          this.persistSave();
           this.showResultDialogue(o, 'win', () => this.showScenario(), `나가리 - 다음 판 ×${this.save.nagariCarry}`);
         }
       } else if (after) {
@@ -191,7 +195,7 @@ export class App {
           if(r.winner===null)carry=Math.min(8,carry*2);else carry=1;
           const result=t.recordPlayerGame(r.winner);
           if(result==='roundWon')carry=1;
-          if(result==='champion'&&!credited){credited=true;this.save.trophies++;if(!this.save.titles.includes('어둠의 판의 챔피언'))this.save.titles.push('어둠의 판의 챔피언');store(this.save);}
+          if(result==='champion'&&!credited){credited=true;this.save=mergeSave(loadSave(),this.save);this.save.trophies++;if(!this.save.titles.includes('어둠의 판의 챔피언'))this.save.titles.push('어둠의 판의 챔피언');this.persistSave();}
           render();
         },carry,()=>this.showTitle(),checkpointSaved);gs.start();
       });
