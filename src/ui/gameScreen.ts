@@ -27,6 +27,7 @@ export class GameScreen {
   private busy = false;
   private awaitingUser = false;
   private selectedCard: Card | null = null;
+  private keyboardNavigation = false;
 
   constructor(
     private root: HTMLElement,
@@ -41,9 +42,12 @@ export class GameScreen {
   }
 
   async start() {
+    this.keyboardNavigation = document.activeElement instanceof HTMLElement && document.activeElement!==document.body && document.activeElement.matches(':focus-visible');
     this.el = document.createElement('div');
     this.el.id = 'game-screen';
     this.el.className = 'screen';
+    this.el.addEventListener('keydown',()=>{this.keyboardNavigation=true;},true);
+    this.el.addEventListener('pointerdown',()=>{this.keyboardNavigation=false;},true);
     this.el.style.backgroundImage=`linear-gradient(#07060aaf,#07060af5),url(${BASE}${this.opponent.background})`;
     this.el.style.backgroundSize='cover';
     this.el.style.backgroundPosition='center';
@@ -263,6 +267,9 @@ export class GameScreen {
   }
 
   private render() { this.dbg();
+    const previousFocus=document.activeElement instanceof HTMLElement&&this.el.contains(document.activeElement)?document.activeElement:null;
+    const focusCard=previousFocus?.dataset.cardId;
+    const focusSound=previousFocus?.classList.contains('sound-toggle');
     if (this.g.over) return;
     const g = this.g;
     const me = g.players[0], opp = g.players[1];
@@ -285,7 +292,7 @@ export class GameScreen {
         <img src="${BASE}${this.opponent.portrait}" alt="${this.opponent.name}">
         <div><div class="opp-name">${this.opponent.name}<span class="go-badge">${opp.goCount ? `고×${opp.goCount}` : ''}</span></div>
         <div class="opp-title">${this.opponent.title}</div></div>
-        <div class="spacer"></div><button class="sound-toggle" aria-label="소리 전체 켜기/끄기">${soundEnabled()?'소리 켬':'소리 끔'}</button>
+        <div class="spacer"></div><button class="sound-toggle" aria-label="소리 전체 켜기/끄기" aria-pressed="${soundEnabled()}">${soundEnabled()?'소리 켬':'소리 끔'}</button>
         <div class="score-pill">${this.opponent.name} <b>${oppScore.total}</b>점</div>
         <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
       </div>
@@ -342,6 +349,11 @@ export class GameScreen {
 
     // 내 손패
     const handEl = this.el.querySelector('#hand')!;
+    handEl.addEventListener('keydown',(event)=>{
+      const e=event as KeyboardEvent;if(!['ArrowLeft','ArrowRight','Home','End'].includes(e.key))return;
+      const cards=[...handEl.querySelectorAll<HTMLElement>('[role=button]')];const at=cards.indexOf(document.activeElement as HTMLElement);if(at<0)return;
+      e.preventDefault();const next=e.key==='Home'?0:e.key==='End'?cards.length-1:(at+(e.key==='ArrowRight'?1:-1)+cards.length)%cards.length;cards[next]?.focus();
+    });
     for (const c of me.hand.slice().sort((a, b) => a.month - b.month || a.id - b.id)) {
       const active=g.turn===0&&!g.awaitingChoice&&!g.awaitingGoStop;
       const ce = cardEl(c, { big: true,interactive:active });
@@ -387,6 +399,10 @@ export class GameScreen {
         hint.textContent = '가져올 바닥 패를 선택하세요';
         ab.appendChild(hint);
       }
+    }
+    if(this.keyboardNavigation&&!g.awaitingChoice&&!g.awaitingGoStop){
+      const target=focusSound?this.el.querySelector<HTMLElement>('.sound-toggle'):g.turn===0&&this.awaitingUser?(this.el.querySelector<HTMLElement>(`#hand [data-card-id="${focusCard}"][role=button]`)??this.el.querySelector<HTMLElement>('#hand [role=button]')):null;
+      target?.focus();
     }
   }
 }

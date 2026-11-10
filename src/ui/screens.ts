@@ -11,15 +11,19 @@ const BASE = import.meta.env.BASE_URL;
 export class App {
   private root: HTMLElement;
   private save = loadSave();
+  private keyboardNavigation = false;
 
   constructor() {
     this.root = document.getElementById('app')!;
+    this.root.addEventListener('keydown',()=>{this.keyboardNavigation=true;},true);
+    this.root.addEventListener('pointerdown',()=>{this.keyboardNavigation=false;},true);
     this.showTitle();
   }
 
   private setScreen(el: HTMLElement) {
     this.root.innerHTML = '';
     this.root.appendChild(el);
+    if(this.keyboardNavigation){const target=el.matches('[role=button]')?el:el.querySelector<HTMLElement>('h2,button,[role=button]');if(target){if(!target.matches('button,[role=button]'))target.tabIndex=-1;target.focus();}}
     if(!store(this.save)){const notice=document.createElement('div');notice.className='save-warning';notice.textContent='이 브라우저에서는 진행을 저장할 수 없습니다.';el.appendChild(notice);}
   }
   private mk(id: string, cls = 'screen'): HTMLElement {
@@ -32,7 +36,7 @@ export class App {
     const el = this.mk('title-screen');
     el.style.backgroundImage = `url(${BASE}assets/keyart.webp)`;
     el.innerHTML = `<div class="title-inner">
-      <div class="game-title">고스톱 2026</div>
+      <h1 class="game-title">고스톱 2026</h1>
       <div class="game-sub">어둠의 판 · 12인의 고수</div>
       <div class="menu">
         <button class="btn primary" id="m-scenario">시나리오 - 밑바닥에서 전설로</button>
@@ -79,6 +83,7 @@ export class App {
     const lines = [...o.intro];
     let i = 0;
     const render = () => {
+      el.setAttribute('aria-label',`${o.name}. ${lines[i]}. ${i < lines.length - 1 ? '계속하려면 Enter' : '대국을 시작하려면 Enter'}`);
       el.innerHTML = `<img class="dialogue-portrait" src="${BASE}${o.portrait}" alt="">
         <div class="dialogue-box">
           <div class="dialogue-name">${o.name} - ${o.title}</div>
@@ -87,7 +92,7 @@ export class App {
         </div>`;
     };
     render();
-    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label','대사 계속');
+    el.tabIndex=0;el.setAttribute('role','button');
     el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
     el.addEventListener('click', () => { i++; if (i >= lines.length) next(); else render(); });
     this.setScreen(el);
@@ -130,7 +135,7 @@ export class App {
         <div class="dialogue-text">${text}</div>
         <div class="dialogue-next">클릭하여 계속 ▶</div>
       </div>`;
-    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label','결과 대사 계속');el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
+    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',`${o.name}. ${text}. 계속하려면 Enter`);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
     el.addEventListener('click', back);
     this.setScreen(el);
   }

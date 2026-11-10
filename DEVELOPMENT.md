@@ -53,3 +53,12 @@ GitHub main 소스 업로드와 gh-pages 빌드 업로드를 확인했습니다.
 - 클래식은 사용자가 지정한 한국식 참고에 맞는 공개라이선스 도안. 별도 출처/CC BY-SA4.0 표시, 장식 추가 없이 변환.
 - 62자동 테스트,4덱48이미지 로딩/선택/재시작/실제손패 검사,320/390/1280설정/타이틀 레이아웃.
 - 실제기기/스피커/사람대상 밸런스 미검증.
+
+## Keyboard and mobile access (2026-11-11)
+- Removed viewport zoom restrictions. Real-device pinch and screen-reader listening still need human verification; headless Chrome validates the viewport declaration and 2x emulated page scale, not physical pinch.
+- Keyboard screen transitions focus the heading or dialogue. Dialogue accessible names include the current speaker and line.
+- Hand focus returns after the AI turn; Left/Right and Home/End move between current hand cards. Mouse/touch play does not force this keyboard focus.
+- `test/keyboard-round.mjs` completes a keyboard-driven scenario round, including capture dialog, choice dialog, go/stop, result and saved progress. `test/mobile-accessibility.mjs` checks focus/dialogue at 320/390/1280 and emulated 2x zoom.
+
+## 현재 배포 기준 (2026-11-11 아침)
+위의 날짜별 기록 중 기본값 유지·이어하기 보류는 이전 상태입니다. 현재 기본 패는 클래식이며, 직접 저장한4종 패 선택은 유지합니다. 판 사이 토너먼트 이어하기는07:30공개 검증했습니다. 진행 중 손패는 저장하지 않습니다. 전체65유닛테스트와 공개UI리로드·중도나가기·다음판완료를 검사했습니다.
