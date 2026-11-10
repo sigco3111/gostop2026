@@ -1,0 +1,17 @@
+import {afterEach,beforeEach,expect,it,vi} from 'vitest';
+let store:Map<string,string>,hidden:boolean,listeners:Map<string,()=>void>,audios:FakeAudio[];
+class FakeAudio{
+ src:string;volume=1;loop=false;preload='';plays=0;pauses=0;
+ constructor(src:string){this.src=src;audios.push(this);}
+ play(){this.plays++;return Promise.resolve();}
+ pause(){this.pauses++;}
+}
+beforeEach(()=>{vi.resetModules();store=new Map();hidden=false;listeners=new Map();audios=[];vi.stubGlobal('Audio',FakeAudio);vi.stubGlobal('localStorage',{getItem:(k:string)=>store.get(k)??null,setItem:(k:string,v:string)=>store.set(k,v)});vi.stubGlobal('document',{get hidden(){return hidden;},addEventListener:(name:string,fn:()=>void)=>listeners.set(name,fn)});});
+afterEach(()=>{vi.unstubAllGlobals();vi.restoreAllMocks();});
+it('starts with effects on and music opt-in without creating audio',async()=>{const a=await import('../src/ui/audio');expect(a.soundEnabled()).toBe(true);expect(a.musicEnabled()).toBe(false);a.syncMusic();expect(audios).toHaveLength(0);});
+it('reads saved effects and music preferences independently',async()=>{store.set('gostop2026-sound','off');store.set('gostop2026-music','on');const a=await import('../src/ui/audio');expect(a.soundEnabled()).toBe(false);expect(a.musicEnabled()).toBe(true);a.syncMusic();a.sfx('play');expect(audios).toHaveLength(0);});
+it('persists toggles, pauses music while muted and resumes the same music object',async()=>{const a=await import('../src/ui/audio');a.setMusic(true);expect(store.get('gostop2026-music')).toBe('on');expect(audios).toHaveLength(1);const m=audios[0];expect(m.src).toMatch(/assets\/audio\/tension\.ogg$/);expect(m.loop).toBe(true);expect(m.volume).toBe(.12);a.setSound(false);expect(m.pauses).toBe(1);expect(store.get('gostop2026-sound')).toBe('off');a.setSound(true);expect(audios).toHaveLength(1);expect(m.plays).toBe(2);a.setMusic(false);expect(m.pauses).toBe(2);});
+it('visibility events pause background music and retry only when visible',async()=>{const a=await import('../src/ui/audio');a.setupMusic();a.setMusic(true);const m=audios[0];hidden=true;listeners.get('visibilitychange')!();expect(m.pauses).toBe(1);expect(m.plays).toBe(1);listeners.get('keydown')!();expect(m.plays).toBe(1);hidden=false;listeners.get('visibilitychange')!();expect(m.plays).toBe(2);expect(audios).toHaveLength(1);});
+it('all four effects use the expected assets and honor mute',async()=>{const a=await import('../src/ui/audio');for(const name of ['play','draw','shuffle','click'] as const)a.sfx(name);expect(audios.map(m=>m.src.split('/').pop())).toEqual(['playcard.wav','draw.wav','shuffle.wav','click4.ogg']);expect(audios.every(m=>m.volume===.32&&m.plays===1)).toBe(true);a.setSound(false);a.sfx('play');expect(audios).toHaveLength(4);});
+it('blocked storage does not prevent in-session audio controls',async()=>{vi.stubGlobal('localStorage',{getItem:()=>{throw Error('blocked');},setItem:()=>{throw Error('blocked');}});const a=await import('../src/ui/audio');expect(()=>a.setMusic(true)).not.toThrow();expect(()=>a.setSound(false)).not.toThrow();expect(a.musicEnabled()).toBe(true);expect(a.soundEnabled()).toBe(false);});
+it('autoplay rejection is caught for music and effects',async()=>{vi.spyOn(FakeAudio.prototype,'play').mockImplementation(()=>Promise.reject(Error('autoplay')));const a=await import('../src/ui/audio');a.setMusic(true);a.sfx('play');await Promise.resolve();expect(audios).toHaveLength(2);vi.restoreAllMocks();});

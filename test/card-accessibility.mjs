@@ -1,8 +1,10 @@
 import puppeteer from 'puppeteer-core';
 import {spawn} from 'node:child_process';
 import {mkdirSync,writeFileSync} from 'node:fs';
-const out='/downloads/card-accessibility';mkdirSync(out,{recursive:true});
-const server=spawn('node',['node_modules/vite/bin/vite.js','preview','--port','4173'],{stdio:'ignore'});
+const out=process.env.QA_OUT??'/downloads/card-accessibility';
+const url=process.env.GAME_URL??'http://localhost:4173/gostop2026/';
+const reducedMotion=process.env.REDUCED_MOTION==='1',rapidInput=process.env.RAPID_INPUT==='1';mkdirSync(out,{recursive:true});
+const server=url.startsWith('http://localhost:4173/')?spawn('node',['node_modules/vite/bin/vite.js','preview','--port','4173'],{stdio:'ignore'}):null;
 let browser;const report={errors:[],rounds:[],story:null,tournament:null};
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 try{
@@ -12,7 +14,7 @@ try{
   let n=23;Math.random=()=>{n=(Math.imul(n,1664525)+1013904223)>>>0;return n/4294967296;};
   const timer=window.setTimeout.bind(window);window.setTimeout=(fn,ms,...args)=>timer(fn,ms===950?950:Math.min(ms??0,20),...args);
  });
- const click=async selector=>{const el=await page.$(selector);if(el){await el.focus();await page.keyboard.press('Enter');}};
+ const click=async selector=>{const el=await page.$(selector);if(el){await el.focus();if(rapidInput&&selector.startsWith('#hand ')){await el.evaluate(e=>{for(let i=0;i<12;i++)e.dispatchEvent(new MouseEvent('click',{bubbles:true}));});}else await page.keyboard.press('Enter');}};
  async function playRound(tag){
   let played=0,choices=0,prompts=0;
   for(let k=0;k<2500;k++){
@@ -45,7 +47,8 @@ try{
   }
   throw new Error(`round stalled: ${tag} `+await page.evaluate(()=>JSON.stringify(window.__game)));
  }
- await page.goto('http://localhost:4173/gostop2026/',{waitUntil:'networkidle0'});
+ if(reducedMotion){await page.emulateMediaFeatures([{name:'prefers-reduced-motion',value:'reduce'}]);await page.evaluateOnNewDocument(()=>{window.__flightNodes=0;new MutationObserver(ms=>{for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1&&(n.matches?.('.fx-card,.fx-burst')||n.querySelector?.('.fx-card,.fx-burst')))window.__flightNodes++;}).observe(document,{childList:true,subtree:true});});}
+ await page.goto(url,{waitUntil:'networkidle0'});
  await page.keyboard.press('Tab');if(!await page.$eval('#m-scenario',e=>e===document.activeElement))throw Error('initial Tab did not enter menu');await page.keyboard.press('Enter');if(!await page.evaluate(()=>document.activeElement?.tagName==='H2'))throw Error('screen heading not focused');await page.keyboard.press('Tab');await page.keyboard.press('Enter');
  if(!await page.$eval('#dialogue-screen',e=>e.getAttribute('aria-label').includes(e.querySelector('.dialogue-text').textContent)))throw Error('dialogue hidden from accessible name');
  for(let i=0;i<5&&!(await page.$('#game-screen'));i++){await click('#dialogue-screen');await pause(25);}
@@ -54,10 +57,12 @@ try{
  const names=await page.$$eval('#hand .hcard',els=>els.map(e=>e.getAttribute('aria-label')));if(names.some(s=>(s.match(/\d+월/g)||[]).length!==1))throw Error('duplicated month name');report.cardNames=names;
  report.zones=await page.evaluate(()=>({opponent:document.querySelector('.opp-hand').getAttribute('aria-label'),floor:document.querySelector('#floor').getAttribute('aria-label'),hand:document.querySelector('#hand').getAttribute('aria-label'),deck:document.querySelector('.deck-pile').getAttribute('aria-label')}));if(!report.zones.opponent.includes('뒷면')||!report.zones.deck.includes('남은 더미'))throw Error('board state names missing');
  await playRound('story');
+ if(reducedMotion){report.reducedMotion=await page.evaluate(()=>({matches:matchMedia('(prefers-reduced-motion:reduce)').matches,flightNodes:window.__flightNodes,animations:document.getAnimations().length}));if(!report.reducedMotion.matches||report.reducedMotion.flightNodes!==0||report.reducedMotion.animations!==0)throw Error('reduced motion emitted animations');}
+ if(rapidInput){const cards=await page.evaluate(()=>{const g=window.__game;return [...g.deck,...g.floor,...g.players.flatMap(p=>[...p.hand,...p.captured])].map(c=>c.id);});if(cards.length!==48||new Set(cards).size!==48)throw Error('rapid repeat input corrupted48-card accounting');report.rapidInput={repeatsPerUserPlay:12,cardCount:cards.length,unique:new Set(cards).size};}
  report.log=await page.evaluate(()=>({lines:window.__logLines,clearedAfterEnd:!document.querySelector('[role=log]'),role:window.__eventLog.getAttribute('role'),live:window.__eventLog.getAttribute('aria-live'),recent:window.__eventLog.children.length}));if(report.log.lines.length<20)throw Error('public events not logged');if(!report.log.clearedAfterEnd)throw Error('log leaked into next screen');if(report.log.recent>12)throw Error('unbounded log');if(!report.log.lines.some(s=>s.startsWith('빈패:')))throw Error('opponent events missing');
 await click('#dialogue-screen');await pause(25);
  const before=await page.evaluate(()=>localStorage.getItem('gostop2026-save-v1'));
  await page.reload({waitUntil:'networkidle0'});const after=await page.evaluate(()=>localStorage.getItem('gostop2026-save-v1'));
  const a=JSON.parse(before),b=JSON.parse(after);const same=JSON.stringify(Object.keys(a).sort().map(k=>[k,a[k]]))===JSON.stringify(Object.keys(b).sort().map(k=>[k,b[k]]));if(!same)throw new Error('save changed after reload');report.story={before,after,valuesPreserved:same};
  report.errors=report.errors.filter(Boolean);console.log(JSON.stringify({log:report.log,cardNames:report.cardNames,errors:report.errors,rounds:report.rounds.length,userPrompts:report.rounds.reduce((s,r)=>s+r.prompts,0),choices:report.rounds.reduce((s,r)=>s+r.choices,0),story:report.story,tournament:report.tournament}));
-}finally{writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));if(browser)await browser.close();server.kill();await new Promise(r=>server.once('exit',r));}
+}finally{writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));if(browser)await browser.close();if(server){server.kill();await new Promise(r=>server.once('exit',r));}}
