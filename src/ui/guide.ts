@@ -1,13 +1,24 @@
+import { OPPONENTS } from '../data/opponents';
+import { PROFILES } from '../data/profiles';
+import { focusDialog } from './dialog';
+const BASE=import.meta.env.BASE_URL;
 import { loadSave } from '../data/save';
 import { buildDeck, MONTH_NAME } from '../engine/cards';
 import { cardEl } from './cards';
 export function guideScreen(back:()=>void):HTMLElement {
  const el=document.createElement('div');el.className='screen guide-screen';el.id='guide-screen';
  el.innerHTML=`<div class="guide-wrap"><header><p class="eyebrow">HOW TO PLAY</p><h2>판에 들어가기 전에</h2><p class="guide-lead">같은 월의 패를 모아 7점. 더 갈지, 지금 멈출지.</p></header>
- <nav class="guide-tabs" aria-label="안내 항목"><button class="btn small" data-tab="rules">게임 방법</button><button class="btn small" data-tab="deck">48장 도감</button><button class="btn small" data-tab="credits">제작·기록</button></nav><div id="guide-content"></div><button class="btn small guide-back">← 타이틀</button></div>`;
+ <nav class="guide-tabs" aria-label="안내 항목"><button class="btn small" data-tab="rules">게임 방법</button><button class="btn small" data-tab="deck">48장 도감</button><button class="btn small" data-tab="rivals">고수 열전</button><button class="btn small" data-tab="credits">제작·기록</button></nav><div id="guide-content"></div><button class="btn small guide-back">← 타이틀</button></div>`;
  const content=el.querySelector('#guide-content')!;
  const show=(tab:string)=>{
-  el.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',String((b as HTMLElement).dataset.tab===tab)));
+  const openRival=(index:number,origin:HTMLElement)=>{
+  const ov=document.createElement('div');ov.className='rival-overlay';ov.setAttribute('aria-label','고수 열전');
+  const render=()=>{const o=OPPONENTS[index],p=PROFILES[index];ov.innerHTML=`<div class="rival-dossier"><div class="rival-controls"><button class="btn small" data-action="prev" aria-label="이전 고수">◀</button><span>${index+1} / 12</span><button class="btn small" data-action="next" aria-label="다음 고수">▶</button><button class="btn small" data-action="close">닫기</button></div><div class="rival-detail"><img src="${BASE}assets/characters/fullbody/opp-${String(o.stage).padStart(2,'0')}.webp" alt="${o.name} 전신 일러스트"><section><p class="eyebrow">${p[0]}</p><h3>${o.name} <small>${o.title}</small></h3><p>${p[1]}</p><p class="guide-note">${p[2]}</p><blockquote>"${o.intro[0]}"</blockquote></section></div></div>`;
+   ov.querySelector('[data-action=prev]')!.addEventListener('click',()=>{index=(index+11)%12;render();});ov.querySelector('[data-action=next]')!.addEventListener('click',()=>{index=(index+1)%12;render();});ov.querySelector('[data-action=close]')!.addEventListener('click',close);(ov.querySelector('[data-action=close]') as HTMLElement)?.focus();
+  };
+  const close=()=>{ov.remove();origin.focus();};render();el.appendChild(ov);focusDialog(ov,ov.querySelector<HTMLElement>('[data-action=close]'),close);
+ };
+ el.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',String((b as HTMLElement).dataset.tab===tab)));
   if(tab==='deck'){
    content.innerHTML=`<p class="guide-note">같은 월은 네 장씩입니다. 화투 고유의 붉은색·검정·초록 도상을 사용합니다. 등급과 월은 패에도 작게 적혀 있습니다.</p><div class="deck-guide"></div>`;
    const deck=buildDeck(),grid=content.querySelector('.deck-guide')!;
@@ -15,6 +26,10 @@ export function guideScreen(back:()=>void):HTMLElement {
     const section=document.createElement('section');section.innerHTML=`<h3>${m}월 · ${MONTH_NAME[m]}</h3><div class="deck-row"></div>`;
     for(const c of deck.filter(c=>c.month===m)){const card=cardEl(c);card.removeAttribute('role');card.removeAttribute('tabindex');section.querySelector('.deck-row')!.appendChild(card);}grid.appendChild(section);
    }
+  }else if(tab==='rivals'){
+   content.innerHTML='<p class="guide-note">열두 개의 판, 열두 명의 고수. 인물을 눌러 전신 일러스트와 이야기를 보세요. 모두 오리지널 캐릭터입니다.</p><div class="rival-gallery"></div>';
+   const gallery=content.querySelector('.rival-gallery')!;
+   OPPONENTS.forEach((o,i)=>{const button=document.createElement('button');button.className='rival-entry';button.innerHTML=`<img loading="lazy" src="${BASE}assets/characters/fullbody/opp-${String(o.stage).padStart(2,'0')}.webp" alt="${o.name} 전신"><span>${o.stage}. ${o.name}</span><small>${o.title}</small>`;button.addEventListener('click',()=>openRival(i,button));gallery.appendChild(button);});
   }else if(tab==='credits'){
    const saved=loadSave();
    content.innerHTML=`<section class="guide-block"><h3>나의 기록</h3><p>시나리오 ${saved.clearedStages?.length??0} / 12인 돌파 · 토너먼트 트로피 ${saved.trophies??0}개</p><p>${saved.titles?.join(' · ')||'아직 얻은 칭호가 없습니다.'}</p><p class="guide-note">기록은 이 브라우저에만 저장됩니다. 브라우저 데이터를 지우거나 기기를 바꾸면 이어지지 않습니다. 토너먼트 중간 대진은 저장하지 않습니다.</p></section>
