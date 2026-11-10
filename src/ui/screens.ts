@@ -1,3 +1,4 @@
+import { guideScreen } from './guide';
 import { loadSave, store } from '../data/save';
 import { Tournament } from '../engine/tournament';
 import { Opponent, OPPONENTS } from '../data/opponents';
@@ -34,10 +35,12 @@ export class App {
         <button class="btn primary" id="m-scenario">시나리오 - 밑바닥에서 전설로</button>
         <button class="btn" id="m-tournament">토너먼트</button>
         <button class="btn" id="m-free">자유 대국</button>
+        <button class="btn small" id="m-guide">게임 방법 · 패 도감 · 기록</button>
       </div></div>`;
     el.querySelector('#m-scenario')!.addEventListener('click', () => this.showScenario());
     el.querySelector('#m-tournament')!.addEventListener('click', () => this.showTournament());
     el.querySelector('#m-free')!.addEventListener('click', () => this.showFreePlay());
+    el.querySelector('#m-guide')!.addEventListener('click',()=>this.setScreen(guideScreen(()=>this.showTitle())));
     this.setScreen(el);
   }
 
@@ -53,6 +56,8 @@ export class App {
       const cleared = this.save.clearedStages.includes(o.stage);
       const card = document.createElement('div');
       card.className = `stage-card${locked ? ' locked' : ''}`;
+      card.setAttribute('role','button');card.tabIndex=locked?-1:0;card.setAttribute('aria-disabled',String(locked));card.setAttribute('aria-label',`${o.stage}단계 ${o.name}${cleared?' 돌파':''}${locked?' 잠김':''}`);
+      card.addEventListener('keydown',e=>{if(!locked&&(e.key==='Enter'||e.key===' ')){e.preventDefault();card.click();}});
       card.innerHTML = `<div class="num">${o.stage}</div>${cleared ? '<div class="cleared">CLEARED</div>' : ''}
         <img src="${BASE}${o.portrait}" alt="${o.name}">
         <div class="meta"><div class="name">${o.name}</div><div class="title">${o.title}</div></div>`;
@@ -77,6 +82,8 @@ export class App {
         </div>`;
     };
     render();
+    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label','대사 계속');
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
     el.addEventListener('click', () => { i++; if (i >= lines.length) next(); else render(); });
     this.setScreen(el);
   }
@@ -86,9 +93,10 @@ export class App {
       if (mode === 'scenario') {
         if (r.winner === 0) {
           if (!this.save.clearedStages.includes(o.stage)) this.save.clearedStages.push(o.stage);
+          if(o.stage===12&&!this.save.titles.includes('어둠의 판의 새 전설'))this.save.titles.push('어둠의 판의 새 전설');
           this.save.nagariCarry = 1;
           store(this.save);
-          this.showResultDialogue(o, 'lose', () => this.showScenario());
+          this.showResultDialogue(o, 'lose', () => o.stage===12?this.showEnding():this.showScenario());
         } else if (r.winner === 1) {
           this.save.nagariCarry = 1;
           store(this.save);
@@ -117,8 +125,15 @@ export class App {
         <div class="dialogue-text">${text}</div>
         <div class="dialogue-next">클릭하여 계속 ▶</div>
       </div>`;
+    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label','결과 대사 계속');el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
     el.addEventListener('click', back);
     this.setScreen(el);
+  }
+
+  private showEnding() {
+    const el=this.mk('ending-screen');el.style.backgroundImage=`linear-gradient(#08060d66,#08060df5),url(${BASE}assets/keyart.webp)`;
+    el.innerHTML=`<div class="ending-copy"><p class="eyebrow">THE LAST HAND</p><h2>전설은 자리를 비웠다.</h2><p>열두 개의 판을 지나, 마지막 패를 내려놓았다.<br>처음 이 골목에 들어왔을 때처럼, 두 손은 가벼웠다.</p><p>남은 것은 빚도, 왕관도 아니다.<br>다음 판 앞에서도 떨리지 않는 손.</p><strong>12인의 고수 돌파 · 어둠의 판의 새 전설</strong><button class="btn primary" id="ending-back">기록으로 돌아가기</button></div>`;
+    el.querySelector('#ending-back')!.addEventListener('click',()=>this.showScenario());this.setScreen(el);
   }
 
   showFreePlay() {
@@ -130,7 +145,7 @@ export class App {
     const grid = el.querySelector('.stage-grid')!;
     for (const o of OPPONENTS) {
       const card = document.createElement('div');
-      card.className = 'stage-card';
+      card.className = 'stage-card';card.setAttribute('role','button');card.tabIndex=0;card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();card.click();}});
       card.innerHTML = `<img src="${BASE}${o.portrait}" alt="${o.name}">
         <div class="meta"><div class="name">${o.name}</div><div class="title">${o.title} · 난이도 ${o.difficulty}</div></div>`;
       card.addEventListener('click', () => this.startMatch(o, 'free'));

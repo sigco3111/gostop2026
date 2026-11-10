@@ -17,6 +17,7 @@ describe('eight-player tournament',()=>{
  });
 });
 describe('save schema',()=>{
+ it('12단계 돌파 칭호는 재로딩 뒤에도 보존된다',()=>{const s=parseSave(JSON.stringify({version:1,clearedStages:Array.from({length:12},(_,i)=>i+1),trophies:1,nagariCarry:1}));expect(s.titles).toEqual(['어둠의 판의 챔피언','어둠의 판의 새 전설']);expect(parseSave(JSON.stringify(s))).toEqual(s);});
  it('malformed, null, wrong version and arrays are safe',()=>{for(const raw of ['bad','null','[]','{"version":99}',null])expect(parseSave(raw).clearedStages).toEqual([]);});
  it('legacy save migrates, gaps cannot silently unlock later stages',()=>{expect(parseSave('{"clearedStages":[1,2,5],"trophies":2,"nagariCarry":4}')).toEqual({version:1,clearedStages:[1,2],titles:['어둠의 판의 챔피언'],trophies:2,nagariCarry:4});});
  it('negative counts and invalid carry are reset, genuine progress survives reload',()=>{const s=parseSave('{"clearedStages":[1,2,3],"trophies":-2,"nagariCarry":3}');expect(s.trophies).toBe(0);expect(s.nagariCarry).toBe(1);expect(parseSave(JSON.stringify(s))).toEqual(s);});

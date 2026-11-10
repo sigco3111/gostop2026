@@ -16,7 +16,7 @@ export interface ScoreBreakdown {
 }
 
 // 국진(9월 열끗)은 열끗 또는 쌍피(피 2장) 중 유리한 쪽을 선택.
-export function score(cards: Card[]): ScoreBreakdown {
+export function score(cards: Card[], gukjinMode: 'auto' | 'yeol' | 'pi' = 'auto'): ScoreBreakdown {
   const gwang = cards.filter((k) => k.kind === 'gwang');
   const bi = gwang.some((k) => k.isBi);
   const yeols = cards.filter((k) => k.kind === 'yeol' && !k.isGukjin);
@@ -55,6 +55,8 @@ export function score(cards: Card[]): ScoreBreakdown {
   const asYeol = totals(false);
   if (!gukjin) return asYeol;
   const asPi = totals(true);
+  if (gukjinMode === 'yeol') return asYeol;
+  if (gukjinMode === 'pi') return asPi;
   return asPi.total >= asYeol.total ? asPi : asYeol;
 }
 
@@ -71,11 +73,24 @@ export interface SettleResult {
   base: number;
   finalScore: number;
   multipliers: string[];    // 적용된 배수 설명
+  breakdown?: ScoreBreakdown;
+  goAdd?: number;
 }
 
 export function settle(input: SettleInput): SettleResult {
-  const w = score(input.winner);
-  const l = score(input.loser);
+  // 국진은 승자에게 최종 정산이 유리한 쪽으로 자동 선택합니다.
+  // 패자는 피박을 피할 수 있으면 국진을 쌍피로 셉니다.
+  const a = settleAs(input, 'yeol');
+  const b = settleAs(input, 'pi');
+  // A designation cannot invalidate the7-point threshold after a stop.
+  if(a.base>=7&&b.base<7)return a;
+  if(b.base>=7&&a.base<7)return b;
+  return b.finalScore >= a.finalScore ? b : a;
+}
+
+function settleAs(input: SettleInput, mode: 'yeol' | 'pi'): SettleResult {
+  const w = score(input.winner, mode);
+  const l = score(input.loser, 'pi');
   const base = w.total;
   const multipliers: string[] = [];
   let mult = 1;
@@ -104,5 +119,5 @@ export function settle(input: SettleInput): SettleResult {
   // 나가리 이월
   if (input.nagariCarry > 1) { mult *= input.nagariCarry; multipliers.push(`나가리 이월 ×${input.nagariCarry}`); }
 
-  return { base, finalScore: (base + goAdd) * mult, multipliers };
+  return { base, finalScore: (base + goAdd) * mult, multipliers, breakdown: w, goAdd };
 }

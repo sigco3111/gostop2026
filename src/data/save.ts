@@ -8,7 +8,7 @@ export function parseSave(raw:string|null):SaveData{
   const saved=Array.isArray(v.clearedStages)?v.clearedStages:[];
   const clearedStages:number[]=[];for(let i=1;i<=12&&saved.includes(i);i++)clearedStages.push(i);
   const trophies=Number.isSafeInteger(v.trophies)&&v.trophies>=0&&v.trophies<=1e6?v.trophies:0;
-  return {version:1,clearedStages,trophies,titles:trophies?['어둠의 판의 챔피언']:[],nagariCarry:[1,2,4,8].includes(v.nagariCarry)?v.nagariCarry:1};
+  return {version:1,clearedStages,trophies,titles:[...(trophies?['어둠의 판의 챔피언']:[]),...(clearedStages.length===12?['어둠의 판의 새 전설']:[])],nagariCarry:[1,2,4,8].includes(v.nagariCarry)?v.nagariCarry:1};
  }catch{return freshSave();}
 }
 export function loadSave():SaveData{try{return parseSave(localStorage.getItem(SAVE_KEY));}catch{return freshSave();}}

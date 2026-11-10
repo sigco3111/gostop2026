@@ -10,12 +10,13 @@ try{
  const page=await browser.newPage();page.on('pageerror',e=>report.errors.push(e.message));
  await page.evaluateOnNewDocument(()=>{
   let n=23;Math.random=()=>{n=(Math.imul(n,1664525)+1013904223)>>>0;return n/4294967296;};
-  const timer=window.setTimeout.bind(window);window.setTimeout=(fn,ms,...args)=>timer(fn,Math.min(ms??0,20),...args);
+  const timer=window.setTimeout.bind(window);window.setTimeout=(fn,ms,...args)=>timer(fn,ms===950?950:Math.min(ms??0,20),...args);
  });
  const click=async selector=>{const el=await page.$(selector);if(el)await el.click().catch(()=>{});};
  async function playRound(tag){
   let played=0,choices=0,prompts=0;
   for(let k=0;k<2500;k++){
+   if(!report.fx && await page.$('.fx-burst')){await page.screenshot({path:`${out}/special-effect.png`});report.fx=true;}
    if(await page.$('.settle-overlay')){
     const text=await page.$eval('.settle-panel',el=>el.innerText);report.rounds.push({tag,played,choices,prompts,text});
     if(report.rounds.length<=4)await page.screenshot({path:`${out}/${tag}-settled.png`});

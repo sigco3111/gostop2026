@@ -52,34 +52,53 @@ export class AI {
     const dec: AIDecision = { cardId: best!.id, shakeMonth };
     const matches = g.floor.filter((f) => f.month === best!.month);
     if (matches.length === 2) {
-      dec.chooseFloorId = (this.level === 1
-        ? matches[Math.floor(this.rnd() * 2)]
-        : matches.slice().sort((a, b) => cardValue(b) - cardValue(a))[0]).id;
+      dec.chooseFloorId = this.bestCapture(g,p,matches,best!).id;
     }
     return dec;
+  }
+
+  // Choice uses only own captured cards and visible floor cards.
+  choose(g:MatgoGame,p:number):number {
+    const choices=g.awaitingChoice;if(!choices?.length)throw new Error('no choice');
+    return this.bestCapture(g,p,choices).id;
+  }
+
+  private bestCapture(g:MatgoGame,p:number,options:Card[],played?:Card):Card {
+    if(this.level===1)return options[Math.floor(this.rnd()*options.length)];
+    const captured=g.players[p].captured;
+    return options.slice().sort((a,b)=>{
+      const value=(c:Card)=>score([...captured,...(played?[played]:[]),c]).total*5+cardValue(c);
+      return value(b)-value(a);
+    })[0];
   }
 
   private evalPlay(g: MatgoGame, p: number, c: Card): number {
     if (this.level === 1) return this.rnd() * 2 + (g.floor.some((f) => f.month === c.month) ? 1 : 0);
     const matches = g.floor.filter((f) => f.month === c.month);
-    let s = this.rnd() * 0.3;
-    if (matches.length > 0) {
-      s += 5 + Math.max(...matches.map(cardValue));
-      // 족보 완성 가치
-      const after = [...g.players[p].captured, c, ...matches];
-      const before = score(g.players[p].captured).total;
-      const gain = score(after).total - before;
-      s += gain * 4;
-    } else {
-      // 내버리는 패: 위험도 평가 (달인)
-      s -= cardValue(c) * 0.5;
-      if (this.level === 3) {
-        // 바닥에 같은 월 2장이 되면 상대에게 따닥 위험
-        const sameOnFloor = g.floor.filter((f) => f.month === c.month).length;
-        if (sameOnFloor === 1) s -= 1.5;
+    const captured=g.players[p].captured;
+    // Unknown cards are counted from visible information only. Never inspect deck order or opponent hand identities.
+    const known=[...g.floor,...g.players[p].hand,...captured,...g.players[1-p].captured];
+    const unseen=48-known.length;
+    const unseenMonth=4-known.filter(k=>k.month===c.month).length;
+    let value=this.rnd()*.3;
+    if(matches.length){
+      const take=matches.length===2?[this.bestCapture(g,p,matches,c)]:matches;
+      value+=5+take.reduce((s,k)=>s+cardValue(k),0);
+      const gain=score([...captured,c,...take]).total-score(captured).total;
+      value+=gain*4;
+      if(this.level===3&&matches.length===1&&unseen>0)value-=unseenMonth/unseen*14; // 뻑 위험
+    }else{
+      value-=cardValue(c)*.5;
+      if(this.level===3&&unseen>0){
+        const handSize=g.players[1-p].hand.length;
+        let miss=1;
+        for(let i=0;i<handSize&&i<unseen;i++)miss*=Math.max(0,(unseen-unseenMonth-i)/(unseen-i));
+        value-=(1-miss)*(cardValue(c)+3);
+        // Keep a pair in our own hand when no floor match is available.
+        if(g.players[p].hand.some(k=>k.id!==c.id&&k.month===c.month))value-=1;
       }
     }
-    return s;
+    return value;
   }
 
   decideGoStop(g: MatgoGame, p: number): boolean {

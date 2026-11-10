@@ -54,7 +54,7 @@ export class GameScreen {
     while (!this.g.over) {
       if(this.g.awaitingChoice){
         if(this.g.turn===0){this.render();return;}
-        const ev=this.g.choose(1,this.g.awaitingChoice[0].id);this.render();await this.processEvents(ev);continue;
+        const ev=this.g.choose(1,this.ai.choose(this.g,1));this.render();await this.processEvents(ev);continue;
       }
       if (this.g.awaitingGoStop) {
         if (this.g.turn === 1) {
@@ -93,12 +93,13 @@ export class GameScreen {
         case 'captured': case 'stealPi': case 'placed': case 'played':
           sfx(e.type === 'played' ? 'play' : 'draw');
           this.render();
+          if (e.type === 'captured' && ['jjok','ttadak','stack','bomb'].includes(e.via)) this.flash(({jjok:'쪽!',ttadak:'따닥!',stack:'뻑 회수!',bomb:'폭탄!'} as Record<string,string>)[e.via]);
           if (e.type !== 'played') await delay(420);
           break;
         case 'ppeok': this.flash('뻑!'); await delay(900); break;
         case 'threePpeok': this.flash('3뻑 승리!'); await delay(1100); break;
         case 'sseul': this.flash('쓸!'); await delay(900); break;
-        case 'shake': this.flash(e.month ? '흔들기!' : '폭탄!'); await delay(900); break;
+        case 'shake': this.flash(`흔들기 / 폭탄 · ${e.month}월`); await delay(900); break;
         case 'chongtong': this.flash('총통!'); await delay(1100); break;
         case 'go': this.flash(`고 ×${e.count}`); await delay(900); break;
         case 'stop': this.flash('스톱!'); await delay(800); break;
@@ -119,6 +120,11 @@ export class GameScreen {
     f.className = 'flash';
     f.textContent = text;
     this.el.appendChild(f);
+    if(!matchMedia('(prefers-reduced-motion: reduce)').matches){
+      const burst=document.createElement('div');burst.className='fx-burst';burst.setAttribute('aria-hidden','true');
+      for(let i=0;i<10;i++){const sp=document.createElement('img');sp.src=`${BASE}assets/fx/${i%2?'spark':'star'}.png`;sp.style.setProperty('--angle',`${i*36}deg`);sp.style.setProperty('--travel',`${90+(i%3)*40}px`);burst.appendChild(sp);}
+      this.el.appendChild(burst);setTimeout(()=>burst.remove(),950);
+    }
     setTimeout(() => f.remove(), 950);
   }
 
@@ -126,7 +132,7 @@ export class GameScreen {
     this.el.querySelector('.gostop-overlay')?.remove();
     const score = this.g.scoreOf(0).total;
     const ov = document.createElement('div');
-    ov.className = 'gostop-overlay';
+    ov.className = 'gostop-overlay';ov.setAttribute('role','dialog');ov.setAttribute('aria-modal','true');ov.setAttribute('aria-label','고 또는 스톱 선택');
     ov.innerHTML = `<div class="gostop-panel">
       <div class="pts">${score}점</div>
       <div class="ask">고 하시겠습니까?</div>
@@ -141,7 +147,7 @@ export class GameScreen {
       await this.processEvents(ev);
       this.loop();
     }));
-    this.el.appendChild(ov);
+    this.el.appendChild(ov);(ov.querySelector('.stop') as HTMLElement)?.focus();
   }
 
   private showSettle(e: Extract<GameEvent, { type: 'gameOver' }>) {
@@ -150,13 +156,15 @@ export class GameScreen {
     const winnerName = e.winner === 0 ? '나' : e.winner === 1 ? this.opponent.name : '없음';
     let rows = '';
     if (e.result) {
-      const br = this.g.scoreOf(e.winner!);
+      const br = e.result.breakdown ?? this.g.scoreOf(e.winner!);
       const items: [string, number][] = [
         ['광', br.gwang], ['고도리', br.godori], ['홍단', br.hongdan], ['청단', br.cheongdan],
         ['초단', br.chodan], ['열끗', br.yeol], ['띠', br.tti], ['피', br.pi],
       ];
-      rows = items.filter(([, v]) => v > 0).map(([k, v]) => `<div class="settle-row"><span>${k}</span><span class="v">${v}점</span></div>`).join('');
+      rows = ['총통','3뻑'].includes(e.reason) ? `<div class="settle-row"><span>${e.reason} 기본 승리</span><span class="v">7점</span></div>` : items.filter(([, v]) => v > 0).map(([k, v]) => `<div class="settle-row"><span>${k}</span><span class="v">${v}점</span></div>`).join('');
     }
+    if(e.result?.goAdd) rows += `<div class="settle-row"><span>고 가산 (${e.result.goAdd}회)</span><span class="v">+${e.result.goAdd}점</span></div>`;
+    if(e.result?.breakdown && this.g.players[e.winner!].captured.some(c=>c.isGukjin)) rows += `<div class="settle-note">국진: ${e.result.breakdown.gukjinAsPi?'쌍피':'열끗'} (최종 점수 기준 자동 선택)</div>`;
     const mults = (e.result?.multipliers ?? []).map((m) => `<span class="mult-tag">${m}</span>`).join('');
     ov.innerHTML = `<div class="settle-panel">
       <h3>${e.reason === '나가리' ? '나가리' : e.winner === 0 ? '승리!' : '패배'}</h3>
