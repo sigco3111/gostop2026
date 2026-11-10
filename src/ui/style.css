@@ -284,3 +284,6 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .bracket-match.bracket-upcoming{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:10px;min-height:44px;}
 .bracket-upcoming>span:last-child{text-align:right;}
 .bracket-upcoming .versus{color:#9c91a8;font-size:12px;}
+
+/* Short landscape viewports need the same scrollable dialogs as portrait phones. */
+.settle-panel,.exit-panel,.gostop-panel{max-height:calc(100dvh - 24px);overflow-y:auto;}

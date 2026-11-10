@@ -62,3 +62,8 @@ GitHub main 소스 업로드와 gh-pages 빌드 업로드를 확인했습니다.
 
 ## 현재 배포 기준 (2026-11-11 아침)
 위의 날짜별 기록 중 기본값 유지·이어하기 보류는 이전 상태입니다. 현재 기본 패는 클래식이며, 직접 저장한4종 패 선택은 유지합니다. 판 사이 토너먼트 이어하기는07:30공개 검증했습니다. 진행 중 손패는 저장하지 않습니다. 전체65유닛테스트와 공개UI리로드·중도나가기·다음판완료를 검사했습니다.
+
+## Short-viewport and transition audit (2026-11-11)
+- Long result panels now scroll at every screen width, including landscape phones. Exit and go/stop panels also stay within the viewport. Previously the result scroll limit applied only below651px width.
+- `test/short-dialogs.mjs` rotates a real keyboard-driven round through844×390,844×320,568×320,390×320 and1280×844, checks choice/go-stop/exit/result panels and confirms the result button is reachable. Its long-result layout stress case deliberately repeats rows; that image is not a real scoring result.
+- `test/transition-invariants.test.ts` audits every transition in3,000 seeded mixed-difficulty rounds:48-card conservation including pending selections, canonical card data, prompts, three-card piles, bomb-pass/turn accounting, invalid-action atomicity and terminal actions. All66 unit tests pass. This is regression coverage, not human balance or device certification.
