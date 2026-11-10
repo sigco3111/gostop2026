@@ -155,3 +155,59 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); font-family
 .bracket-slot.me { border-color: var(--neon-c); }
 .bracket-slot.out { opacity: .35; text-decoration: line-through; }
 .bracket-slot.champ { border-color: var(--gold); color: var(--gold); }
+
+/* ===== 등급별 카드 시각 구분 ===== */
+.hcard .typeov { position: absolute; inset: 0; pointer-events: none; }
+/* 광: 금빛 내부 광륜 */
+.hcard.k-gwang .typeov { background: radial-gradient(circle at 50% 38%, rgba(245,196,81,.30), transparent 60%); box-shadow: inset 0 0 0 2px rgba(245,196,81,.65); }
+.hcard.k-gwang.bi .typeov { background: radial-gradient(circle at 50% 38%, rgba(120,170,255,.30), transparent 60%); box-shadow: inset 0 0 0 2px rgba(120,170,255,.65); }
+/* 열끗: 상단 크롭 느낌 + 시안 상단 라인 */
+.hcard.k-yeol img { object-position: 50% 18%; }
+.hcard.k-yeol .typeov { box-shadow: inset 0 3px 0 rgba(34,211,238,.8); }
+/* 띠: 실제 화투처럼 대각 리본 띠 */
+.hcard.k-tti img { object-position: 50% 45%; }
+.hcard.k-tti .typeov { background: linear-gradient(155deg, transparent 58%, var(--ribbon, #b03040) 58%, var(--ribbon, #b03040) 76%, transparent 76%); }
+.hcard.k-tti.dan-hong .typeov { --ribbon: #c22030; }
+.hcard.k-tti.dan-cheong .typeov { --ribbon: #2450c8; }
+.hcard.k-tti.dan-cho .typeov { --ribbon: #8a1f2d; }
+/* 피: 하단 크롭 + 차분한 톤 */
+.hcard.k-pi img { object-position: 50% 82%; filter: saturate(.82) brightness(.94); }
+.hcard.k-pi .typeov { box-shadow: inset 0 -3px 0 rgba(154,160,176,.5); }
+/* 쌍피: 밝게 + 이중 표식 */
+.hcard.ssang img { filter: saturate(1.15) brightness(1.08); }
+.hcard.ssang .typeov { box-shadow: inset 0 0 0 2px rgba(232,228,240,.75), inset 0 -3px 0 rgba(154,160,176,.5); }
+.hcard.k-gwang img { object-position: 50% 50%; }
+/* Handheld layout: all floor months and both hands stay inside viewport. */
+.floor-zone { position: relative; }
+@media(max-width:650px) {
+  .opp-bar { padding:6px 8px;gap:7px; }
+  .opp-bar .opp-title {font-size:10px;}
+  .score-pill {padding:4px 7px;font-size:11px;}
+  .opp-hand {gap:2px;}
+  .opp-hand .card-back {width:23px;height:34px;}
+  .opp-zone {min-height:42px; flex-wrap:wrap;}
+  .opp-captured,.my-captured {gap:6px;}
+  .mini {width:20px;height:29px;}
+  .cap-stack .mini {margin-left:-13px;}
+  .floor-zone {grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;min-height:200px;padding:8px 8px 38px;align-content:center;}
+  .floor-cell {min-height:72px;}
+  .floor-cell .hcard {width:47px;height:70px;}
+  .my-hand {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;padding:5px;justify-items:center;}
+  .hcard.big {width:57px;height:84px;}
+  .table-area {padding:5px 7px;gap:3px;overflow-y:auto;}
+  .action-bar {min-height:27px;font-size:11px;flex-wrap:wrap;}
+  .action-bar .btn {padding:5px 9px;font-size:11px;}
+  .deck-pile {right:7px;bottom:5px;display:flex;align-items:center;gap:4px;}
+  .deck-pile .card-back {width:19px;height:28px;}
+  .gostop-panel .btn {min-width:120px;padding:13px 25px;}
+  .screen-head {display:block;}
+  .screen-head h2 {font-size:21px;}
+  #free-screen {overflow-y:auto;}
+}
+/* Production SVG carries correct symbols, labels and ribbons itself. */
+.hcard .typeov,.hcard .badge,.hcard .monthlbl {display:none;}
+.hcard img,.hcard.k-pi img,.hcard.ssang img {object-fit:fill;object-position:center;filter:none;}
+.sound-toggle {background:#1a1626;border:1px solid #49365a;color:#c8bdd6;border-radius:5px;font-size:10px;padding:5px;cursor:pointer;}
+@media(max-width:650px){.opp-bar img{width:35px;height:35px;}.opp-bar .opp-title{max-width:70px;}.sound-toggle{font-size:9px;padding:4px;}.floor-zone{grid-template-columns:repeat(5,minmax(0,1fr));}}
+.choice-overlay {position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;background:#06050bcb;color:#eee7fa;backdrop-filter:blur(3px);}
+.choice-row {display:flex;gap:30px;}.choice-row .hcard {width:100px;height:150px;}

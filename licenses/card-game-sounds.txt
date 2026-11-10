@@ -1,0 +1,6 @@
+Card Game sounds
+Original author: HaelDB (not tersyolnyolcusu, who is a commenter).
+Source verified 2026-11-10: https://opengameart.org/content/card-game-sounds
+License: Creative Commons Zero (CC0).
+Original download title: Cardsounds.zip. Mirror: sigco3111/assets-audio release v6.12.
+The mirror's LICENSE-SOURCE.txt misattributes the author. This record corrects it against the creator's page.

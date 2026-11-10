@@ -1,8 +1,9 @@
+import { sfx, soundEnabled, setSound } from './audio';
 import { MatgoGame, GameEvent } from '../engine/game';
 import { AI } from '../engine/ai';
 import { Card } from '../engine/cards';
 import { Opponent } from '../data/opponents';
-import { cardEl, cardBackEl } from './cards';
+import { cardEl, cardBackEl, cardUrl } from './cards';
 
 const BASE = import.meta.env.BASE_URL;
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -40,7 +41,7 @@ export class GameScreen {
     this.el.className = 'screen';
     this.root.innerHTML = '';
     this.root.appendChild(this.el);
-    const ev = this.g.deal(); this.dbg();
+    const ev = this.g.deal(); this.dbg(); sfx('shuffle');
     this.render();
     await this.processEvents(ev);
     await this.loop();
@@ -48,6 +49,10 @@ export class GameScreen {
 
   private async loop() {
     while (!this.g.over) {
+      if(this.g.awaitingChoice){
+        if(this.g.turn===0){this.render();return;}
+        const ev=this.g.choose(1,this.g.awaitingChoice[0].id);this.render();await this.processEvents(ev);continue;
+      }
       if (this.g.awaitingGoStop) {
         if (this.g.turn === 1) {
           await delay(900);
@@ -71,13 +76,6 @@ export class GameScreen {
         }
         this.render();
         await this.processEvents(ev);
-        if (this.g.awaitingChoice) {
-          await delay(500);
-          const ch = this.g.awaitingChoice!;
-          const ev2 = this.g.choose(1, ch[0].id);
-          this.render();
-          await this.processEvents(ev2);
-        }
       } else {
         this.awaitingUser = true;
         this.render(); // 사용자 입력 대기 상태
@@ -90,6 +88,7 @@ export class GameScreen {
     for (const e of events) {
       switch (e.type) {
         case 'captured': case 'stealPi': case 'placed': case 'played':
+          sfx(e.type === 'played' ? 'play' : 'draw');
           this.render();
           if (e.type !== 'played') await delay(420);
           break;
@@ -147,7 +146,6 @@ export class GameScreen {
     const winnerName = e.winner === 0 ? '나' : e.winner === 1 ? this.opponent.name : '없음';
     let rows = '';
     if (e.result) {
-      const s = this.g.scoreOf(e.winner!).constructor; void s;
       const br = this.g.scoreOf(e.winner!);
       const items: [string, number][] = [
         ['광', br.gwang], ['고도리', br.godori], ['홍단', br.hongdan], ['청단', br.cheongdan],
@@ -216,7 +214,7 @@ export class GameScreen {
         ['피', cards.filter((c) => c.kind === 'pi')],
       ];
       return groups.filter(([, cs]) => cs.length).map(([label, cs]) =>
-        `<div class="cap-group"><div class="cap-stack">${cs.map((c) => `<img class="mini" src="${(window as any).__base}assets/cards/month-${String(c.month).padStart(2, '0')}.webp" alt="${c.label}">`).join('')}</div><div class="cap-label">${label} ${label === '피' ? cs.reduce((s, c) => s + c.piValue, 0) : cs.length}</div></div>`).join('');
+        `<div class="cap-group"><div class="cap-stack">${cs.map((c) => `<img class="mini" src="${cardUrl(c.id)}" alt="${c.label}">`).join('')}</div><div class="cap-label">${label} ${label === '피' ? cs.reduce((s, c) => s + c.piValue, 0) : cs.length}</div></div>`).join('');
     };
     (window as any).__base = BASE;
 
@@ -225,7 +223,7 @@ export class GameScreen {
         <img src="${BASE}${this.opponent.portrait}" alt="${this.opponent.name}">
         <div><div class="opp-name">${this.opponent.name}<span class="go-badge">${opp.goCount ? `고×${opp.goCount}` : ''}</span></div>
         <div class="opp-title">${this.opponent.title}</div></div>
-        <div class="spacer"></div>
+        <div class="spacer"></div><button class="sound-toggle" aria-label="효과음 켜기/끄기">${soundEnabled()?'소리 켬':'소리 끔'}</button>
         <div class="score-pill">${this.opponent.name} <b>${oppScore.total}</b>점</div>
         <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
       </div>
@@ -243,6 +241,7 @@ export class GameScreen {
         <div class="my-hand" id="hand"></div>
       </div>`;
 
+    this.el.querySelector('.sound-toggle')?.addEventListener('click', () => {setSound(!soundEnabled());this.render();});
     // 바닥
     const floorEl = this.el.querySelector('#floor')!;
     const byMonth = new Map<number, Card[]>();
@@ -285,9 +284,18 @@ export class GameScreen {
       handEl.appendChild(ce);
     }
 
+    // Pending flip choices must expose each physical card, not just a covered stack.
+    if(g.awaitingChoice && g.turn===0){
+      const chooser=document.createElement('div');chooser.className='choice-overlay';
+      const label=document.createElement('div');label.textContent='가져올 패를 선택하세요';chooser.appendChild(label);
+      const row=document.createElement('div');row.className='choice-row';
+      g.awaitingChoice.forEach(c=>{const ce=cardEl(c,{big:true});ce.addEventListener('click',async()=>{if(this.busy)return;this.busy=true;try{const ev=g.choose(0,c.id);this.render();await this.processEvents(ev);await this.loop();}finally{this.busy=false;}});row.appendChild(ce);});
+      chooser.appendChild(row);this.el.appendChild(chooser);
+    }
     // 액션 바: 흔들기/폭탄
     const ab = this.el.querySelector('#actionbar')!;
-    if (g.turn === 0 && !g.awaitingGoStop && !g.over) {
+    if (g.turn === 0 && !g.awaitingGoStop && !g.awaitingChoice && !g.over) {
+      if(me.bombPasses){const b=document.createElement('button');b.className='btn small';b.textContent=`폭탄 빈패 (${me.bombPasses})`;b.addEventListener('click',()=>this.playUser(-1));ab.appendChild(b);}
       for (const m of g.canBomb(0)) {
         const b = document.createElement('button');
         b.className = 'btn small danger';

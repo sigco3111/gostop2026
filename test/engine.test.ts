@@ -90,19 +90,19 @@ describe('게임 진행', () => {
     }
     expect(g.over).toBe(true);
   });
-  it('총통 즉시 승리', () => {
-    const g = new MatgoGame(() => 0.5);
-    g.deal();
-    // 강제 구성: p0 손패를 1월 4장으로
-    const m1 = byMonth(1);
-    g.players[0].hand = m1.slice();
-    const g2 = new MatgoGame(() => 0.5);
-    // deal() 내 총통 검사를 직접 검증
-    (g2 as any).players[0].hand = m1.slice();
-    g2.floor = deck.filter((c) => c.month > 2).slice(0, 8);
-    g2.players[1].hand = deck.filter((c) => c.month === 2);
-    g2.deck = [];
-    // deal을 다시 호출하지 않고 private 검증 로직이 deal 안에 있으므로 여기선 상태만 확인
-    expect(m1.length).toBe(4);
+  it('총통 판은 실제 deal 이벤트로7점 승리한다', () => {
+    let found=false;
+    for(let seed=1;seed<2000&&!found;seed++){
+      let x=seed;
+      const g=new MatgoGame(()=>{x=(Math.imul(x,1664525)+1013904223)>>>0;return x/4294967296;});
+      const ev=g.deal();
+      if(ev.some(e=>e.type==='chongtong')){
+        expect(g.over).toBe(true);
+        const end=ev.find(e=>e.type==='gameOver');
+        if(end?.type==='gameOver'){expect(end.reason).toBe('총통');expect(end.result?.finalScore).toBe(7);}
+        found=true;
+      }
+    }
+    expect(found).toBe(true);
   });
 });

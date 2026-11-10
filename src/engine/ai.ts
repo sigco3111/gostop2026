@@ -27,6 +27,7 @@ export class AI {
 
   decide(g: MatgoGame, p: number): AIDecision {
     const ps = g.players[p];
+    if (!ps.hand.length) return { cardId: -1 };
     // 폭탄 사용: 숙련 이상
     if (this.level >= 2) {
       const bombs = g.canBomb(p);
