@@ -7,13 +7,15 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:a11y": "npm run build && node test/axe-audit.mjs && node test/axe-round.mjs"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
+    "axe-core": "4.14.0",
     "puppeteer-core": "^25.16.0",
     "typescript": "^5.6.3",
-    "vite": "^5.4.10",
-    "vitest": "^2.1.4"
+    "vite": "6.4.6",
+    "vitest": "4.1.12"
   }
 }

@@ -65,7 +65,7 @@ export class App {
       const cleared = this.save.clearedStages.includes(o.stage);
       const card = document.createElement('div');
       card.className = `stage-card${locked ? ' locked' : ''}`;
-      card.setAttribute('role','button');card.tabIndex=locked?-1:0;card.setAttribute('aria-disabled',String(locked));card.setAttribute('aria-label',`${o.stage}단계 ${o.name}${cleared?' 돌파':''}${locked?' 잠김':''}`);
+      card.setAttribute('role','button');card.tabIndex=locked?-1:0;card.setAttribute('aria-disabled',String(locked));
       card.addEventListener('keydown',e=>{if(!locked&&(e.key==='Enter'||e.key===' ')){e.preventDefault();card.click();}});
       card.innerHTML = `<div class="num">${o.stage}</div>${cleared ? '<div class="cleared">CLEARED</div>' : ''}
         <img src="${BASE}${o.portrait}" alt="${o.name}">
@@ -83,13 +83,13 @@ export class App {
     const lines = [...o.intro];
     let i = 0;
     const render = () => {
-      el.setAttribute('aria-label',`${o.name}. ${lines[i]}. ${i < lines.length - 1 ? '계속하려면 Enter' : '대국을 시작하려면 Enter'}`);
       el.innerHTML = `<img class="dialogue-portrait" src="${BASE}${o.portrait}" alt="">
         <div class="dialogue-box">
           <div class="dialogue-name">${o.name} - ${o.title}</div>
           <div class="dialogue-text">${lines[i]}</div>
           <div class="dialogue-next">${i < lines.length - 1 ? '클릭하여 계속 ▼' : '클릭하여 대국 시작 ▶'}</div>
         </div>`;
+      el.setAttribute('aria-label',`${el.textContent?.replace(/\s+/g,' ').trim()}. Enter 키로 진행`);
     };
     render();
     el.tabIndex=0;el.setAttribute('role','button');
@@ -135,7 +135,7 @@ export class App {
         <div class="dialogue-text">${text}</div>
         <div class="dialogue-next">클릭하여 계속 ▶</div>
       </div>`;
-    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',`${o.name}. ${text}. 계속하려면 Enter`);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
+    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',`${el.textContent?.replace(/\s+/g,' ').trim()}. Enter 키로 진행`);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
     el.addEventListener('click', back);
     this.setScreen(el);
   }

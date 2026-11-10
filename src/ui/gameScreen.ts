@@ -234,7 +234,7 @@ export class GameScreen {
       const detail=document.createElement('p');detail.textContent=`광 ${sc.counts.gwang}장 · 열끗 ${sc.counts.yeol}장 · 띠 ${sc.counts.tti}장 · 피 ${sc.counts.piUnits}장분`;panel.appendChild(detail);
       const note=document.createElement('p');note.className='capture-note';note.textContent='현재 원점수입니다. 고·박·흔들기 배수는 마지막 정산에서 적용합니다.';panel.appendChild(note);
       const grid=document.createElement('div');grid.className='captured-grid';
-      for(const card of this.g.players[player].captured.slice().sort((a,b)=>a.month-b.month||a.id-b.id)){const item=cardEl(card);item.removeAttribute('role');item.removeAttribute('tabindex');grid.appendChild(item);}
+      for(const card of this.g.players[player].captured.slice().sort((a,b)=>a.month-b.month||a.id-b.id)){const item=cardEl(card);item.removeAttribute('tabindex');grid.appendChild(item);}
       if(!grid.children.length)grid.textContent='아직 먹은 패가 없습니다.';panel.appendChild(grid);
     }
     ov.appendChild(panel);this.el.appendChild(ov);focusDialog(ov,close,dismiss);
@@ -292,7 +292,7 @@ export class GameScreen {
         <img src="${BASE}${this.opponent.portrait}" alt="${this.opponent.name}">
         <div><div class="opp-name">${this.opponent.name}<span class="go-badge">${opp.goCount ? `고×${opp.goCount}` : ''}</span></div>
         <div class="opp-title">${this.opponent.title}</div></div>
-        <div class="spacer"></div><button class="sound-toggle" aria-label="소리 전체 켜기/끄기" aria-pressed="${soundEnabled()}">${soundEnabled()?'소리 켬':'소리 끔'}</button>
+        <div class="spacer"></div><button class="sound-toggle" aria-pressed="${soundEnabled()}">${soundEnabled()?'소리 켬':'소리 끔'}</button>
         <div class="score-pill">${this.opponent.name} <b>${oppScore.total}</b>점</div>
         <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
       </div>

@@ -20,11 +20,11 @@ export function guideScreen(back:()=>void):HTMLElement {
  };
  el.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',String((b as HTMLElement).dataset.tab===tab)));
   if(tab==='deck'){
-   content.innerHTML=`<p class="guide-note">같은 월은 네 장씩입니다. 화투 고유의 붉은색·검정·초록 도상을 사용합니다. 등급과 월은 패에도 작게 적혀 있습니다.</p><div class="deck-guide"></div>`;
+   content.innerHTML=`<p class="guide-note">같은 월은 네 장씩입니다. 화투 고유의 붉은색·검정·초록 도상을 사용합니다. 월별 도상과 광·열끗·띠·피 구성을 함께 확인하세요.</p><div class="deck-guide"></div>`;
    const deck=buildDeck(),grid=content.querySelector('.deck-guide')!;
    for(let m=1;m<=12;m++){
     const section=document.createElement('section');section.innerHTML=`<h3>${m}월 · ${MONTH_NAME[m]}</h3><div class="deck-row"></div>`;
-    for(const c of deck.filter(c=>c.month===m)){const card=cardEl(c);card.removeAttribute('role');card.removeAttribute('tabindex');section.querySelector('.deck-row')!.appendChild(card);}grid.appendChild(section);
+    for(const c of deck.filter(c=>c.month===m)){const card=cardEl(c);card.removeAttribute('tabindex');section.querySelector('.deck-row')!.appendChild(card);}grid.appendChild(section);
    }
   }else if(tab==='rivals'){
    content.innerHTML='<p class="guide-note">열두 개의 판, 열두 명의 고수. 인물을 눌러 전신 일러스트와 이야기를 보세요. 모두 오리지널 캐릭터입니다. 같은 난이도의 상대는 공통 AI 규칙을 사용하며 아래 배경은 이야기 설정입니다.</p><div class="rival-gallery"></div>';
@@ -33,8 +33,8 @@ export function guideScreen(back:()=>void):HTMLElement {
   }else if(tab==='credits'){
    const saved=loadSave();
    content.innerHTML=`<section class="guide-block"><h3>나의 기록</h3><p>시나리오 ${saved.clearedStages?.length??0} / 12인 돌파 · 토너먼트 트로피 ${saved.trophies??0}개</p><p>${saved.titles?.join(' · ')||'아직 얻은 칭호가 없습니다.'}</p><p class="guide-note">기록은 이 브라우저에만 저장됩니다. 브라우저 데이터를 지우거나 기기를 바꾸면 이어지지 않습니다. 토너먼트는 완료한 판까지 대진·승수를 자동 저장합니다. 진행 중인 한 판의 손패는 저장하지 않습니다.</p></section>
-   <section class="guide-block"><h3>오리지널 아트와 이야기</h3><p>12인의 고수, 장소, 키아트와 48장의 화투는 이 게임을 위해 만든 오리지널 그림입니다. 특정 작품의 캐릭터나 기존 제품의 카드 그림을 사용하지 않았습니다.</p></section>
-   <section class="guide-block"><h3>사용한 외부 에셋</h3><p>Card Game sounds · HaelDB · CC0<br>UI Audio / Particle Pack · Kenney · CC0<br>tension and distress · allen yatsura · CC0 (음량 조절·OGG 변환)</p><p class="guide-links"><a href="https://opengameart.org/content/card-game-sounds" target="_blank" rel="noopener">효과음 원본 ↗</a> <a href="https://kenney.nl/assets/ui-audio" target="_blank" rel="noopener">UI Audio ↗</a> <a href="https://kenney.nl/assets/particle-pack" target="_blank" rel="noopener">Particle Pack ↗</a> <a href="https://opengameart.org/content/tension-and-distress" target="_blank" rel="noopener">배경음악 ↗</a></p></section>
+   <section class="guide-block"><h3>오리지널 아트와 이야기</h3><p>12인의 고수, 장소, 키아트, 누아르·코믹·심플 화투패는 이 게임을 위해 만든 오리지널 그림입니다. 특정 작품의 캐릭터를 가져오지 않았습니다.</p></section>
+   <section class="guide-block"><h3>클래식 화투패 출처</h3><p>Marcus Richert · Louie Mantia Jr., SVG 최적화 Spenĉjo. CC BY-SA 4.0. 공개 도안을 크롭·WebP 변환하고 한국식11·12월 및 게임의 패 순서를 적용했습니다. 해당 이미지에 같은 라이선스가 적용됩니다.</p><p class="guide-links"><a href="https://commons.wikimedia.org/wiki/File:Hwatu_overview.svg" target="_blank" rel="noopener">클래식 원본 ↗</a> <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0 ↗</a></p></section><section class="guide-block"><h3>사용한 외부 에셋</h3><p>Card Game sounds · HaelDB · CC0<br>UI Audio / Particle Pack · Kenney · CC0<br>tension and distress · allen yatsura · CC0 (음량 조절·OGG 변환)</p><p class="guide-links"><a href="https://opengameart.org/content/card-game-sounds" target="_blank" rel="noopener">효과음 원본 ↗</a> <a href="https://kenney.nl/assets/ui-audio" target="_blank" rel="noopener">UI Audio ↗</a> <a href="https://kenney.nl/assets/particle-pack" target="_blank" rel="noopener">Particle Pack ↗</a> <a href="https://opengameart.org/content/tension-and-distress" target="_blank" rel="noopener">배경음악 ↗</a></p></section>
    <section class="guide-block"><h3>개발판 안내</h3><p>싱글 플레이 전용. 실제 돈·구매·현금 보상은 없습니다. 규칙과 연출은 검증·개선 중입니다.</p></section>`;
   }else{
    content.innerHTML=`<section class="guide-block"><h3>01 · 내 패를 한 장 내세요</h3><p>바닥에 같은 월이 있으면 가져옵니다. 같은 월 두 장 중에는 원하는 패를 고릅니다. 낸 다음 더미에서 한 장을 자동으로 뒤집고, 같은 방법으로 짝을 맞춥니다.</p><p>손패를 누르거나 키보드 Tab으로 이동해 Enter / Space로 냅니다. 가져올 패 선택 화면에서도 같은 방법을 씁니다. 좁은 화면은 대국판 안을 세로로 스크롤할 수 있습니다. 먹은 패·점수 버튼으로 패를 크게 볼 수 있습니다. 손패에 마우스나 키보드 포커스를 두면 같은 월 바닥 위치를 표시합니다. 내 차례의 나가기 버튼은 확인 후 현재 판을 종료하며, 이미 저장한 기록은 유지합니다. 타이틀의 배경음악은 처음에는 꺼져 있으며, 대국 중 소리 끔은 음악도 멈춥니다.</p></section>
