@@ -18,3 +18,7 @@ export function mergeSave(candidate:SaveData,existing:SaveData):SaveData{
  return parseSave(JSON.stringify({...a,clearedStages:a.clearedStages.length>=b.clearedStages.length?a.clearedStages:b.clearedStages,trophies:Math.max(a.trophies,b.trophies),nagariCarry:b.clearedStages.length>a.clearedStages.length?b.nagariCarry:a.nagariCarry}));
 }
 export function store(s:SaveData):boolean{try{const merged=mergeSave(s,loadSave());localStorage.setItem(SAVE_KEY,JSON.stringify(merged));Object.assign(s,merged);return true;}catch{console.warn('진행 저장 불가: 이 브라우저에서 저장 공간을 사용할 수 없습니다.');return false;}}
+
+/** A failed write leaves a pending in-memory carry; navigation must not reset it.
+ * Newer completed stages/trophies still win through mergeSave. */
+export function refreshSave(current:SaveData,writeFailed=false):SaveData{const saved=loadSave();return writeFailed?mergeSave(current,saved):mergeSave(saved,current);}

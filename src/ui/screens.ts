@@ -1,7 +1,7 @@
 import { deckSettingsScreen } from './deckSettings';
 import { musicEnabled, setMusic } from './audio';
 import { guideScreen } from './guide';
-import { loadSave, mergeSave, store } from '../data/save';
+import { loadSave, refreshSave, store } from '../data/save';
 import { loadTournament, tournamentSession } from '../data/tournamentSave';
 import { Tournament } from '../engine/tournament';
 import { Opponent, OPPONENTS } from '../data/opponents';
@@ -35,7 +35,7 @@ export class App {
   }
 
   showTitle() {
-    this.save=mergeSave(loadSave(),this.save);
+    this.save=refreshSave(this.save,!this.saveAvailable);
     const el = this.mk('title-screen');
     el.style.backgroundImage = `url(${BASE}assets/keyart.webp)`;
     el.innerHTML = `<div class="title-inner">
@@ -57,7 +57,7 @@ export class App {
   }
 
   showScenario() {
-    this.save=mergeSave(loadSave(),this.save);
+    this.save=refreshSave(this.save,!this.saveAvailable);
     const el = this.mk('scenario-screen');
     const maxOpen = Math.max(1, ...this.save.clearedStages.map((s) => s + 1), 1);
     el.innerHTML = `<div class="screen-head"><h2>시나리오 - 밑바닥에서 전설로</h2><span class="sub">12인의 고수를 순서대로 꺾어라</span></div>
@@ -208,7 +208,7 @@ export class App {
           const result=t.recordPlayerGame(r.winner);
           if(result==='roundWon')carry=1;
           const stored=session.write(t,carry);if(stored==='conflict'){conflict();return;}
-          if(result==='champion'&&!credited){credited=true;this.save=mergeSave(loadSave(),this.save);this.save.trophies++;if(!this.save.titles.includes('어둠의 판의 챔피언'))this.save.titles.push('어둠의 판의 챔피언');this.persistSave();}
+          if(result==='champion'&&!credited){credited=true;this.save=refreshSave(this.save,!this.saveAvailable);this.save.trophies++;if(!this.save.titles.includes('어둠의 판의 챔피언'))this.save.titles.push('어둠의 판의 챔피언');this.persistSave();}
           render(stored);
         },carry,()=>this.showTitle(),checkpointSaved);gs.start();
       });
