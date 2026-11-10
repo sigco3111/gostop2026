@@ -113,7 +113,7 @@ export class App {
       } else {
         this.showTitle();
       }
-    }, mode === 'scenario' ? this.save.nagariCarry ?? 1 : 1);
+    }, mode === 'scenario' ? this.save.nagariCarry ?? 1 : 1,()=>mode==='scenario'?this.showScenario():this.showTitle());
     gs.start();
   }
 
@@ -184,7 +184,7 @@ export class App {
           if(result==='roundWon')carry=1;
           if(result==='champion'&&!credited){credited=true;this.save.trophies++;if(!this.save.titles.includes('어둠의 판의 챔피언'))this.save.titles.push('어둠의 판의 챔피언');store(this.save);}
           render();
-        },carry);gs.start();
+        },carry,()=>this.showTitle());gs.start();
       });
       this.setScreen(el);
     };

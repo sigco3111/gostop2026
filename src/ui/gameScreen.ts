@@ -33,6 +33,7 @@ export class GameScreen {
     private opponent: Opponent,
     private onEnd: (r: MatchResult) => void,
     nagariCarry = 1,
+    private onExit?: () => void,
   ) {
     this.ai = new AI(opponent.difficulty);
     this.g.nagariCarry = nagariCarry;
@@ -152,6 +153,7 @@ export class GameScreen {
 
   private showGoStop() {
     this.el.querySelector('.gostop-overlay')?.remove();
+    this.effectLayer.replaceChildren();
     const score = this.g.scoreOf(0).total;
     const now=settle({winner:this.g.players[0].captured,loser:this.g.players[1].captured,goCount:this.g.players[0].goCount,loserGoCount:this.g.players[1].goCount,shakes:this.g.players[0].shakes,nagariCarry:this.g.nagariCarry});
     const ov = document.createElement('div');
@@ -203,6 +205,16 @@ export class GameScreen {
       this.onEnd({ winner: e.winner as 0 | 1 | null, finalScore: e.result?.finalScore, reason: e.reason, multipliers: e.result?.multipliers, base: e.result?.base });
     });
     this.el.appendChild(ov);focusDialog(ov);
+  }
+
+  private showExit() {
+    if(this.busy||this.g.over||this.g.turn!==0||this.g.awaitingChoice||this.g.awaitingGoStop||!this.onExit)return;
+    const ov=document.createElement('div');ov.className='exit-overlay';ov.setAttribute('aria-label','대국 나가기 확인');
+    ov.innerHTML='<div class="exit-panel"><h3>이 대국을 나갈까요?</h3><p>현재 판과 토너먼트 대진은 이어할 수 없습니다. 이미 저장한 시나리오 돌파·칭호·트로피는 유지됩니다. 승리나 점수는 기록하지 않습니다.</p><div><button class="btn small" data-exit="cancel">계속하기</button><button class="btn small danger" data-exit="confirm">대국 나가기</button></div></div>';
+    const cancel=()=>{ov.remove();(this.el.querySelector('.exit-toggle') as HTMLElement)?.focus();};
+    ov.querySelector('[data-exit=cancel]')!.addEventListener('click',cancel);
+    ov.querySelector('[data-exit=confirm]')!.addEventListener('click',()=>{this.effectLayer.remove();this.onExit?.();});
+    this.el.appendChild(ov);focusDialog(ov,ov.querySelector<HTMLElement>('[data-exit=cancel]'),cancel);
   }
 
   private showCaptured() {
@@ -275,7 +287,7 @@ export class GameScreen {
         <div class="score-pill">${this.opponent.name} <b>${oppScore.total}</b>점</div>
         <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
       </div>
-      <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':'내 차례 · 손패를 내세요'):`${this.opponent.name}의 차례`}</span><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button></div>
+      <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':'내 차례 · 손패를 내세요'):`${this.opponent.name}의 차례`}</span><div class="turn-actions"><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button><button class="exit-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''} aria-label="대국 나가기">나가기</button></div></div>
       <div class="table-area">
         <div class="opp-zone">
           <div class="opp-hand">${opp.hand.map(() => '<div class="card-back"></div>').join('')}</div>
@@ -292,6 +304,7 @@ export class GameScreen {
 
     this.el.querySelector('.sound-toggle')?.addEventListener('click', () => {setSound(!soundEnabled());this.render();});
     this.el.querySelector('.capture-toggle')?.addEventListener('click',()=>this.showCaptured());
+    this.el.querySelector('.exit-toggle')?.addEventListener('click',()=>this.showExit());
     // 바닥
     const floorEl = this.el.querySelector('#floor')!;
     const byMonth = new Map<number, Card[]>();
@@ -304,7 +317,7 @@ export class GameScreen {
       const cell = document.createElement('div');
       cell.className = 'floor-cell';
       cards.forEach((c, i) => {
-        const ce = cardEl(c);
+        const ce = cardEl(c,{interactive:!!this.selectedCard&&c.month===this.selectedCard.month});
         if (i > 0) { ce.style.position = 'absolute'; ce.style.transform = `translate(${i * 5}px, ${i * -4}px)`; }
         if (this.selectedCard && c.month === this.selectedCard.month) {
           cell.classList.add('target');
@@ -328,7 +341,10 @@ export class GameScreen {
     // 내 손패
     const handEl = this.el.querySelector('#hand')!;
     for (const c of me.hand.slice().sort((a, b) => a.month - b.month || a.id - b.id)) {
-      const ce = cardEl(c, { big: true });
+      const active=g.turn===0&&!g.awaitingChoice&&!g.awaitingGoStop;
+      const ce = cardEl(c, { big: true,interactive:active });
+      if(!active)ce.setAttribute('aria-disabled','true');
+      if(active){const mark=(on:boolean)=>this.el.querySelectorAll<HTMLElement>('.floor-cell').forEach(cell=>cell.classList.toggle('matching-month',on&&!!cell.querySelector(`[data-card-id="${g.floor.find(f=>f.month===c.month)?.id}"]`)));ce.addEventListener('mouseenter',()=>mark(true));ce.addEventListener('mouseleave',()=>mark(false));ce.addEventListener('focus',()=>mark(true));ce.addEventListener('blur',()=>mark(false));}
       if (this.selectedCard?.id === c.id) ce.classList.add('playable-hint');
       ce.addEventListener('click', () => this.onHandClick(c));
       handEl.appendChild(ce);
@@ -339,7 +355,7 @@ export class GameScreen {
       const chooser=document.createElement('div');chooser.className='choice-overlay';chooser.setAttribute('aria-label','가져올 패 선택');
       const label=document.createElement('div');label.textContent='가져올 패를 선택하세요';chooser.appendChild(label);
       const row=document.createElement('div');row.className='choice-row';
-      g.awaitingChoice.forEach(c=>{const ce=cardEl(c,{big:true});ce.addEventListener('click',async()=>{if(this.busy)return;this.busy=true;try{const ev=g.choose(0,c.id);this.render();await this.processEvents(ev);await this.loop();}finally{this.busy=false;}});row.appendChild(ce);});
+      g.awaitingChoice.forEach(c=>{const ce=cardEl(c,{big:true,interactive:true});ce.addEventListener('click',async()=>{if(this.busy)return;this.busy=true;try{const ev=g.choose(0,c.id);this.render();await this.processEvents(ev);await this.loop();}finally{this.busy=false;}});row.appendChild(ce);});
       chooser.appendChild(row);this.el.appendChild(chooser);focusDialog(chooser);
     }
     // 액션 바: 흔들기/폭탄
