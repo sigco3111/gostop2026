@@ -34,6 +34,7 @@ export class GameScreen {
     private onEnd: (r: MatchResult) => void,
     nagariCarry = 1,
     private onExit?: () => void,
+    private tournamentCheckpoint = false,
   ) {
     this.ai = new AI(opponent.difficulty);
     this.g.nagariCarry = nagariCarry;
@@ -214,6 +215,7 @@ export class GameScreen {
     const cancel=()=>{ov.remove();(this.el.querySelector('.exit-toggle') as HTMLElement)?.focus();};
     ov.querySelector('[data-exit=cancel]')!.addEventListener('click',cancel);
     ov.querySelector('[data-exit=confirm]')!.addEventListener('click',()=>{this.effectLayer.remove();this.onExit?.();});
+    if(this.tournamentCheckpoint)ov.querySelector('p')!.textContent='진행 중인 한 판의 손패는 저장되지 않습니다. 완료한 판까지의 대진·승수·나가리 이월은 저장되어 타이틀의 토너먼트 이어하기로 돌아올 수 있습니다. 현재 판의 승리나 점수는 기록하지 않습니다.';
     this.el.appendChild(ov);focusDialog(ov,ov.querySelector<HTMLElement>('[data-exit=cancel]'),cancel);
   }
 

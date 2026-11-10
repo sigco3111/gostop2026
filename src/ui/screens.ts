@@ -2,6 +2,7 @@ import { deckSettingsScreen } from './deckSettings';
 import { musicEnabled, setMusic } from './audio';
 import { guideScreen } from './guide';
 import { loadSave, store } from '../data/save';
+import { loadTournament, storeTournament } from '../data/tournamentSave';
 import { Tournament } from '../engine/tournament';
 import { Opponent, OPPONENTS } from '../data/opponents';
 import { GameScreen, MatchResult } from './gameScreen';
@@ -35,7 +36,7 @@ export class App {
       <div class="game-sub">어둠의 판 · 12인의 고수</div>
       <div class="menu">
         <button class="btn primary" id="m-scenario">시나리오 - 밑바닥에서 전설로</button>
-        <button class="btn" id="m-tournament">토너먼트</button>
+        <button class="btn" id="m-tournament">${loadTournament()?'토너먼트 이어하기':'토너먼트'}</button>
         <button class="btn" id="m-free">자유 대국</button>
         <button class="btn small" id="m-settings">설정 · 화투패</button><button class="btn small" id="m-guide">게임 방법 · 패 도감 · 기록</button><button class="btn small music-choice" id="m-music" aria-pressed="${musicEnabled()}">배경음악 ${musicEnabled()?'켬':'끔'}</button>
       </div></div>`;
@@ -160,8 +161,9 @@ export class App {
   }
 
   showTournament() {
-    const t=new Tournament(OPPONENTS);
-    let carry=1,credited=false;
+    const checkpoint=loadTournament();
+    const t=checkpoint?.t??new Tournament(OPPONENTS);
+    let carry=checkpoint?.carry??1,credited=false,checkpointSaved=false;
     const name=(p:import('../engine/tournament').Entrant)=>p==='ME'?'나':p.name;
     const render=()=>{
       const el=this.mk('tournament-screen');
@@ -175,7 +177,7 @@ export class App {
           <p class="series">나 ${t.series[0]}승 : ${t.series[1]}승 ${t.opponent?.name} ${carry>1?` · 나가리 ×${carry}`:''}</p>`:''}
         ${t.champion?`<h3 class="champion-label">트로피 ${this.save.trophies}개 · 어둠의 판의 챔피언</h3>`:''}
         <div class="tourney-actions">${!finished?'<button class="btn primary" id="next">대국 시작</button>':''}<button class="btn small" id="back">타이틀로</button></div>
-        <small class="tourney-note">토너먼트 중간 진행은 저장되지 않습니다. 타이틀로 나가면 현재 대진을 종료합니다.</small>
+        <small class="tourney-note">완료한 판까지 자동 저장합니다. 타이틀이나 새로고침 후 이어할 수 있습니다. 진행 중인 한 판의 손패는 저장하지 않습니다.</small>
       </div>`;
       el.querySelector('#back')!.addEventListener('click',()=>this.showTitle());
       el.querySelector('#next')?.addEventListener('click',()=>{
@@ -186,9 +188,11 @@ export class App {
           if(result==='roundWon')carry=1;
           if(result==='champion'&&!credited){credited=true;this.save.trophies++;if(!this.save.titles.includes('어둠의 판의 챔피언'))this.save.titles.push('어둠의 판의 챔피언');store(this.save);}
           render();
-        },carry,()=>this.showTitle());gs.start();
+        },carry,()=>this.showTitle(),checkpointSaved);gs.start();
       });
       this.setScreen(el);
+      checkpointSaved=storeTournament(t,carry);
+      if(!checkpointSaved){const warning=document.createElement('p');warning.className='tourney-note';warning.setAttribute('role','alert');warning.textContent='토너먼트를 저장하지 못했습니다. 새로고침하면 대진을 잃을 수 있습니다.';el.querySelector('.tourney-wrap')!.appendChild(warning);}
     };
     render();
   }
