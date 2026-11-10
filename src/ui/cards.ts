@@ -1,3 +1,4 @@
+import { deckCardUrl } from './deckSettings';
 import { Card } from '../engine/cards';
 
 const BASE = import.meta.env.BASE_URL;
@@ -7,7 +8,7 @@ export function cardImageUrl(month: number): string {
   return `${BASE}assets/cards/month-${String(month).padStart(2, '0')}.webp`;
 }
 
-export function cardUrl(id: number): string { return `${BASE}assets/cards/card-${String(id).padStart(2, '0')}.webp`; }
+export function cardUrl(id: number): string { return deckCardUrl(id); }
 
 export function cardEl(card: Card, opts: { big?: boolean; interactive?: boolean } = {}): HTMLElement {
   const el = document.createElement('div');
