@@ -5,7 +5,7 @@ folder=Path('public/assets/cards')
 manifest=json.loads((folder/'deck-manifest.json').read_text())
 regular='/home/sandbox/.fonts/NotoSansKR-Regular.otf'
 bold='/home/sandbox/.fonts/NotoSansKR-Bold.otf'
-font=ImageFont.truetype(bold,28); small=ImageFont.truetype(regular,18)
+font=ImageFont.truetype(bold,35); small=ImageFont.truetype(regular,20)
 for a in manifest:
  sheet=Image.open(f'/downloads/deck-sheet-{a["month"]:02}.png').convert('RGB')
  w,h=sheet.size;q=a['id']%4;x=q%2;y=q//2

@@ -13,6 +13,9 @@ export function cardEl(card: Card, opts: { big?: boolean } = {}): HTMLElement {
   const el = document.createElement('div');
   el.className = `hcard k-${card.kind}${opts.big ? ' big' : ''}${card.piValue === 2 ? ' ssang' : ''}${card.isBi ? ' bi' : ''}${card.dan ? ` dan-${card.dan}` : ''}`;
   el.dataset.cardId = String(card.id);
+  el.setAttribute('role','button');el.tabIndex=0;
+  el.setAttribute('aria-label',`${card.month}월 ${card.label} ${card.piValue===2?'쌍피':KIND_LABEL[card.kind]}`);
+  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
   const img = document.createElement('img');
   img.src = cardUrl(card.id);
   img.alt = card.label;

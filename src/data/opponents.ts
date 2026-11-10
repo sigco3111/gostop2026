@@ -17,8 +17,8 @@ export const OPPONENTS: Opponent[] = [
     id: 'binpae', stage: 1, name: '빈패', title: '골목의 허세꾼', difficulty: 1,
     portrait: 'assets/characters/opp-01.webp', background: 'assets/backgrounds/bg-alley.webp',
     intro: ['어디서 굴러먹던 놈이 기어 들어왔네.', '패나 제대로 쥘 줄 알고?'],
-    win: ['하, 재수 없게 졌다. 다음 판엔 안 봐준다.'],
-    lose: ['이 판은 이쯤에서 접어 주지. 자, 다음 판을 찾아가 봐.'],
+    win: ['패 잡는 법부터 다시 배워 와. 골목은 만만한 데가 아니야.'],
+    lose: ['하, 내가 졌다. 그 실력이면 다음 판에도 자격은 있겠네.'],
   },
   {
     id: 'baeksuhak', stage: 2, name: '백수학', title: '계산기', difficulty: 2,

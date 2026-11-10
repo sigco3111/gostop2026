@@ -39,6 +39,9 @@ export class GameScreen {
     this.el = document.createElement('div');
     this.el.id = 'game-screen';
     this.el.className = 'screen';
+    this.el.style.backgroundImage=`linear-gradient(#07060aaf,#07060af5),url(${BASE}${this.opponent.background})`;
+    this.el.style.backgroundSize='cover';
+    this.el.style.backgroundPosition='center';
     this.root.innerHTML = '';
     this.root.appendChild(this.el);
     const ev = this.g.deal(); this.dbg(); sfx('shuffle');
@@ -120,6 +123,7 @@ export class GameScreen {
   }
 
   private showGoStop() {
+    this.el.querySelector('.gostop-overlay')?.remove();
     const score = this.g.scoreOf(0).total;
     const ov = document.createElement('div');
     ov.className = 'gostop-overlay';
@@ -170,12 +174,6 @@ export class GameScreen {
 
   private onHandClick(card: Card) {
     if (this.busy || !this.awaitingUser || this.g.turn !== 0 || this.g.over || this.g.awaitingGoStop) return;
-    const matches = this.g.floor.filter((f) => f.month === card.month);
-    if (matches.length === 2) {
-      this.selectedCard = card;
-      this.render();
-      return;
-    }
     this.playUser(card.id);
   }
 
@@ -187,6 +185,7 @@ export class GameScreen {
   }
 
   private async playUser(cardId: number, chooseFloorId?: number, opts?: { shakeMonth?: number; bombMonth?: number }) {
+    if(this.busy||this.g.turn!==0||this.g.over)return;
     this.busy = true;
     this.awaitingUser = false;
     try {
@@ -196,7 +195,6 @@ export class GameScreen {
       await this.loop();
     } finally {
       this.busy = false;
-      this.render();
     }
   }
 

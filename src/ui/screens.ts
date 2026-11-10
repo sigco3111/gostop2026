@@ -1,21 +1,9 @@
+import { loadSave, store } from '../data/save';
+import { Tournament } from '../engine/tournament';
 import { Opponent, OPPONENTS } from '../data/opponents';
 import { GameScreen, MatchResult } from './gameScreen';
 
 const BASE = import.meta.env.BASE_URL;
-const SAVE_KEY = 'gostop2026-save-v1';
-
-export interface SaveData {
-  clearedStages: number[];
-  titles: string[];
-  trophies: number;
-  nagariCarry: number;
-}
-export function loadSave(): SaveData {
-  try { return { clearedStages: [], titles: [], trophies: 0, nagariCarry: 1, ...JSON.parse(localStorage.getItem(SAVE_KEY) ?? '{}') }; }
-  catch { return { clearedStages: [], titles: [], trophies: 0, nagariCarry: 1 }; }
-}
-export function store(s: SaveData) { localStorage.setItem(SAVE_KEY, JSON.stringify(s)); }
-
 export class App {
   private root: HTMLElement;
   private save = loadSave();
@@ -28,6 +16,7 @@ export class App {
   private setScreen(el: HTMLElement) {
     this.root.innerHTML = '';
     this.root.appendChild(el);
+    if(!store(this.save)){const notice=document.createElement('div');notice.className='save-warning';notice.textContent='이 브라우저에서는 진행을 저장할 수 없습니다.';el.appendChild(notice);}
   }
   private mk(id: string, cls = 'screen'): HTMLElement {
     const el = document.createElement('div');
@@ -152,60 +141,36 @@ export class App {
   }
 
   showTournament() {
-    // 12인 중 랜덤 7인 + 나 = 8강, 각 라운드 3판 2승
-    const pool = [...OPPONENTS].sort(() => Math.random() - 0.5).slice(0, 7);
-    const bracket: (Opponent | 'ME' | null)[] = ['ME', ...pool];
-    const state = { round: 0, alive: bracket.slice(), champ: null as Opponent | 'ME' | null };
-
-    const renderBracket = () => {
-      const el = this.mk('tournament-screen');
-      el.innerHTML = `<div class="setup-panel"><h2>토너먼트 - 8강</h2>
-        <div class="sub" style="color:var(--dim);font-size:13px">각 라운드 3판 2승 · 우승 시 트로피 기록 (보유: ${this.save.trophies})</div>
-        <div class="bracket">${state.alive.map((p) => p === 'ME'
-          ? '<div class="bracket-slot me">나</div>'
-          : p ? `<div class="bracket-slot">${p.name}</div>` : '').join('')}</div>
-        <div style="margin-top:18px;display:flex;gap:10px">
-          <button class="btn primary" id="next">다음 대국</button>
-          <button class="btn small" id="back">← 타이틀</button></div></div>`;
-      el.querySelector('#back')!.addEventListener('click', () => this.showTitle());
-      el.querySelector('#next')!.addEventListener('click', () => playNext());
+    const t=new Tournament(OPPONENTS);
+    let carry=1,credited=false;
+    const name=(p:import('../engine/tournament').Entrant)=>p==='ME'?'나':p.name;
+    const render=()=>{
+      const el=this.mk('tournament-screen');
+      const roundNames=['8강','4강','결승'];
+      const history=t.history.map((r,i)=>`<div class="bracket-round"><h3>${roundNames[i]}</h3>${r.map(p=>`<div class="bracket-match"><span>${name(p.a)} <b>${p.score[0]} : ${p.score[1]}</b> ${name(p.b)}</span><small>승자: ${name(p.winner)}</small></div>`).join('')}</div>`).join('');
+      const finished=t.eliminated||t.champion;
+      el.innerHTML=`<div class="tourney-wrap"><div class="screen-head"><h2>토너먼트 · ${t.champion?'우승':t.eliminated?'탈락':roundNames[t.round]}</h2></div>
+        <p class="tourney-note">각 대진 3판 2승. 다른 AI 대진은 결과를 계산합니다. 토너먼트 도중 나가리는 해당 대진의 다음 판에만 이월됩니다.</p>
+        ${history}
+        ${!finished?`<div class="bracket-round"><h3>${roundNames[t.round]} 대진</h3>${Array.from({length:t.alive.length/2},(_,i)=>`<div class="bracket-match">${name(t.alive[i*2])} <span>VS</span> ${name(t.alive[i*2+1])}</div>`).join('')}</div>
+          <p class="series">나 ${t.series[0]}승 : ${t.series[1]}승 ${t.opponent?.name} ${carry>1?` · 나가리 ×${carry}`:''}</p>`:''}
+        ${t.champion?`<h3 class="champion-label">트로피 ${this.save.trophies}개 · 어둠의 판의 챔피언</h3>`:''}
+        <div class="tourney-actions">${!finished?'<button class="btn primary" id="next">대국 시작</button>':''}<button class="btn small" id="back">타이틀로</button></div>
+        <small class="tourney-note">토너먼트 중간 진행은 저장되지 않습니다. 타이틀로 나가면 현재 대진을 종료합니다.</small>
+      </div>`;
+      el.querySelector('#back')!.addEventListener('click',()=>this.showTitle());
+      el.querySelector('#next')?.addEventListener('click',()=>{
+        const opp=t.opponent;if(!opp)return;
+        const gs=new GameScreen(this.root,opp,(r)=>{
+          if(r.winner===null)carry=Math.min(8,carry*2);else carry=1;
+          const result=t.recordPlayerGame(r.winner);
+          if(result==='roundWon')carry=1;
+          if(result==='champion'&&!credited){credited=true;this.save.trophies++;if(!this.save.titles.includes('어둠의 판의 챔피언'))this.save.titles.push('어둠의 판의 챔피언');store(this.save);}
+          render();
+        },carry);gs.start();
+      });
       this.setScreen(el);
     };
-
-    const playNext = () => {
-      // 내 다음 상대를 찾기: 살아있는 상대 중 첫 번째
-      const opp = state.alive.find((p): p is Opponent => p !== null && p !== 'ME');
-      if (!opp) return;
-      let wins = 0, losses = 0;
-      const playMatch = () => {
-        this.startMatch(opp, 'tournament', (r) => {
-          if (r.winner === 0) wins++; else if (r.winner === 1) losses++;
-          if (wins === 2 || losses === 2) {
-            if (wins === 2) {
-              state.alive = state.alive.filter((p) => p !== opp);
-              if (state.alive.length === 1 && state.alive[0] === 'ME') {
-                this.save.trophies++;
-                store(this.save);
-                const el = this.mk('tournament-screen');
-                el.innerHTML = `<div class="setup-panel" style="text-align:center"><h2>🏆 토너먼트 우승!</h2>
-                  <p style="color:var(--dim);margin:12px 0 20px">칭호: 어둠의 판의 챔피언 (누적 트로피 ${this.save.trophies})</p>
-                  <button class="btn primary" id="back">타이틀로</button></div>`;
-                el.querySelector('#back')!.addEventListener('click', () => this.showTitle());
-                this.setScreen(el);
-                return;
-              }
-            } else {
-              renderBracket();
-              return;
-            }
-            renderBracket();
-          } else {
-            playMatch();
-          }
-        });
-      };
-      playMatch();
-    };
-    renderBracket();
+    render();
   }
 }
