@@ -259,3 +259,6 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 #title-screen{overflow-y:auto;}.title-inner{flex-shrink:0;}.menu .btn{width:min(360px,90vw);padding-left:15px;padding-right:15px;}
 @media(max-width:650px){.menu .btn{font-size:15px;letter-spacing:0;}.menu .btn.small{font-size:13px;}}
 @media(max-height:500px){.game-title{font-size:40px;}.game-sub{font-size:12px;}.title-inner{padding:20px 0;}.menu{margin-top:16px;gap:8px;}.menu .btn{padding-top:8px;padding-bottom:8px;font-size:15px;}.menu .btn.small{font-size:12px;}}
+/* Familiar printed hwatu palette. The noir treatment belongs to the room, not the cards. */
+.hcard.k-gwang,.hcard.k-yeol,.hcard.k-tti,.hcard.k-pi{border-color:#171717;box-shadow:0 2px 5px #0008;}
+.my-hand .hcard:hover{box-shadow:0 5px 12px #000a;}

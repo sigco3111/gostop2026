@@ -9,7 +9,7 @@ export function guideScreen(back:()=>void):HTMLElement {
  const show=(tab:string)=>{
   el.querySelectorAll('[data-tab]').forEach(b=>b.setAttribute('aria-pressed',String((b as HTMLElement).dataset.tab===tab)));
   if(tab==='deck'){
-   content.innerHTML=`<p class="guide-note">같은 월은 네 장씩입니다. 금색은 광, 시안은 열끗, 보라는 띠. 등급과 월은 패에도 적혀 있습니다.</p><div class="deck-guide"></div>`;
+   content.innerHTML=`<p class="guide-note">같은 월은 네 장씩입니다. 화투 고유의 붉은색·검정·초록 도상을 사용합니다. 등급과 월은 패에도 작게 적혀 있습니다.</p><div class="deck-guide"></div>`;
    const deck=buildDeck(),grid=content.querySelector('.deck-guide')!;
    for(let m=1;m<=12;m++){
     const section=document.createElement('section');section.innerHTML=`<h3>${m}월 · ${MONTH_NAME[m]}</h3><div class="deck-row"></div>`;
