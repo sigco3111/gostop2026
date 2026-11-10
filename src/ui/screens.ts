@@ -2,7 +2,7 @@ import { deckSettingsScreen } from './deckSettings';
 import { musicEnabled, setMusic } from './audio';
 import { guideScreen } from './guide';
 import { loadSave, mergeSave, store } from '../data/save';
-import { loadTournament, storeTournament } from '../data/tournamentSave';
+import { loadTournament, tournamentSession } from '../data/tournamentSave';
 import { Tournament } from '../engine/tournament';
 import { Opponent, OPPONENTS } from '../data/opponents';
 import { GameScreen, MatchResult } from './gameScreen';
@@ -170,11 +170,21 @@ export class App {
   }
 
   showTournament() {
-    const checkpoint=loadTournament();
+    const session=tournamentSession(),checkpoint=session.checkpoint;
     const t=checkpoint?.t??new Tournament(OPPONENTS);
     let carry=checkpoint?.carry??1,credited=false,checkpointSaved=false;
+    const conflict=()=>{
+      const el=this.mk('tournament-conflict-screen');
+      el.innerHTML='<div class="setup-panel"><h2 style="word-break:keep-all">다른 탭에서 대회가 변경되었습니다</h2><p class="tourney-note" role="alert">다른 탭의 최신 기록을 보호하기 위해 이전 대진으로 계속할 수 없습니다. 이 탭의 대국 결과는 최신 기록에 덮어쓰지 않습니다. 최신 대진을 확인하고 이어해 주세요. 진행 중인 손패는 복원되지 않습니다.</p><div class="tourney-actions"><button class="btn primary" id="latest">최신 대진 확인</button><button class="btn small" id="back">타이틀로</button></div></div>';
+      el.querySelector('#latest')!.addEventListener('click',()=>this.showTournament());
+      el.querySelector('#back')!.addEventListener('click',()=>this.showTitle());
+      this.setScreen(el);
+      (el.querySelector('h2') as HTMLElement).tabIndex=-1;(el.querySelector('h2') as HTMLElement).focus();
+    };
     const name=(p:import('../engine/tournament').Entrant)=>p==='ME'?'나':p.name;
-    const render=()=>{
+    const render=(stored=session.write(t,carry))=>{
+      if(stored==='conflict'){conflict();return;}
+      checkpointSaved=stored==='saved';
       const el=this.mk('tournament-screen');
       const roundNames=['8강','4강','결승'];
       const history=t.history.map((r,i)=>`<div class="bracket-round"><h3>${roundNames[i]}</h3>${r.map(p=>`<div class="bracket-match"><span>${name(p.a)} <b>${p.score[0]} : ${p.score[1]}</b> ${name(p.b)}</span><small>승자: ${name(p.winner)}</small></div>`).join('')}</div>`).join('');
@@ -190,17 +200,19 @@ export class App {
       </div>`;
       el.querySelector('#back')!.addEventListener('click',()=>this.showTitle());
       el.querySelector('#next')?.addEventListener('click',()=>{
+        if(session.check()==='conflict'){conflict();return;}
         const opp=t.opponent;if(!opp)return;
         const gs=new GameScreen(this.root,opp,(r)=>{
+          if(session.check()==='conflict'){conflict();return;}
           if(r.winner===null)carry=Math.min(8,carry*2);else carry=1;
           const result=t.recordPlayerGame(r.winner);
           if(result==='roundWon')carry=1;
+          const stored=session.write(t,carry);if(stored==='conflict'){conflict();return;}
           if(result==='champion'&&!credited){credited=true;this.save=mergeSave(loadSave(),this.save);this.save.trophies++;if(!this.save.titles.includes('어둠의 판의 챔피언'))this.save.titles.push('어둠의 판의 챔피언');this.persistSave();}
-          render();
+          render(stored);
         },carry,()=>this.showTitle(),checkpointSaved);gs.start();
       });
       this.setScreen(el);
-      checkpointSaved=storeTournament(t,carry);
       if(!checkpointSaved){const warning=document.createElement('p');warning.className='tourney-note';warning.setAttribute('role','alert');warning.textContent='토너먼트를 저장하지 못했습니다. 새로고침하면 대진을 잃을 수 있습니다.';el.querySelector('.tourney-wrap')!.appendChild(warning);}
     };
     render();

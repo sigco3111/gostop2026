@@ -28,3 +28,24 @@ export function parseTournament(raw:string|null):{t:Tournament;carry:number}|nul
 }
 export function loadTournament(){try{return parseTournament(localStorage.getItem(TOURNAMENT_KEY));}catch{return null;}}
 export function storeTournament(t:Tournament,carry:number):boolean{try{if(t.champion||t.eliminated)localStorage.removeItem(TOURNAMENT_KEY);else localStorage.setItem(TOURNAMENT_KEY,JSON.stringify(tournamentSnapshot(t,carry)));return true;}catch{return false;}}
+
+/** A tab may continue only from the checkpoint it last read or wrote.
+ * This guards stale tabs, not transactional cross-device synchronization. */
+export function tournamentSession(){
+ let expected:string|null=null;
+ try{expected=localStorage.getItem(TOURNAMENT_KEY);}catch{/* Storage failures remain visible through write(). */}
+ return {
+  checkpoint:parseTournament(expected),
+  check(): 'current'|'conflict'|'unavailable'{
+   try{return localStorage.getItem(TOURNAMENT_KEY)!==expected?'conflict':'current';}catch{return 'unavailable';}
+  },
+  write(t:Tournament,carry:number):'saved'|'conflict'|'unavailable'{
+   if(this.check()==='conflict')return 'conflict';
+   try{
+    const raw=t.champion||t.eliminated?null:JSON.stringify(tournamentSnapshot(t,carry));
+    if(raw===null)localStorage.removeItem(TOURNAMENT_KEY);else localStorage.setItem(TOURNAMENT_KEY,raw);
+    expected=raw;return 'saved';
+   }catch{return 'unavailable';}
+  }
+ };
+}
