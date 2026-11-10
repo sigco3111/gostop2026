@@ -1,0 +1,290 @@
+[
+  {
+    "id": 0,
+    "month": 1,
+    "type": "광",
+    "path": "card-00.webp"
+  },
+  {
+    "id": 1,
+    "month": 1,
+    "type": "홍단",
+    "path": "card-01.webp"
+  },
+  {
+    "id": 2,
+    "month": 1,
+    "type": "피",
+    "path": "card-02.webp"
+  },
+  {
+    "id": 3,
+    "month": 1,
+    "type": "피",
+    "path": "card-03.webp"
+  },
+  {
+    "id": 4,
+    "month": 2,
+    "type": "열끗",
+    "path": "card-04.webp"
+  },
+  {
+    "id": 5,
+    "month": 2,
+    "type": "홍단",
+    "path": "card-05.webp"
+  },
+  {
+    "id": 6,
+    "month": 2,
+    "type": "피",
+    "path": "card-06.webp"
+  },
+  {
+    "id": 7,
+    "month": 2,
+    "type": "피",
+    "path": "card-07.webp"
+  },
+  {
+    "id": 8,
+    "month": 3,
+    "type": "광",
+    "path": "card-08.webp"
+  },
+  {
+    "id": 9,
+    "month": 3,
+    "type": "홍단",
+    "path": "card-09.webp"
+  },
+  {
+    "id": 10,
+    "month": 3,
+    "type": "피",
+    "path": "card-10.webp"
+  },
+  {
+    "id": 11,
+    "month": 3,
+    "type": "피",
+    "path": "card-11.webp"
+  },
+  {
+    "id": 12,
+    "month": 4,
+    "type": "열끗",
+    "path": "card-12.webp"
+  },
+  {
+    "id": 13,
+    "month": 4,
+    "type": "초단",
+    "path": "card-13.webp"
+  },
+  {
+    "id": 14,
+    "month": 4,
+    "type": "피",
+    "path": "card-14.webp"
+  },
+  {
+    "id": 15,
+    "month": 4,
+    "type": "피",
+    "path": "card-15.webp"
+  },
+  {
+    "id": 16,
+    "month": 5,
+    "type": "열끗",
+    "path": "card-16.webp"
+  },
+  {
+    "id": 17,
+    "month": 5,
+    "type": "초단",
+    "path": "card-17.webp"
+  },
+  {
+    "id": 18,
+    "month": 5,
+    "type": "피",
+    "path": "card-18.webp"
+  },
+  {
+    "id": 19,
+    "month": 5,
+    "type": "피",
+    "path": "card-19.webp"
+  },
+  {
+    "id": 20,
+    "month": 6,
+    "type": "열끗",
+    "path": "card-20.webp"
+  },
+  {
+    "id": 21,
+    "month": 6,
+    "type": "청단",
+    "path": "card-21.webp"
+  },
+  {
+    "id": 22,
+    "month": 6,
+    "type": "피",
+    "path": "card-22.webp"
+  },
+  {
+    "id": 23,
+    "month": 6,
+    "type": "피",
+    "path": "card-23.webp"
+  },
+  {
+    "id": 24,
+    "month": 7,
+    "type": "열끗",
+    "path": "card-24.webp"
+  },
+  {
+    "id": 25,
+    "month": 7,
+    "type": "초단",
+    "path": "card-25.webp"
+  },
+  {
+    "id": 26,
+    "month": 7,
+    "type": "피",
+    "path": "card-26.webp"
+  },
+  {
+    "id": 27,
+    "month": 7,
+    "type": "피",
+    "path": "card-27.webp"
+  },
+  {
+    "id": 28,
+    "month": 8,
+    "type": "광",
+    "path": "card-28.webp"
+  },
+  {
+    "id": 29,
+    "month": 8,
+    "type": "열끗",
+    "path": "card-29.webp"
+  },
+  {
+    "id": 30,
+    "month": 8,
+    "type": "피",
+    "path": "card-30.webp"
+  },
+  {
+    "id": 31,
+    "month": 8,
+    "type": "피",
+    "path": "card-31.webp"
+  },
+  {
+    "id": 32,
+    "month": 9,
+    "type": "열끗",
+    "path": "card-32.webp"
+  },
+  {
+    "id": 33,
+    "month": 9,
+    "type": "청단",
+    "path": "card-33.webp"
+  },
+  {
+    "id": 34,
+    "month": 9,
+    "type": "피",
+    "path": "card-34.webp"
+  },
+  {
+    "id": 35,
+    "month": 9,
+    "type": "피",
+    "path": "card-35.webp"
+  },
+  {
+    "id": 36,
+    "month": 10,
+    "type": "열끗",
+    "path": "card-36.webp"
+  },
+  {
+    "id": 37,
+    "month": 10,
+    "type": "청단",
+    "path": "card-37.webp"
+  },
+  {
+    "id": 38,
+    "month": 10,
+    "type": "피",
+    "path": "card-38.webp"
+  },
+  {
+    "id": 39,
+    "month": 10,
+    "type": "피",
+    "path": "card-39.webp"
+  },
+  {
+    "id": 40,
+    "month": 11,
+    "type": "광",
+    "path": "card-40.webp"
+  },
+  {
+    "id": 41,
+    "month": 11,
+    "type": "피",
+    "path": "card-41.webp"
+  },
+  {
+    "id": 42,
+    "month": 11,
+    "type": "피",
+    "path": "card-42.webp"
+  },
+  {
+    "id": 43,
+    "month": 11,
+    "type": "쌍피",
+    "path": "card-43.webp"
+  },
+  {
+    "id": 44,
+    "month": 12,
+    "type": "비광",
+    "path": "card-44.webp"
+  },
+  {
+    "id": 45,
+    "month": 12,
+    "type": "열끗",
+    "path": "card-45.webp"
+  },
+  {
+    "id": 46,
+    "month": 12,
+    "type": "띠",
+    "path": "card-46.webp"
+  },
+  {
+    "id": 47,
+    "month": 12,
+    "type": "쌍피",
+    "path": "card-47.webp"
+  }
+]
