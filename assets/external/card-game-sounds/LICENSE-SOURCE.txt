@@ -1,0 +1,6 @@
+Asset: Card Game sounds
+Source: https://opengameart.org/content/card-game-sounds
+Author: tersyolnyolcusu
+License: CC0
+Retrieved: 2026-11-05 (mirror in sigco3111 game asset library)
+CC0: public domain dedication - redistribution allowed.

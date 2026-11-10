@@ -52,8 +52,8 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); font-family
 .stage-card .title { color: var(--dim); font-size: 12px; margin-top: 2px; }
 .stage-card .num { position: absolute; top: 8px; left: 10px; font-size: 22px; font-weight: 900; color: #fff; text-shadow: 0 0 10px var(--neon-p); }
 .stage-card .cleared { position: absolute; top: 8px; right: 10px; color: var(--gold); font-weight: 800; font-size: 13px; }
-.stage-card.locked { filter: grayscale(1) brightness(.45); cursor: default; }
-.stage-card.locked::after { content: 'LOCKED'; position: absolute; inset: 0; display: grid; place-items: center; color: #fff8; font-weight: 900; letter-spacing: .3em; }
+.stage-card.locked { filter: grayscale(.55) brightness(.72); cursor: default; }
+.stage-card.locked::after { content: 'LOCKED'; position: absolute; top: 8px; right: 10px; color: #fffc; font-weight: 800; font-size: 11px; letter-spacing: .18em; background: rgba(7,6,10,.55); padding: 2px 8px; border-radius: 3px; }
 
 /* ===== 대사(컷인) ===== */
 #dialogue-screen { justify-content: flex-end; background-size: cover; background-position: center; }
