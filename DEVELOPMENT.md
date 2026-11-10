@@ -1,6 +1,6 @@
 # 개발 상태
 
-2026-11-11 오전. AI 싱글 전용, 실제 돈·구매·현금 보상 없음. 개발판이며 최종 완성판으로 분류하지 않습니다.
+2026-11-11 오전. AI 싱글 전용, 실제 돈·구매·현금 보상 없음. 08:53 핵심 모드 검수를 마친 첫 완성 후보입니다. 최종 품질 보증이나 사람 플레이 검수 완료로 분류하지 않습니다.
 
 ## 구현과 검사
 
@@ -99,3 +99,14 @@ GitHub main 소스 업로드와 gh-pages 빌드 업로드를 확인했습니다.
 - Reproduced a scenario defect with an explicitly injected terminal-draw fixture and failed localStorage writes: the dialogue promised next-hand×2, but screen navigation refreshed the older stored carry and started the next hand at×1. This fixture is not a naturally played full draw and does not certify rule handling.
 - Screen refresh now preserves pending in-memory carry/reset while the last write failed. More advanced stored stages and higher trophy totals still merge in; after a successful write, same-stage updates in another tab continue to refresh. The save warning remains visible. This is session-only recovery, not successful persistence: reloads can still lose unsaved data.
 - Five unit tests cover draw carry, loss reset, advanced remote-local progress, ordinary tab refresh and blocked reads. `test/storage-failure-carry.mjs` verifies failed-write draw dialogue→scenario→title→scenario→next hand preserves×2 and keeps the warning;320/390/1280warning pixels inspected. Ordinary8-round journey, tournament conflict guard and39automated accessibility states pass.94tests/build pass, including one new150-round/all3levels/public-phase hidden-state permutation check for AI decisions. That test preserves hand sizes/public cards and changes only hidden opponent identities/deck order, not a human difficulty assessment.
+
+
+## First-complete candidate acceptance checkpoint (2026-11-11 08:53 KST)
+
+The first candidate closes the approved single-player feature scope, not every possible future enhancement. Human/device/audio/screen-reader listening and long-term balance remain explicitly unverified. The candidate does not wait indefinitely for that external review.
+
+Consolidated the successful fresh-public QA drivers into `npm run test:acceptance`: five isolated Chrome profiles, configurable `GAME_URL`, `CHROME_PATH` and `QA_OUT`, JSON evidence and PNG captures. No seed stage clears, forced wins or trophy injection in story/championship flows. The resume flow deliberately adds malformed storage and blocked writes after its real two-hand checkpoint journey. Captures were directly inspected:390ending/championship/classic hand and320settings; full bracket scrolls normally below the viewport.
+
+The canonical scripts passed against the unchanged public bundle at08:51–08:53:17story rounds/12stages with reloads4&8;12freeplay rounds/12opponents/progress unchanged;8round story/championship/freeplay journey including six played tournament wins, champion/trophy1 and checkpoint removal;2resume hands/reload/unfinished exit/malformed fallback/write warning;4×48decoded card assets/selection/reload/hand application/3203901280settings.0runtime errors. Fresh94unit tests, TypeScript/Vite build and npm audit0findings pass. Literal runtime asset references also resolve in public assets. New QA/docs do not alter JS/CSS hashes and do not require a new Pages build.
+
+Acceptance source: https://github.com/sigco3111/gostop2026/commit/2b340fb34b2f8c08dfe5d7a2846789e7c5b00ef4 ; deployed build: https://github.com/sigco3111/gostop2026/actions/runs/42923737258 . Public play: https://sigco3111.github.io/gostop2026/ . These are automated seeded UI runs, not user-owned save data or a claim of human tournament wins. Earlier per-batch counts and fixture descriptions above are historical and must not be added together as unique games.
