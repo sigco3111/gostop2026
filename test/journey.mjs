@@ -54,9 +54,9 @@ try{
    await next.click();await pause(25);await playRound(`t${trial}g${game}`);
   }
   const text=await page.$eval('#tournament-screen',el=>el.innerText);
-  if(text.includes('토너먼트 · 우승')){report.tournament={won:true,trial,text};await page.screenshot({path:`${out}/tournament-won.png`});break;}
+  if(text.includes('토너먼트 · 우승')){report.tournament={won:true,trial,text};if(await page.evaluate(()=>localStorage.getItem('gostop2026-tournament-v1')!==null))throw Error('champion checkpoint not cleared');await page.screenshot({path:`${out}/tournament-won.png`});await page.evaluate(()=>document.querySelector('#tournament-screen').scrollTop=99999);await page.screenshot({path:`${out}/tournament-won-bottom.png`});break;}
   if(!text.includes('탈락'))throw new Error('tournament did not reach terminal state');
-  report.tournament={won:false,trial,text};await click('#back');
+  if(await page.evaluate(()=>localStorage.getItem('gostop2026-tournament-v1')!==null))throw Error('eliminated checkpoint not cleared');report.tournament={won:false,trial,text};await click('#back');
  }
  // Free play enters a chosen opponent and can finish a whole round.
  await page.goto('http://localhost:4173/gostop2026/');await click('#m-free');await click('.stage-card');await playRound('free');

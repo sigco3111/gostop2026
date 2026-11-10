@@ -53,5 +53,7 @@ try{
  const after=await page.evaluate(()=>localStorage.getItem('gostop2026-tournament-v1'));
  if(before!==after)throw Error('unfinished hand changed checkpoint');
  await click('#next');await playRound('after-resume');
- report.tournament={restored:true,unfinishedHandPreserved:true,text};console.log(JSON.stringify(report));
+ report.tournament={restored:true,unfinishedHandPreserved:true,text};
+ await page.goto('http://localhost:4173/gostop2026/');await page.evaluate(()=>localStorage.setItem('gostop2026-tournament-v1','bad'));await page.reload();if(await page.$eval('#m-tournament',e=>e.innerText.includes('이어하기')))throw Error('invalid save advertised');await click('#m-tournament');if(!await page.$('#next'))throw Error('invalid save blocked new tournament');
+ await page.goto('http://localhost:4173/gostop2026/');await page.evaluate(()=>{Storage.prototype.setItem=function(){throw new Error('quota')};Storage.prototype.removeItem=function(){throw new Error('blocked')};});await click('#m-tournament');if(!await page.$('[role=alert]'))throw Error('save failure hidden');await page.screenshot({path:`${out}/storage-blocked.png`});report.storageFailureVisible=true;console.log(JSON.stringify(report));
 }finally{writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));if(browser)await browser.close();server.kill();await new Promise(r=>server.once('exit',r));}
