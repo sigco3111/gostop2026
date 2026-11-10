@@ -1,3 +1,4 @@
+import { cardDescription } from '../data/cardDescription';
 import { focusDialog } from './dialog';
 import { sfx, soundEnabled, setSound } from './audio';
 import { MatgoGame, GameEvent } from '../engine/game';
@@ -24,6 +25,7 @@ export class GameScreen {
   private ai: AI;
   private el!: HTMLElement;
   private effectLayer!: HTMLElement;
+  private announcements!: HTMLElement;
   private busy = false;
   private awaitingUser = false;
   private selectedCard: Card | null = null;
@@ -53,6 +55,7 @@ export class GameScreen {
     this.el.style.backgroundPosition='center';
     this.root.innerHTML = '';
     this.root.appendChild(this.el);
+    this.announcements=document.createElement('div');this.announcements.className='sr-only';this.announcements.setAttribute('role','log');this.announcements.setAttribute('aria-live','polite');this.announcements.setAttribute('aria-relevant','additions');this.announcements.setAttribute('aria-label','대국 진행');this.root.appendChild(this.announcements);
     this.effectLayer=document.createElement('div');this.effectLayer.className='fx-layer';this.effectLayer.setAttribute('aria-hidden','true');this.root.appendChild(this.effectLayer);
     const ev = this.g.deal(); this.dbg(); sfx('shuffle');
     this.render();
@@ -99,6 +102,7 @@ export class GameScreen {
 
   private async processEvents(events: GameEvent[]) {
     for (const e of events) {
+      this.announce(e);
       switch (e.type) {
         case 'captured': case 'stealPi': case 'placed': case 'played':
           sfx(e.type === 'played' ? 'play' : 'draw');
@@ -124,6 +128,26 @@ export class GameScreen {
           break;
       }
     }
+  }
+
+  private announce(e:GameEvent){
+    const who=(player:number)=>player===0?'나':this.opponent.name;
+    let text='';
+    if(e.type==='played')text=`${who(e.player)}: ${cardDescription(e.card)} 냄`;
+    else if(e.type==='placed')text=`${who(e.player)}: ${cardDescription(e.card)} 바닥에 놓음`;
+    else if(e.type==='captured')text=`${who(e.player)}: ${e.cards.map(cardDescription).join(', ')} 가져감`;
+    else if(e.type==='stealPi')text=`${who(e.to)}: 피 뺏기, ${cardDescription(e.card)}`;
+    else if(e.type==='go')text=`${who(e.player)}: ${e.count}고`;
+    else if(e.type==='ppeok')text=`${who(e.player)}: 뻑`;
+    else if(e.type==='stop')text=`${who(e.player)}: 스톱`;
+    else if(e.type==='sseul')text=`${who(e.player)}: 쓸, 바닥패 모두 가져감`;
+    else if(e.type==='shake')text=`${who(e.player)}: ${e.month}월 흔들기 또는 폭탄`;
+    else if(e.type==='chongtong')text=`${who(e.player)}: 총통`;
+    else if(e.type==='threePpeok')text=`${who(e.player)}: 3뻑 승리`;
+    else if(e.type==='nagari')text='나가리';
+    if(!text)return;
+    const line=document.createElement('p');line.textContent=text;this.announcements.appendChild(line);
+    while(this.announcements.children.length>12)this.announcements.firstElementChild?.remove();
   }
 
   private animateCards(e: Extract<GameEvent,{type:'played'|'captured'|'placed'|'stealPi'}>) {
@@ -218,7 +242,7 @@ export class GameScreen {
     ov.innerHTML='<div class="exit-panel"><h3>이 대국을 나갈까요?</h3><p>현재 판과 토너먼트 대진은 이어할 수 없습니다. 이미 저장한 시나리오 돌파·칭호·트로피는 유지됩니다. 승리나 점수는 기록하지 않습니다.</p><div><button class="btn small" data-exit="cancel">계속하기</button><button class="btn small danger" data-exit="confirm">대국 나가기</button></div></div>';
     const cancel=()=>{ov.remove();(this.el.querySelector('.exit-toggle') as HTMLElement)?.focus();};
     ov.querySelector('[data-exit=cancel]')!.addEventListener('click',cancel);
-    ov.querySelector('[data-exit=confirm]')!.addEventListener('click',()=>{this.effectLayer.remove();this.onExit?.();});
+    ov.querySelector('[data-exit=confirm]')!.addEventListener('click',()=>{this.effectLayer.remove();this.announcements.remove();this.onExit?.();});
     if(this.tournamentCheckpoint)ov.querySelector('p')!.textContent='진행 중인 한 판의 손패는 저장되지 않습니다. 완료한 판까지의 대진·승수·나가리 이월은 저장되어 타이틀의 토너먼트 이어하기로 돌아올 수 있습니다. 현재 판의 승리나 점수는 기록하지 않습니다.';
     this.el.appendChild(ov);focusDialog(ov,ov.querySelector<HTMLElement>('[data-exit=cancel]'),cancel);
   }
@@ -283,7 +307,7 @@ export class GameScreen {
         ['피', cards.filter((c) => c.kind === 'pi')],
       ];
       return groups.filter(([, cs]) => cs.length).map(([label, cs]) =>
-        `<div class="cap-group"><div class="cap-stack">${cs.map((c) => `<img class="mini" src="${cardUrl(c.id)}" alt="${c.label}">`).join('')}</div><div class="cap-label">${label} ${label === '피' ? cs.reduce((s, c) => s + c.piValue, 0) : cs.length}</div></div>`).join('');
+        `<div class="cap-group"><div class="cap-stack">${cs.map((c) => `<img class="mini" src="${cardUrl(c.id)}" alt="${cardDescription(c)}">`).join('')}</div><div class="cap-label">${label} ${label === '피' ? cs.reduce((s, c) => s + c.piValue, 0) : cs.length}</div></div>`).join('');
     };
     (window as any).__base = BASE;
 
@@ -299,16 +323,16 @@ export class GameScreen {
       <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':'내 차례 · 손패를 내세요'):`${this.opponent.name}의 차례`}</span><div class="turn-actions"><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button><button class="exit-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''} aria-label="대국 나가기">나가기</button></div></div>
       <div class="table-area">
         <div class="opp-zone">
-          <div class="opp-hand">${opp.hand.map(() => '<div class="card-back"></div>').join('')}</div>
+          <div class="opp-hand" role="img" aria-label="${this.opponent.name} 손패 ${opp.hand.length}장, 뒷면">${opp.hand.map(() => '<div class="card-back"></div>').join('')}</div>
           <div class="spacer" style="flex:1"></div>
           <div class="opp-captured">${capGroup(opp.captured)}</div>
         </div>
-        <div class="floor-zone" id="floor"></div>
+        <div class="floor-zone" id="floor" role="group" aria-label="바닥패 ${g.floor.length}장"></div>
         <div class="opp-zone" style="justify-content:flex-end">
           <div class="my-captured">${capGroup(me.captured)}</div>
         </div>
         <div class="action-bar" id="actionbar"></div>
-        <div class="my-hand" id="hand"></div>
+        <div class="my-hand" id="hand" role="group" aria-label="내 손패 ${me.hand.length}장"></div>
       </div>`;
 
     this.el.querySelector('.sound-toggle')?.addEventListener('click', () => {setSound(!soundEnabled());this.render();});
@@ -339,7 +363,7 @@ export class GameScreen {
     }
     // 덱 더미 표시
     const pile = document.createElement('div');
-    pile.className = 'deck-pile';
+    pile.className = 'deck-pile';pile.setAttribute('role','img');pile.setAttribute('aria-label',`남은 더미 ${g.deck.length}장`);
     pile.appendChild(cardBackEl());
     const count = document.createElement('div');
     count.style.cssText = 'color:#8a84a0;font-size:11px;text-align:center;margin-top:2px';

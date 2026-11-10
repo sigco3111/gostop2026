@@ -1,3 +1,4 @@
+import { cardDescription } from '../data/cardDescription';
 import { deckCardUrl } from './deckSettings';
 import { Card } from '../engine/cards';
 
@@ -16,11 +17,11 @@ export function cardEl(card: Card, opts: { big?: boolean; interactive?: boolean 
   el.dataset.cardId = String(card.id);
   if(opts.interactive){el.setAttribute('role','button');el.tabIndex=0;}
   else el.setAttribute('role','img');
-  el.setAttribute('aria-label',`${card.month}월 ${card.label} ${card.piValue===2?'쌍피':KIND_LABEL[card.kind]}`);
+  el.setAttribute('aria-label',cardDescription(card));
   el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
   const img = document.createElement('img');
   img.src = cardUrl(card.id);
-  img.alt = card.label;
+  img.alt = cardDescription(card);
   img.draggable = false;
   el.appendChild(img);
   // 등급별 시각 구분 레이어
@@ -42,7 +43,7 @@ export function miniCardEl(card: Card): HTMLImageElement {
   const img = document.createElement('img');
   img.className = 'mini';
   img.src = cardUrl(card.id);
-  img.alt = card.label;
+  img.alt = cardDescription(card);
   return img;
 }
 

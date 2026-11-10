@@ -289,3 +289,6 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .settle-panel,.exit-panel,.gostop-panel{max-height:calc(100dvh - 24px);overflow-y:auto;}
 
 .deck-credit a{color:#9fe5ff;text-underline-offset:3px;}.deck-credit a:focus-visible{outline:3px solid #4ee8ff;outline-offset:3px;}
+
+/* Accessible event log stays mounted while the visual board redraws. */
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
