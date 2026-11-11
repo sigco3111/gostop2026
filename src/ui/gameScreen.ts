@@ -1,3 +1,5 @@
+import { captureGroups } from '../data/captureGroups';
+import { ScoreBreakdown } from '../engine/scoring';
 import { scoreDescription, scoreItems } from '../data/scoreDescription';
 import { cardDescription } from '../data/cardDescription';
 import { focusDialog } from './dialog';
@@ -299,16 +301,8 @@ export class GameScreen {
     const me = g.players[0], opp = g.players[1];
     const myScore = g.scoreOf(0), oppScore = g.scoreOf(1);
 
-    const capGroup = (cards: Card[]) => {
-      const groups: [string, Card[]][] = [
-        ['광', cards.filter((c) => c.kind === 'gwang')],
-        ['열끗', cards.filter((c) => c.kind === 'yeol' || c.isGukjin)],
-        ['띠', cards.filter((c) => c.kind === 'tti')],
-        ['피', cards.filter((c) => c.kind === 'pi')],
-      ];
-      return groups.filter(([, cs]) => cs.length).map(([label, cs]) =>
-        `<div class="cap-group"><div class="cap-stack">${cs.map((c) => `<img class="mini" src="${cardUrl(c.id)}" alt="${cardDescription(c)}">`).join('')}</div><div class="cap-label">${label} ${label === '피' ? cs.reduce((s, c) => s + c.piValue, 0) : cs.length}</div></div>`).join('');
-    };
+    const capGroup = (cards: Card[], breakdown:ScoreBreakdown) => captureGroups(cards,breakdown).map(({label,cards:cs,count}) =>
+      `<div class="cap-group"><div class="cap-stack">${cs.map((c) => `<img class="mini" src="${cardUrl(c.id)}" alt="${cardDescription(c)}">`).join('')}</div><div class="cap-label">${label} ${count}</div></div>`).join('');
     (window as any).__base = BASE;
 
     this.el.innerHTML = `
@@ -325,11 +319,11 @@ export class GameScreen {
         <div class="opp-zone">
           <div class="opp-hand" role="img" aria-label="${this.opponent.name} 손패 ${opp.hand.length}장, 뒷면">${opp.hand.map(() => '<div class="card-back"></div>').join('')}</div>
           <div class="spacer" style="flex:1"></div>
-          <div class="opp-captured">${capGroup(opp.captured)}</div>
+          <div class="opp-captured">${capGroup(opp.captured,oppScore)}</div>
         </div>
         <div class="floor-zone" id="floor" role="group" aria-label="바닥패 ${g.floor.length}장"></div>
         <div class="opp-zone" style="justify-content:flex-end">
-          <div class="my-captured">${capGroup(me.captured)}</div>
+          <div class="my-captured">${capGroup(me.captured,myScore)}</div>
         </div>
         <div class="action-bar" id="actionbar"></div>
         <div class="my-hand" id="hand" role="group" aria-label="내 손패 ${me.hand.length}장"></div>
