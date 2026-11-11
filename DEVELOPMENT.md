@@ -195,3 +195,8 @@ GAME_URL=https://sigco3111.github.io/gostop2026/ node test/effect-fallback.mjs
 GAME_URL=https://sigco3111.github.io/gostop2026/ EFFECT=b QA_START=10 QA_END=10 node test/natural-opponents.mjs
 GAME_URL=https://sigco3111.github.io/gostop2026/ QA_WIDTH=844 QA_HEIGHT=320 node test/contact-timing.mjs
 ```
+
+### 2026-11-11 12:40 - Captured-card mobile browsing
+- Grouped the expanded capture list by the score's current 광/열끗/띠/피 designation, using the same helper as the board. 국진 follows its current 열끗/쌍피 score treatment.
+- Kept the return control and two player/score jump buttons visible while scrolling. Jumping focuses the destination heading below the sticky controls; browsing does not play a card or change game state.
+- `test/captured-score-detail.mjs` now checks scroll-end control visibility, 44px navigation targets, both focused destinations, grouped 국진, unchanged game state, empty captures and four viewports (320x568,390x844,844x320,1280x844). Deliberate isolated public-capture fixture, not a naturally played round. Axe: zero violations at each viewport;117 unit tests pass. Physical-phone testing remains unverified.

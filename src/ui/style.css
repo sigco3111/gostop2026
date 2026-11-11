@@ -320,3 +320,13 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 @keyframes contact-card{0%,100%{scale:1;translate:0 0;}35%{scale:1.055;translate:0 -3px;}65%{scale:.99;translate:0 1px;}}
 @media(prefers-reduced-motion:reduce){.motion-contact{display:none;}.motion-match img{animation:none;}}
 .effect-settings{margin:24px 0;padding:18px 0;border-top:1px solid #4c3b57;border-bottom:1px solid #4c3b57;}.effect-settings>p{font-size:13px;line-height:1.8;}.effect-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;}.effect-option{background:#17121e;border:1px solid #66516e;border-radius:6px;color:#eee2d4;padding:10px;cursor:pointer;min-width:0;display:flex;flex-direction:column;gap:8px;align-items:center;}.effect-option.selected{border:2px solid #e5c58b;padding:9px;background:#2b2030;}.effect-option>span:not(.effect-thumb),.effect-option small{font-size:12px;line-height:1.65;}.effect-option small{color:#c2afc9;overflow-wrap:anywhere;}.effect-thumb{display:block;width:96px;height:96px;max-width:100%;background-repeat:no-repeat;}.effect-option:focus-visible{outline:3px solid #eee2c2;outline-offset:3px;}@media(max-width:480px){.effect-options{grid-template-columns:1fr;}.effect-option{display:grid;grid-template-columns:76px 1fr;text-align:left;}.effect-thumb{width:72px;height:72px;grid-row:1/4;}.effect-option strong,.effect-option>span:not(.effect-thumb),.effect-option small{grid-column:2;}}
+
+/* Keep touch return and public-player navigation visible in long capture lists. */
+.capture-panel{position:relative;scroll-padding-top:124px;overscroll-behavior:contain;}
+.capture-controls{position:sticky;top:-20px;z-index:2;background:#17131c;padding:8px 0 10px;border-bottom:1px solid #56435e;display:grid;gap:8px;}
+.capture-close{justify-self:end;}
+.capture-navigation{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.capture-jump{min-height:44px;min-width:0;border:1px solid #66516e;border-radius:5px;background:#24202c;color:#eee6f2;font:inherit;font-size:13px;padding:8px;cursor:pointer;overflow-wrap:anywhere;}
+.capture-player>h3{scroll-margin-top:124px;}.capture-player>h3:focus{outline:2px solid #4ee8ff;outline-offset:4px;}
+.capture-category h4{font-size:14px;color:#e6ca9e;margin:18px 0 8px;}.capture-category .captured-grid{margin:0 0 18px;}
+@media(max-width:650px){.capture-controls{top:-14px;}.capture-panel{scroll-padding-top:124px;}.capture-player>h3{margin-top:18px;}}

@@ -243,17 +243,28 @@ export class GameScreen {
     if(this.g.over || this.g.turn!==0 || this.g.awaitingGoStop || this.g.awaitingChoice || this.busy)return;
     const ov=document.createElement('div');ov.className='capture-overlay';ov.setAttribute('aria-label','먹은 패와 점수');
     const panel=document.createElement('div');panel.className='capture-panel';
+    const controls=document.createElement('div');controls.className='capture-controls';
     const close=document.createElement('button');close.className='btn small capture-close';close.textContent='판으로 돌아가기';
-    const dismiss=()=>{ov.remove();(this.el.querySelector('.capture-toggle') as HTMLElement)?.focus();};close.addEventListener('click',dismiss);panel.appendChild(close);
+    const dismiss=()=>{ov.remove();(this.el.querySelector('.capture-toggle') as HTMLElement)?.focus();};close.addEventListener('click',dismiss);controls.appendChild(close);
+    const navigation=document.createElement('div');navigation.className='capture-navigation';navigation.setAttribute('role','group');navigation.setAttribute('aria-label','먹은 패 바로 이동');controls.appendChild(navigation);panel.appendChild(controls);
     for(const player of [0,1] as const){
-      const heading=document.createElement('h3');const sc=this.g.scoreOf(player);heading.textContent=`${player===0?'나':this.opponent.name} · ${sc.total}점`;panel.appendChild(heading);
-      const detail=document.createElement('p');detail.textContent=`광 ${sc.counts.gwang}장 · 열끗 ${sc.counts.yeol}장 · 띠 ${sc.counts.tti}장 · 피 ${sc.counts.piUnits}장분`;panel.appendChild(detail);
-      const breakdown=document.createElement('p');breakdown.className='capture-breakdown';breakdown.textContent=scoreDescription(sc);panel.appendChild(breakdown);
-      if(this.g.players[player].captured.some(c=>c.isGukjin)){const designation=document.createElement('p');designation.className='capture-gukjin';designation.textContent=`국진은 현재 ${sc.gukjinAsPi?'쌍피 2장분':'열끗 1장'}으로 셉니다. 최종 정산에서는 배수와 7점 조건에 따라 달라질 수 있습니다.`;panel.appendChild(designation);}
-      const note=document.createElement('p');note.className='capture-note';note.textContent='현재 원점수입니다. 고·박·흔들기 배수는 마지막 정산에서 적용합니다.';panel.appendChild(note);
-      const grid=document.createElement('div');grid.className='captured-grid';
-      for(const card of this.g.players[player].captured.slice().sort((a,b)=>a.month-b.month||a.id-b.id)){const item=cardEl(card);item.removeAttribute('tabindex');grid.appendChild(item);}
-      if(!grid.children.length)grid.textContent='아직 먹은 패가 없습니다.';panel.appendChild(grid);
+      const sc=this.g.scoreOf(player),name=player===0?'나':this.opponent.name;
+      const section=document.createElement('section');section.className='capture-player';section.id=`capture-player-${player}`;section.setAttribute('aria-labelledby',`capture-heading-${player}`);
+      const heading=document.createElement('h3');heading.id=`capture-heading-${player}`;heading.tabIndex=-1;heading.textContent=`${name} · ${sc.total}점`;section.appendChild(heading);panel.appendChild(section);
+      const jump=document.createElement('button');jump.className='capture-jump';jump.textContent=`${name} · ${sc.total}점`;jump.setAttribute('aria-controls',section.id);jump.addEventListener('click',()=>{heading.focus({preventScroll:true});panel.scrollTop=section.offsetTop-controls.offsetHeight-8;});navigation.appendChild(jump);
+      const detail=document.createElement('p');detail.textContent=`광 ${sc.counts.gwang}장 · 열끗 ${sc.counts.yeol}장 · 띠 ${sc.counts.tti}장 · 피 ${sc.counts.piUnits}장분`;section.appendChild(detail);
+      const breakdown=document.createElement('p');breakdown.className='capture-breakdown';breakdown.textContent=scoreDescription(sc);section.appendChild(breakdown);
+      if(this.g.players[player].captured.some(c=>c.isGukjin)){const designation=document.createElement('p');designation.className='capture-gukjin';designation.textContent=`국진은 현재 ${sc.gukjinAsPi?'쌍피 2장분':'열끗 1장'}으로 셉니다. 최종 정산에서는 배수와 7점 조건에 따라 달라질 수 있습니다.`;section.appendChild(designation);}
+      const note=document.createElement('p');note.className='capture-note';note.textContent='현재 원점수입니다. 고·박·흔들기 배수는 마지막 정산에서 적용합니다.';section.appendChild(note);
+      const groups=captureGroups(this.g.players[player].captured,sc);
+      for(const {label,cards,count} of groups){
+        const group=document.createElement('div');group.className='capture-category';
+        const title=document.createElement('h4');title.textContent=`${label} · ${count}${label==='피'?'장분':'장'}`;group.appendChild(title);
+        const grid=document.createElement('div');grid.className='captured-grid';grid.setAttribute('role','group');grid.setAttribute('aria-label',title.textContent);
+        for(const card of cards.slice().sort((a,b)=>a.month-b.month||a.id-b.id)){const item=cardEl(card);item.removeAttribute('tabindex');grid.appendChild(item);}
+        group.appendChild(grid);section.appendChild(group);
+      }
+      if(!groups.length){const empty=document.createElement('p');empty.className='capture-empty';empty.textContent='아직 먹은 패가 없습니다.';section.appendChild(empty);}
     }
     ov.appendChild(panel);this.el.appendChild(ov);focusDialog(ov,close,dismiss);
   }
