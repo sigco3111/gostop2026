@@ -375,3 +375,9 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .guide-navigation .guide-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;flex-wrap:nowrap;margin:6px 0 0;}
 .guide-navigation .guide-tabs .btn{padding:8px 4px;min-width:0;}
 @media(max-width:500px){.guide-navigation .guide-tabs .btn{font-size:11px;}}
+
+/* A long tournament history must not hide start and return controls. */
+#tournament-screen .tourney-actions{position:sticky;top:0;z-index:5;display:flex;flex-wrap:nowrap;gap:10px;padding:8px 0;margin:16px 0;background:#12101a;border-bottom:1px solid #49344f;}
+#tournament-screen .tourney-actions .btn{min-width:0;min-height:44px;padding:10px 14px;font-size:14px;letter-spacing:0;}
+#tournament-screen .tourney-actions #next{flex:1;}
+#tournament-screen .tourney-actions #back{margin-left:auto;}

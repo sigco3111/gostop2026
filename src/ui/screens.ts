@@ -188,12 +188,12 @@ export class App {
       const history=t.history.map((r,i)=>`<div class="bracket-round"><h3>${roundNames[i]}</h3>${r.map(p=>`<div class="bracket-match"><span>${name(p.a)} <b>${p.score[0]} : ${p.score[1]}</b> ${name(p.b)}</span><small>승자: ${name(p.winner)}</small></div>`).join('')}</div>`).join('');
       const finished=t.eliminated||t.champion;
       el.innerHTML=`<div class="tourney-wrap"><div class="screen-head"><h2>토너먼트 · ${t.champion?'우승':t.eliminated?'탈락':roundNames[t.round]}</h2></div>
+        <nav class="tourney-actions" aria-label="토너먼트 이동">${!finished?'<button class="btn primary" id="next">대국 시작</button>':''}<button class="btn small" id="back">타이틀로</button></nav>
         <p class="tourney-note">각 대진 3판 2승. 다른 AI 대진은 결과를 계산합니다. 토너먼트 도중 나가리는 해당 대진의 다음 판에만 이월됩니다.</p>
         ${history}
         ${!finished?`<div class="bracket-round"><h3>${roundNames[t.round]} 대진</h3>${Array.from({length:t.alive.length/2},(_,i)=>`<div class="bracket-match bracket-upcoming"><span>${name(t.alive[i*2])}</span><span class="versus">VS</span><span>${name(t.alive[i*2+1])}</span></div>`).join('')}</div>
           <p class="series">나 ${t.series[0]}승 : ${t.series[1]}승 ${t.opponent?.name} ${carry>1?` · 나가리 ×${carry}`:''}</p>`:''}
         ${t.champion?`<h3 class="champion-label">트로피 ${this.save.trophies}개 · 패담의 챔피언</h3>`:''}
-        <div class="tourney-actions">${!finished?'<button class="btn primary" id="next">대국 시작</button>':''}<button class="btn small" id="back">타이틀로</button></div>
         <small class="tourney-note">${finished?'대회가 종료되었습니다. 타이틀에서 토너먼트를 선택하면 새 대회를 시작합니다.':'완료한 판까지 자동 저장합니다. 타이틀이나 새로고침 후 이어할 수 있습니다. 진행 중인 한 판의 손패는 저장하지 않습니다.'}</small>
       </div>`;
       el.querySelector('#back')!.addEventListener('click',()=>this.showTitle());
