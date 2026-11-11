@@ -317,3 +317,11 @@ check, not a full-round or hardware-keyboard test. `SPECIAL_ONLY=bomb` limits
 the run to bomb and blank-pass cases; `GAME_URL` and `QA_OUT` override the public
 URL and output directory. Empty captured-panel jumps were separately inspected
 at 320, 568 and 844 widths; no defect was found.
+
+`node test/header-go-layout.mjs` checks header-only display fixtures for all
+12 rivals at 320/360/390/568 widths, with Go 0/1/5, raw score 0/12/29 and both
+sound labels (288 combinations). The fixture changes only displayed text,
+not game state or saved progress. It checks intact labels, reachable sound,
+no horizontal overflow and state/save equality. This does not claim those Go
+and score combinations were earned in real play. Header CSS keeps narrow Go
+and sound labels intact; Go badges use a lighter red for dark-surface contrast.

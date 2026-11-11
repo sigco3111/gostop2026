@@ -412,3 +412,17 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 /* Guide captions explain scoring groups without painting over the hwatu art. */
 .deck-card-entry{width:60px;min-width:0;flex-shrink:0;}.deck-row .deck-card-entry .hcard{width:100%;height:auto;aspect-ratio:2/3;}.deck-card-entry figcaption{font-size:12px;line-height:1.5;color:#d8cce2;text-align:center;margin-top:7px;word-break:keep-all;}.deck-card-entry figcaption span{display:block;}
 @media(max-width:650px){.deck-card-entry{width:calc((100% - 18px)/4);max-width:78px;}.deck-row .deck-card-entry .hcard{max-width:none;}}
+
+/* Keep go counts and sound labels intact in the narrow game header. */
+@media(max-width:360px){
+ .opp-bar{gap:4px;}
+ .opp-bar .score-pill{padding:4px 5px;white-space:nowrap;}
+ .opp-bar .sound-toggle{white-space:nowrap;flex-shrink:0;}
+ .opp-bar>div:nth-child(2){min-width:0;flex-shrink:1;}
+ .opp-name{white-space:nowrap;}
+ .opp-name .go-badge{display:block;margin-left:0;}
+ .opp-title{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+ .score-pill .go-badge{font-size:11px;margin-left:2px;white-space:nowrap;}
+}
+/* Go badges stay readable on both dark header surfaces. */
+.go-badge{color:#ff6363;}
