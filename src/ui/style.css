@@ -330,3 +330,8 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .capture-player>h3{scroll-margin-top:124px;}.capture-player>h3:focus{outline:2px solid #4ee8ff;outline-offset:4px;}
 .capture-category h4{font-size:14px;color:#e6ca9e;margin:18px 0 8px;}.capture-category .captured-grid{margin:0 0 18px;}
 @media(max-width:650px){.capture-controls{top:-14px;}.capture-panel{scroll-padding-top:124px;}.capture-player>h3{margin-top:18px;}}
+/* Coarse pointers need room for a fingertip without shrinking the playing cards. */
+@media(pointer:coarse){
+ .sound-toggle,.capture-toggle,.exit-toggle{min-width:44px;min-height:44px;}
+ .my-hand .hcard:hover{transform:none;}
+}

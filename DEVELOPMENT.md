@@ -200,3 +200,7 @@ GAME_URL=https://sigco3111.github.io/gostop2026/ QA_WIDTH=844 QA_HEIGHT=320 node
 - Grouped the expanded capture list by the score's current 광/열끗/띠/피 designation, using the same helper as the board. 국진 follows its current 열끗/쌍피 score treatment.
 - Kept the return control and two player/score jump buttons visible while scrolling. Jumping focuses the destination heading below the sticky controls; browsing does not play a card or change game state.
 - `test/captured-score-detail.mjs` now checks scroll-end control visibility, 44px navigation targets, both focused destinations, grouped 국진, unchanged game state, empty captures and four viewports (320x568,390x844,844x320,1280x844). Deliberate isolated public-capture fixture, not a naturally played round. Axe: zero violations at each viewport;117 unit tests pass. Physical-phone testing remains unverified.
+
+### 2026-11-11 12:45 - Touch targets and swipe safety
+- Coarse-pointer devices get44px minimum hit areas for sound/capture/exit controls. Mouse-only layout is unchanged. Touch devices no longer retain a lifted hover card.
+- `test/touch-controls.mjs`:320x568/390x844/844x320 real CDP touch swipe starts on hand without playing, last hand is reachable after scrolling when needed, a single tap plays exactly one card. Touch the outer part of sound/capture/return/exit/cancel controls; no game-state change from those controls. Axe0 at each viewport. Seeded fresh test profiles, not physical-device testing.
