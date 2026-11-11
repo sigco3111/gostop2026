@@ -415,3 +415,13 @@ and dialog focus/Tab containment, and verifies scroll access to the title and
 heading and buttons; they need not fit together. Both rounds must have identical
 inputs, boundary states, result, earned save, reload and records, with axe0.
 This is desktop-browser tab/viewport simulation, not phone app suspension.
+
+`tournament-series-normal.mjs` naturally completes an opening best-of-three
+pairing with production timers and fixed shuffle, reloads the earned checkpoint
+between games, and checks the transition to the semifinal bracket. It checks
+four recorded quarterfinal results, reset series0:0, persistent reload and
+cancel/confirmed exit from the unfinished semifinal without changing the
+checkpoint or crediting a trophy. Other AI pairings are calculated by the game,
+not played as hidden full rounds. This is not a naturally won championship or
+human difficulty test. Bracket history and current pairings remain scrollable
+on short screens.
