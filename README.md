@@ -279,3 +279,11 @@ the visible caption. `test/deck-captions.mjs` checks all 48 labels at five sizes
 uncropped image proportions, caption placement, reachable short-landscape text,
 progress invariance, overflow and axe/runtime checks. A 320px-tall screen scrolls
 to see captions below the card images.
+
+### Repeatable keyboard browsing in the rival dossier (2026-11-11)
+After moving to a previous or next rival, focus stays on that same navigation
+button. Repeated Enter/Space browses the twelve rivals rather than accidentally
+activating Close. Initial opening still focuses Close; Escape or Close restores
+the originating gallery card. `test/rival-navigation.mjs` checks 12 forward and
+12 backward keyboard moves, wrapping, touch navigation, modal focus boundaries,
+background isolation, 44px visible controls, save invariance and axe at five sizes.
