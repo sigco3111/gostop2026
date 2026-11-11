@@ -390,3 +390,9 @@ three impact-sprite downloads in isolated sessions selecting A/B/C. Both checks
 compare complete decision-boundary game state, earned saves and records with a
 normal round, check reload continuity and axe0. Network failures are deliberate
 fixtures, not evidence of an actual public outage.
+
+`free-roster-key-boundary.mjs` covers all12 freely available rivals at320/568/1280
+widths with touch/Enter/Space (108 entries). A held roster key must not play a
+card when focus moves into the game; cancel preserves the full state, confirmed
+exit returns to title and preserves progress. This is entry/exit coverage, not
+108 completed rounds or a human difficulty evaluation.
