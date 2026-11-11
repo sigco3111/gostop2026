@@ -106,6 +106,8 @@ export class GameScreen {
 
   private async processEvents(events: GameEvent[]) {
     const motion=this.motion;
+    // Motion temporarily adds/removes floor cells, so remember the view first.
+    const tableView=this.tableView();
     let result:Extract<GameEvent,{type:"gameOver"}>|undefined;
     this.el.querySelectorAll(".choice-overlay").forEach(node=>node.remove());
     this.el.inert=true;this.el.setAttribute("aria-busy","true");
@@ -136,7 +138,7 @@ export class GameScreen {
           break;
       }
     }
-    } finally {await motion.finishContacts();this.el.inert=false;this.el.removeAttribute("aria-busy");this.render();}
+    } finally {await motion.finishContacts();this.el.inert=false;this.el.removeAttribute("aria-busy");this.render(tableView);}
     if(result)this.showSettle(result);
   }
 
@@ -294,7 +296,13 @@ export class GameScreen {
     }
   }
 
-  private render() { this.dbg();
+  private tableView() {
+    const table=this.el.querySelector<HTMLElement>('.table-area');
+    // Include the hand/table padding after scrollIntoView aligns the last card.
+    return table?{top:table.scrollTop,atEnd:table.scrollHeight-table.clientHeight-table.scrollTop<=12}:null;
+  }
+
+  private render(tableScroll=this.tableView()) { this.dbg();
     const previousFocus=document.activeElement instanceof HTMLElement&&this.el.contains(document.activeElement)?document.activeElement:null;
     const focusCard=previousFocus?.dataset.cardId;
     const focusSound=previousFocus?.classList.contains('sound-toggle');
@@ -425,6 +433,10 @@ export class GameScreen {
         ab.appendChild(hint);
       }
     }
+    // Keep the viewed part of the table stable when turn rendering replaces it.
+    const table=this.el.querySelector<HTMLElement>('.table-area');
+    if(table&&tableScroll)table.scrollTop=tableScroll.atEnd?table.scrollHeight:tableScroll.top;
+
     if(this.keyboardNavigation&&!g.awaitingChoice&&!g.awaitingGoStop){
       const target=focusSound?this.el.querySelector<HTMLElement>('.sound-toggle'):g.turn===0&&this.awaitingUser?(this.el.querySelector<HTMLElement>(`#hand [data-card-id="${focusCard}"][role=button]`)??this.el.querySelector<HTMLElement>('#hand [role=button]')):null;
       target?.focus();
