@@ -190,3 +190,16 @@ input lock. It compares every subsequent input boundary, full final state,
 settlement and earned/reloaded progress with an unchanged-size run, using normal
 production timers. The check proves turn/input recovery for that case, not every
 intermediate animation coordinate, phone sensor rotation or all opponents.
+
+`test/motion-background-round.mjs` opens a separate blank browser tab for 1.2
+seconds during each of eight player card-play animations and verifies actual
+hidden/visible transitions on return. The paired normal-timer, fixed-shuffle
+round must preserve all input boundaries, final state, settlement and earned
+progress after reload. It does not test phone app switching, OS memory reclaim,
+or a long background session.
+
+`test/repeat-touch-round.mjs` makes four extra touchscreen taps at the played
+card's position while the board is input-locked, on every player play. Its
+normal-timer paired round must preserve inputs, all boundary states, settlement,
+final state and saved/reloaded progress. This is browser touch emulation, not
+physical-device latency testing. Neither test injects wins or saved progress.
