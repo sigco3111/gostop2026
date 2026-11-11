@@ -287,3 +287,10 @@ activating Close. Initial opening still focuses Close; Escape or Close restores
 the originating gallery card. `test/rival-navigation.mjs` checks 12 forward and
 12 backward keyboard moves, wrapping, touch navigation, modal focus boundaries,
 background isolation, 44px visible controls, save invariance and axe at five sizes.
+
+### Rival controls remain reachable after reading (2026-11-11)
+The dossier's previous/next/close controls stay pinned at every width, including
+844×320 landscape. `test/rival-scroll-controls.mjs` reads the bottom of all twelve
+profiles at five sizes, checks the complete final quote and all 44px controls,
+then uses Next and Close without scrolling back to the top. Navigation focus,
+wrapping, origin focus and progress storage remain unchanged.
