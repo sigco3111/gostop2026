@@ -337,3 +337,11 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
  .action-bar .btn{min-width:44px;min-height:44px;}
  .my-hand .hcard:hover{transform:none;}
 }
+/* Roster browsing must keep the way back within reach, even mid-list. */
+.roster-navigation{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;min-height:60px;padding:8px 0;margin-bottom:14px;background:#12101a;border-bottom:1px solid #42354b;}
+.roster-navigation span{font-size:13px;color:#d4c7de;}
+.roster-navigation .btn{min-height:44px;}
+#scenario-screen .stage-card,#free-screen .stage-card{scroll-margin-top:76px;}
+#scenario-screen .stage-card{scroll-margin-top:calc(76px + 4vh);}
+
+#scenario-screen .roster-navigation{top:-4vh;}

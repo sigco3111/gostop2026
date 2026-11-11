@@ -60,9 +60,8 @@ export class App {
     this.save=refreshSave(this.save,!this.saveAvailable);
     const el = this.mk('scenario-screen');
     const maxOpen = Math.max(1, ...this.save.clearedStages.map((s) => s + 1), 1);
-    el.innerHTML = `<div class="screen-head"><h2>시나리오 - 밑바닥에서 전설로</h2><span class="sub">12인의 고수를 순서대로 꺾어라</span></div>
-      <div class="stage-grid"></div>
-      <button class="btn small" id="back">← 타이틀</button>`;
+    el.innerHTML = `<div class="screen-head"><h2>시나리오 - 밑바닥에서 전설로</h2><span class="sub">12인의 고수를 순서대로 꺾어라</span></div><nav class="roster-navigation" aria-label="시나리오 이동"><span>시나리오</span><button class="btn small" id="back">← 타이틀</button></nav>
+      <div class="stage-grid"></div>`;
     const grid = el.querySelector('.stage-grid')!;
     for (const o of OPPONENTS) {
       const locked = o.stage > maxOpen;
@@ -153,9 +152,8 @@ export class App {
   showFreePlay() {
     const el = this.mk('free-screen');
     el.innerHTML = `<div class="setup-panel"><h2>자유 대국</h2>
-      <div class="sub" style="color:var(--dim);font-size:13px">상대를 고르세요 (시나리오에서 만난 고수와 다시 대국)</div>
-      <div class="stage-grid" style="margin-top:16px"></div>
-      <button class="btn small" id="back">← 타이틀</button></div>`;
+      <div class="sub" style="color:var(--dim);font-size:13px">상대를 고르세요 (시나리오에서 만난 고수와 다시 대국)</div><nav class="roster-navigation" aria-label="자유 대국 이동"><span>상대 선택</span><button class="btn small" id="back">← 타이틀</button></nav>
+      <div class="stage-grid" style="margin-top:16px"></div></div>`;
     const grid = el.querySelector('.stage-grid')!;
     for (const o of OPPONENTS) {
       const card = document.createElement('div');
