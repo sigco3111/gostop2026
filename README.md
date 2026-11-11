@@ -165,3 +165,11 @@ return button into view, then releases the images and confirms identical button
 coordinates plus a successful tap at the original point across five viewports.
 Set GAME_URL for a public build, or run Vite preview on port 4178 for local QA.
 This is a controlled browser load test, not a physical-device network test.
+
+`test/settings-loading-input.mjs` holds card requests while choosing Comic cards,
+applying them, choosing effect C and returning to the title before requests
+finish. Across five sizes, normal writes survive reload as Comic/C, while
+injected preference-write failures show deck feedback and reload as Classic/A.
+Progress remains unchanged; axe and runtime errors are checked. This is a
+controlled test browser and does not alter the user's progress or prove a real
+network/storage/device failure. GAME_URL and QA_OUT select the target/output.
