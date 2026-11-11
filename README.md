@@ -442,3 +442,25 @@ loading checks assert the red pattern and hidden visual text; failed-download
 checks still cover readable fallbacks, recovery and unchanged turns/saves.
 These are defect fixes, not the larger mobile board redesign requested by the
 user, which is being investigated separately using current game references.
+
+### Mobile board restructuring (2026-11-12)
+The board keeps the hand and player score in the viewport. Only the central
+floor scrolls; opponent and player captured-card counts stay in short strips,
+with pictures and scoring details in the existing detail dialog. Portrait uses
+a non-overlapping5×2hand and landscape a10-card row with a single header.
+Stacked same-month floor groups show physical-card counts. Scrollable floor
+animation placement includes scrollTop and reveals matching targets before the
+flight, without changing game state. Six layout checks include320×480native
+finger scrolling, minimum44px hand targets, all10cards visible and axe0.
+Normal-speed paired rounds at320×568and320×480, and mid-flight rotation pairs,
+retain the same choices,16point results and saved records. Impact A/B/C still
+starts at actual landing, including a scrolled short portrait and568×320bomb.
+Special actions share the player's score strip and retain44px touch targets
+without reducing the central floor below a full-card row at the tested sizes.
+Current validation is browser emulation, not a physical-phone usability study.
+Comparison used official Pmang/Hangame/Winjoy store screenshot pixels plus
+Pmang's official portrait/landscape description. It did not copy their artwork,
+change rules, introduce purchases or add multiplayer. The product remains a
+single-player12-opponent game. Source comparison and visual evidence are kept
+in the separate design report; this section is not a claim of current ranking
+or direct Android-client testing.

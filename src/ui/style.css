@@ -450,3 +450,95 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
    downloads keep the readable public-card fallback and accessible identity. */
 .card-image-loading>.card-fallback{background:repeating-linear-gradient(45deg,#3d0d12,#3d0d12 4px,#59121a 4px,#59121a 8px);box-shadow:inset 0 0 0 2px #7a1f28;}
 .card-image-loading>.card-fallback>*{visibility:hidden;}
+
+/* Board redesign prototype: bounded play space, persistent bottom hand. */
+#game-screen>.opp-bar{flex:none;min-height:52px;padding:4px 10px;gap:8px;background:#0e1312ee;border-color:#35443c;}
+#game-screen .opp-bar img{border-color:#a58a53;width:36px;height:36px;}
+#game-screen .opp-bar .opp-title{font-size:10px;max-width:none;}
+#game-screen .turn-bar{background:#17231de8;border-bottom:1px solid #35443c;padding:2px 8px;gap:5px;min-height:48px;}
+#game-screen .table-area{display:grid;grid-template-rows:auto minmax(0,1fr) auto auto auto;overflow:hidden;padding:5px 7px 6px;gap:4px;}
+#game-screen .opp-zone{min-height:24px;display:flex;flex-wrap:nowrap;gap:6px;justify-content:space-between;}
+#game-screen .opp-hand{gap:1px;flex-shrink:0;}
+#game-screen .opp-hand .card-back{width:12px;height:18px;border-radius:2px;}
+#game-screen .opp-captured,#game-screen .my-captured{display:flex;flex-wrap:nowrap;gap:5px;}
+#game-screen .capture-count{font-size:10px;color:#cad3c8;white-space:nowrap;}
+#game-screen .capture-count b{font-size:12px;color:#eee7d5;}
+#game-screen .opponent-deck{display:flex;flex:1;justify-content:center;}
+#game-screen .deck-pile{position:static;display:flex;align-items:center;gap:3px;}
+#game-screen .deck-pile .card-back{width:13px;height:19px;border-radius:2px;}
+#game-screen .floor-frame{display:grid;grid-template-rows:20px minmax(0,1fr);min-height:0;background:radial-gradient(ellipse,#244c3ce8,#0e231cec);border:1px solid #57705b;border-radius:12px;overflow:hidden;}
+#game-screen .floor-heading{display:flex;justify-content:space-between;align-items:center;padding:0 9px;font-size:10px;color:#c6cdb8;}
+#game-screen .floor-scroll-note{visibility:hidden;color:#e1c98c;}
+#game-screen .floor-overflow .floor-scroll-note{visibility:visible;}
+#game-screen .floor-zone{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:84px;align-content:center;align-items:center;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:none;border:0;border-radius:0;gap:6px;padding:6px 8px 10px;}
+#game-screen .floor-overflow .floor-zone{align-content:start;}
+#game-screen .floor-cell{min-height:80px;}
+#game-screen .floor-cell .hcard{width:52px;height:78px;}
+#game-screen .player-summary{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:2px 4px;min-height:24px;border-bottom:1px solid #87714966;}
+#game-screen .my-score{font-size:13px;white-space:nowrap;color:#eee5ce;}
+#game-screen .my-score>b{font-size:20px;color:#f2ce75;}
+#game-screen .my-hand{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));justify-items:center;align-content:end;gap:4px;padding:2px 0 0;min-height:0;background:linear-gradient(#17130b00,#211c12cc);border-radius:7px;}
+#game-screen .my-hand .hcard.big{width:min(58px,100%);height:auto;aspect-ratio:2/3;}
+#game-screen .action-bar{min-height:0;gap:4px;padding:0;flex-wrap:wrap;}
+#game-screen .action-bar .btn{min-height:44px;padding:4px 9px;font-size:12px;}
+#game-screen .action-bar:empty{display:none;}
+@media(min-width:370px) and (min-height:650px){
+ #game-screen .floor-zone{grid-auto-rows:102px;}
+ #game-screen .floor-cell{min-height:98px;}
+ #game-screen .floor-cell .hcard{width:64px;height:96px;}
+ #game-screen .my-hand .hcard.big{width:min(70px,100%);}
+ #game-screen .capture-count{font-size:11px;}
+}
+@media(min-width:651px), (orientation:landscape){
+ #game-screen>.opp-bar{min-height:44px;}
+ #game-screen .opp-bar img{width:30px;height:30px;}
+ #game-screen .turn-bar{min-height:44px;}
+ #game-screen .table-area{gap:2px;padding:3px 10px 5px;}
+ #game-screen .opp-zone{min-height:22px;justify-content:flex-start;}
+ #game-screen .opp-captured{margin-left:auto;}
+ #game-screen .opponent-deck{flex:0;min-width:48px;}
+ #game-screen .floor-zone{grid-template-columns:repeat(8,minmax(0,1fr));grid-auto-rows:78px;padding:4px 10px 8px;gap:5px;}
+ #game-screen .floor-cell{min-height:74px;}
+ #game-screen .floor-cell .hcard{width:48px;height:72px;}
+ #game-screen .my-hand{grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;}
+ #game-screen .my-hand .hcard.big{width:min(58px,100%);}
+ #game-screen .my-score>b{font-size:17px;}
+ #game-screen .player-summary{min-height:22px;padding:0 3px;}
+}
+@media(min-width:1000px) and (min-height:650px){
+ #game-screen .table-area{width:min(1100px,100%);margin:0 auto;padding-bottom:12px;}
+ #game-screen .floor-zone{grid-auto-rows:126px;}
+ #game-screen .floor-cell{min-height:122px;}
+ #game-screen .floor-cell .hcard{width:80px;height:120px;}
+ #game-screen .my-hand .hcard.big{width:80px;}
+ #game-screen .capture-count{font-size:13px;}
+ #game-screen .capture-count b{font-size:16px;}
+ #game-screen .opp-hand .card-back{width:19px;height:28px;}
+}
+/* Wide/short screens use one compact header instead of two stacked bars. */
+@media(min-width:651px), (orientation:landscape){
+ #game-screen{display:grid;grid-template-columns:220px minmax(0,1fr);grid-template-rows:52px minmax(0,1fr);}
+ #game-screen>.opp-bar{grid-column:1;grid-row:1;padding:3px 7px;gap:5px;border-bottom:1px solid #35443c;min-width:0;}
+ #game-screen .opp-title{display:none;}
+ #game-screen .opp-name{font-size:13px;}
+ #game-screen .score-pill{padding:3px 6px;font-size:11px;}
+ #game-screen>.turn-bar{grid-column:2;grid-row:1;min-width:0;border-bottom:1px solid #35443c;}
+ #game-screen>.table-area{grid-column:1/-1;grid-row:2;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr) auto auto;width:100%;}
+ #game-screen .opp-zone{grid-column:1/-1;grid-row:1;}
+ #game-screen .floor-frame{grid-column:1/-1;grid-row:2;}
+ #game-screen .player-summary{grid-column:1;grid-row:3;}
+ #game-screen .action-bar{grid-column:2;grid-row:3;}
+ #game-screen .my-hand{grid-column:1/-1;grid-row:4;}
+}
+#game-screen .capture-count{padding:1px 2px;border-radius:3px;background:#08120d66;}
+@media(min-width:1000px) and (min-height:650px){#game-screen>.table-area{width:min(1100px,100%);}}
+#game-screen .floor-cell[data-stack-count]::after{content:attr(data-stack-count);position:absolute;right:0;bottom:0;z-index:4;pointer-events:none;font-size:10px;line-height:16px;padding:0 4px;border-radius:4px;background:#08130ef2;color:#ffdf91;border:1px solid #aa8b4d;}
+/* Special actions share the score strip so a short portrait keeps a full floor row. */
+@media(max-width:650px) and (orientation:portrait){
+ #game-screen .table-area{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto minmax(0,1fr) auto auto;}
+ #game-screen .opp-zone{grid-column:1/-1;grid-row:1;}
+ #game-screen .floor-frame{grid-column:1/-1;grid-row:2;}
+ #game-screen .player-summary{grid-column:1;grid-row:3;flex-wrap:wrap;gap:2px 5px;}
+ #game-screen .action-bar{grid-column:2;grid-row:3;}
+ #game-screen .my-hand{grid-column:1/-1;grid-row:4;}
+}

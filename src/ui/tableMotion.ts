@@ -39,6 +39,13 @@ export class TableMotion {
     return {x:floor.right-32,y:player===0?floor.bottom-16:floor.top+16};
   }
   private find(card:Card){return this.board.querySelector<HTMLElement>(`.floor-cell [data-card-id="${card.id}"]`);}
+  private reveal(card:Card){
+    const floor=this.board.querySelector<HTMLElement>('#floor');
+    const same=[...this.board.querySelectorAll<HTMLElement>('.floor-cell [data-card-id]')].find(el=>Math.floor(Number(el.dataset.cardId)/4)===card.month-1);
+    if(!floor||!same)return;const r=floor.getBoundingClientRect(),c=same.getBoundingClientRect();
+    if(c.top<r.top+6)floor.scrollTop-=r.top+6-c.top;
+    else if(c.bottom>r.bottom-6)floor.scrollTop+=c.bottom-r.bottom+6;
+  }
   private spot(card:Card){
     const floor=this.board.querySelector('#floor');const r=(floor??this.board).getBoundingClientRect();
     const same=[...this.board.querySelectorAll<HTMLElement>('.floor-cell [data-card-id]')].find(el=>Math.floor(Number(el.dataset.cardId)/4)===card.month-1);
@@ -49,7 +56,7 @@ export class TableMotion {
     if(this.find(card))return;
     const cell=document.createElement('div');cell.className='floor-cell motion-landed';
     const floor=this.board.querySelector<HTMLElement>('#floor');if(!floor)return;
-    const r=floor.getBoundingClientRect();cell.style.cssText=`position:absolute;display:block;width:56px;height:84px;min-height:0;left:${point.x-r.x-28}px;top:${point.y-r.y-42}px;z-index:3`;
+    const r=floor.getBoundingClientRect();cell.style.cssText=`position:absolute;display:block;width:56px;height:84px;min-height:0;left:${point.x-r.x-28}px;top:${point.y-r.y-42+floor.scrollTop}px;z-index:3`;
     const face=cardEl(card);face.style.width='56px';face.style.height='84px';cell.appendChild(face);floor.appendChild(cell);
   }
   private ghost(card:Card,from:Point,to:Point,kind:string,offset=0){
@@ -83,6 +90,7 @@ export class TableMotion {
     const garbage:HTMLElement[]=[];
     try{
       if(e.type==='played'||e.type==='flipped'){
+        this.reveal(e.card);
         const target=this.spot(e.card);
         const source=e.type==='played'?this.board.querySelector(e.player===0?`#hand [data-card-id="${e.card.id}"]`:'.opp-hand .card-back'):this.board.querySelector('.deck-pile');
         const moving=this.ghost(e.card,this.center(source),target,e.type==='played'?'play':'flip');garbage.push(moving);
@@ -93,6 +101,7 @@ export class TableMotion {
       }else{
         const cards=e.type==='captured'?e.cards:[e.card];
         if(e.type==='captured'&&e.via==='bomb'){
+          this.reveal(cards[0]);
           const landing=this.spot(cards[0]);
           const flights=cards.slice(0,3).map((card,i)=>{
             const source=e.player===0?this.board.querySelector<HTMLElement>(`#hand [data-card-id="${card.id}"]`):this.board.querySelectorAll<HTMLElement>('.opp-hand .card-back')[i];

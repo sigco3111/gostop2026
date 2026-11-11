@@ -10,7 +10,7 @@ import { AI } from '../engine/ai';
 import { settle } from '../engine/scoring';
 import { Card } from '../engine/cards';
 import { Opponent } from '../data/opponents';
-import { cardEl, cardBackEl, cardUrl } from './cards';
+import { cardEl, cardBackEl } from './cards';
 import { TableMotion } from './tableMotion';
 
 const BASE = import.meta.env.BASE_URL;
@@ -36,6 +36,7 @@ export class GameScreen {
   private awaitingUser = false;
   private selectedCard: Card | null = null;
   private keyboardNavigation = false;
+  private floorObserver?: ResizeObserver;
 
   constructor(
     private root: HTMLElement,
@@ -308,7 +309,7 @@ export class GameScreen {
   }
 
   private tableView() {
-    const table=this.el.querySelector<HTMLElement>('.table-area');
+    const table=this.el.querySelector<HTMLElement>('.floor-zone');
     // Include the hand/table padding after scrollIntoView aligns the last card.
     return table?{top:table.scrollTop,atEnd:table.scrollHeight-table.clientHeight-table.scrollTop<=12}:null;
   }
@@ -323,8 +324,7 @@ export class GameScreen {
     const myScore = g.scoreOf(0), oppScore = g.scoreOf(1);
     const specialLabel=me.bombPasses?'빈패':g.canBomb(0).length?'폭탄':g.canShakeOnly(0).length?'흔들기':null;
 
-    const capGroup = (cards: Card[], breakdown:ScoreBreakdown) => captureGroups(cards,breakdown).map(({label,cards:cs,count}) =>
-      `<div class="cap-group"><div class="cap-stack">${cs.map((c) => `<img class="mini" src="${cardUrl(c.id)}" alt="${cardDescription(c)}">`).join('')}</div><div class="cap-label">${label} ${count}</div></div>`).join('');
+    const capSummary = (breakdown:ScoreBreakdown) => ['광','열끗','띠','피'].map((label,i)=>`<span class="capture-count">${label} <b>${[breakdown.counts.gwang,breakdown.counts.yeol,breakdown.counts.tti,breakdown.counts.piUnits][i]}</b></span>`).join('');
     (window as any).__base = BASE;
 
     this.el.innerHTML = `
@@ -334,20 +334,18 @@ export class GameScreen {
         <div class="opp-title">${this.opponent.title}</div></div>
         <div class="spacer"></div><button class="sound-toggle" aria-pressed="${soundEnabled()}">${soundEnabled()?'소리 켬':'소리 끔'}</button>
         <div class="score-pill">${this.opponent.name} <b>${oppScore.total}</b>점</div>
-        <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
+
       </div>
-      <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':`<button class="hand-jump" aria-controls="${specialLabel?'actionbar':'hand'}">내 차례 · ${specialLabel??'손패'} 보기</button>`):`${this.opponent.name}의 차례`}</span><div class="turn-actions"><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button><button class="exit-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''} aria-label="대국 나가기">나가기</button></div></div>
+      <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':`<button class="hand-jump" aria-controls="${specialLabel?'actionbar':'hand'}">내 차례 · ${specialLabel??'패를 내세요'}</button>`):`${this.opponent.name}의 차례`}</span><div class="turn-actions"><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 자세히</button><button class="exit-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''} aria-label="대국 나가기">나가기</button></div></div>
       <p class="audio-save-status" role="status" aria-live="polite">${audioSaveWarning()}</p>
       <div class="table-area">
         <div class="opp-zone">
           <div class="opp-hand" role="img" aria-label="${this.opponent.name} 손패 ${opp.hand.length}장, 뒷면">${opp.hand.map(() => '<div class="card-back"></div>').join('')}</div>
-          <div class="spacer" style="flex:1"></div>
-          <div class="opp-captured">${capGroup(opp.captured,oppScore)}</div>
+          <div class="opponent-deck"></div>
+          <div class="opp-captured" aria-label="상대 먹은 패 개수">${capSummary(oppScore)}</div>
         </div>
-        <div class="floor-zone" id="floor" role="group" aria-label="바닥패 ${g.floor.length}장"></div>
-        <div class="opp-zone" style="justify-content:flex-end">
-          <div class="my-captured">${capGroup(me.captured,myScore)}</div>
-        </div>
+        <div class="floor-frame"><div class="floor-heading"><span>바닥패 <b>${g.floor.length}</b>장</span><span class="floor-scroll-note">위아래로 밀어 전체 보기</span></div><div class="floor-zone" id="floor" tabindex="0" role="group" aria-label="바닥패 ${g.floor.length}장, 넘치면 위아래로 스크롤"></div></div>
+        <div class="player-summary"><div class="my-score">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div><div class="my-captured" aria-label="내 먹은 패 개수">${capSummary(myScore)}</div></div>
         <div class="action-bar" id="actionbar" tabindex="-1" role="group" aria-label="특수 행동"></div>
         <div class="my-hand" id="hand" tabindex="-1" role="group" aria-label="내 손패 ${me.hand.length}장"></div>
       </div>`;
@@ -377,6 +375,7 @@ export class GameScreen {
     for (const [, cards] of [...byMonth.entries()].sort((a, b) => a[0] - b[0])) {
       const cell = document.createElement('div');
       cell.className = 'floor-cell';
+      if(cards.length>1)cell.dataset.stackCount=`${cards.length}장`;
       cards.forEach((c, i) => {
         const ce = cardEl(c,{interactive:!!this.selectedCard&&c.month===this.selectedCard.month});
         if (i > 0) { ce.style.position = 'absolute'; ce.style.transform = `translate(${i * 5}px, ${i * -4}px)`; }
@@ -397,7 +396,7 @@ export class GameScreen {
     count.style.cssText = 'color:#8a84a0;font-size:11px;text-align:center;margin-top:2px';
     count.textContent = `${g.deck.length}`;
     pile.appendChild(count);
-    this.el.querySelector('.floor-zone')!.appendChild(pile);
+    this.el.querySelector('.opponent-deck')!.appendChild(pile);
 
     // 내 손패
     const handEl = this.el.querySelector('#hand')!;
@@ -453,8 +452,10 @@ export class GameScreen {
       }
     }
     // Keep the viewed part of the table stable when turn rendering replaces it.
-    const table=this.el.querySelector<HTMLElement>('.table-area');
+    const table=this.el.querySelector<HTMLElement>('.floor-zone');
     if(table&&tableScroll)table.scrollTop=tableScroll.atEnd?table.scrollHeight:tableScroll.top;
+    this.floorObserver?.disconnect();
+    if(table){const update=()=>this.el.querySelector('.floor-frame')?.classList.toggle('floor-overflow',table.scrollHeight>table.clientHeight+2);update();this.floorObserver=new ResizeObserver(update);this.floorObserver.observe(table);}
 
     if(this.keyboardNavigation&&!g.awaitingChoice&&!g.awaitingGoStop){
       const target=focusSound?this.el.querySelector<HTMLElement>('.sound-toggle'):g.turn===0&&this.awaitingUser?(this.el.querySelector<HTMLElement>(`#hand [data-card-id="${focusCard}"][role=button]`)??this.el.querySelector<HTMLElement>('#hand [role=button]')):null;
