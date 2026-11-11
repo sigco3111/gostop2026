@@ -359,3 +359,10 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .settings-wrap .deck-setting-actions #deck-status{position:absolute;top:100%;left:0;right:0;margin:0;min-height:0;background:#0d0a12;}
 .settings-wrap .deck-setting-actions #deck-status:not(:empty){padding:6px 0 8px;border-bottom:1px solid #42354b;}
 .deck-preview-grid img,.effect-options button{scroll-margin-top:140px;}
+
+/* Keep the decision row visible after rotating into a short landscape screen. */
+@media(max-height:480px) and (orientation:landscape){
+ .gostop-panel .pts{font-size:32px;}
+ .gostop-panel .ask{margin:6px 0 10px;}
+ .gostop-panel .stop-preview,.gostop-panel .stop-breakdown,.gostop-panel .stop-designation,.gostop-panel .go-risk{margin-top:4px;margin-bottom:4px;}
+}
