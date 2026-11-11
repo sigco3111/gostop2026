@@ -38,3 +38,7 @@ GPL 3.0인 Whoosh 1/2(bart)는 제외.
 2026-11-10 저녁: 장소8종을 추가 생성하여 단계별 배경12종으로 분리. 12종 접촉표와 실제 화면에서 검토. 캐릭터 원본은 초상 중심이며 기획의 전신 일러스트 목표와는 구분.
 
 18:30: tension and distress / allen yatsura 원본 페이지의 CC0 표기 대조 후 OGG로 변환, 낮은 음량의 선택형 루프로 적용. 처음에는 끔, 사용자가 켤 때만 재생, 백그라운드 탭·전체 소리 끔에서 정지. 청취 취향·실제 기기 음량 점검은 남음.
+
+2026-11-11: 사용자 선택 A / Sinestesia의 Hit Animation | Frame by frame를 일반 패 획득에 적용. 원본 페이지 https://opengameart.org/content/hit-animation-frame-by-frame 에서 CC0 재확인. 16프레임1024px 원본을 공통 투명 여백 크롭,256px 셀,손실 없는WebP4x4시트로 변환.400ms재생은 기존 획득 대기 안에서 실행. 라이선스 기록과 원본/파생 SHA-256은 public/assets/effects/에 보관. 시스템 움직임 줄이기에서는 생략. 게임 내 제작자와 원본 링크 표기. 원본은 sigco3111/assets-2d-pixel의 실제 ZIP에서 확보. 이후10:49사용자 요청으로 B/C도 옵션에 추가.
+
+2026-11-11 추가: 옵션에서A/B/C선택과저장. B는Inguz Media/Esteban Díaz의2DFX Impact중impact07(CC0선택), C는JoesAlotofthings의AlotofImpacts - 6 Frame Impacts - 4 Additional variations중Yellow(CC-BY4.0). C원본 https://opengameart.org/content/alotofimpacts-6-frame-impacts-4-additional-variations 및 https://creativecommons.org/licenses/by/4.0/ 를게임크레딧에표기. 두팩모두공통투명여백크롭,192px셀로축소,무손실WebP변환,400ms재생조정. 원본/파생SHA256및권리파일public/assets/effects/에동봉. B64프레임,C6프레임. 상황별효과매핑은향후방향이며현재선택은일반획득효과만바꿈.

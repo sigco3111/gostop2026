@@ -1,0 +1,14 @@
+Source: https://opengameart.org/content/hit-animation-frame-by-frame
+Title: Hit Animation | Frame by frame
+Author: Sinestesia (OpenGameArt.org submitter)
+Copyright/Attribution Notice (from the page): Just... don't lie and say you made this... cause you didn't (haha) These are free to use, go ahead. If you got the chance though, please mention us :) Or at least leave a like on facebook /sinestesiastudio or Instagram now :p /sinestesiaguy/
+License(s) listed on the page: CC0
+License chosen by the collector: CC0 (https://creativecommons.org/publicdomain/zero/1.0/)
+Page date: 2017-12-25
+Collected: 2026-11-08
+
+Chosen license: CC0 (public domain dedication); no attribution is legally required.
+The author's request quoted above is a courtesy request, not a license condition.
+This file was written by the collector from the page's license statement; it is not an original license file from the author.
+
+Game adaptation: transparent-margin crop, resized256px cells, lossless WebP atlas;400ms playback. Source image SHA-256: f74635da13771d8434f21bdf250c94e27fa7272b5b44043cf953ef29e89fe762

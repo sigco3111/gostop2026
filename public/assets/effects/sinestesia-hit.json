@@ -1,0 +1,11 @@
+{
+  "source": "https://opengameart.org/content/hit-animation-frame-by-frame",
+  "author": "Sinestesia",
+  "license": "CC0-1.0",
+  "originalSha256": "f74635da13771d8434f21bdf250c94e27fa7272b5b44043cf953ef29e89fe762",
+  "derivedSha256": "a9bbfb2837c626ba1c0fcfc736200f75d8d75c3bc24280ce5860eacf0ef54c19",
+  "frames": 16,
+  "columns": 4,
+  "cell": 256,
+  "changes": "Crop shared transparent bounds (181,241,818,801), proportionally resize into256px cells, WebP lossless atlas. Timing adjusted to400ms."
+}

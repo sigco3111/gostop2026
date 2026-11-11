@@ -1,6 +1,7 @@
 import { Card } from '../engine/cards';
 import { GameEvent } from '../engine/game';
 import { cardEl, cardUrl } from './cards';
+import { EFFECTS,effectDefinition,effectUrl } from './effectSettings';
 
 type MotionEvent = Extract<GameEvent, {type:'played'|'flipped'|'placed'|'captured'|'stealPi'}>;
 const wait=(ms:number)=>new Promise<void>(resolve=>setTimeout(resolve,ms));
@@ -8,6 +9,7 @@ type Point={x:number;y:number};
 
 // The engine settles synchronously. Keep the previous board visible until each
 // public event has been shown, then GameScreen renders the authoritative state.
+const atlases=new Map(EFFECTS.map(e=>{const image=new Image();image.src=effectUrl(e.file);return [e.id,image] as const;}));
 export class TableMotion {
   constructor(private board:HTMLElement,private layer:HTMLElement){}
   private center(el:Element|null):Point {const r=(el??this.board).getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};}
@@ -40,11 +42,18 @@ export class TableMotion {
     this.layer.appendChild(node);return node;
   }
   private contact(point:Point){
+    const effect=effectDefinition(),atlas=atlases.get(effect.id)!;
+    if(!atlas.complete||!atlas.naturalWidth)return null;
     const node=document.createElement('div');node.className='motion-contact';
-    node.style.left=`${Math.max(76,Math.min(innerWidth-76,point.x))}px`;
+    node.style.left=`${Math.max(80,Math.min(innerWidth-80,point.x))}px`;
     node.style.top=`${Math.max(80,Math.min(innerHeight-80,point.y))}px`;
-    for(let i=0;i<8;i++){const line=document.createElement('i');line.style.setProperty('--angle',`${i*45}deg`);node.appendChild(line);}
-    this.layer.appendChild(node);return node;
+    node.dataset.effect=effect.id;
+    node.style.backgroundImage=`url(${atlas.src})`;node.style.backgroundSize=`${effect.columns*100}% ${effect.rows*100}%`;
+    this.layer.appendChild(node);
+    const frames=Array.from({length:effect.frames},(_,i)=>({backgroundPosition:`${i%effect.columns*100/(effect.columns-1)}% ${Math.floor(i/effect.columns)*100/(effect.rows-1)}%`,offset:i/effect.frames,easing:'steps(1,end)'}));
+    frames.push({...frames[effect.frames-1],offset:1});
+    node.animate(frames,{duration:400,easing:'linear',fill:'forwards'});
+    return node;
   }
   async show(e:MotionEvent){
     if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
@@ -70,7 +79,7 @@ export class TableMotion {
         const point=this.center(cards.map(card=>this.find(card)).find(Boolean)??this.board.querySelector('#floor'));
         const impact=document.createElement('div');impact.className='motion-impact';impact.style.left=`${Math.max(80,Math.min(innerWidth-80,point.x))}px`;impact.style.top=`${Math.max(80,Math.min(innerHeight-80,point.y))}px`;impact.textContent=e.type==='stealPi'?'피 가져감':`${cards[0].month}월 · ${cards.length}장 획득`;this.layer.appendChild(impact);garbage.push(impact);
         sources.forEach(el=>el?.classList.add('motion-match'));
-        if(e.type==='captured')garbage.push(this.contact(point));
+        if(e.type==='captured'){const contact=this.contact(point);if(contact)garbage.push(contact);}
         await wait(110);
         cards.forEach((card,i)=>{garbage.push(this.ghost(card,origins[i],target,'capture',i*3));const el=sources[i];if(el){const cell=el.closest('.floor-cell');if(cell){el.remove();if(!cell.children.length)cell.remove();}else el.style.visibility='hidden';}});
         await wait(300);

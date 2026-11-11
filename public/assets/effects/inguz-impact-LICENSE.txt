@@ -1,0 +1,15 @@
+Source: https://opengameart.org/content/2dfx-impact-spritesheets
+Title: 2DFX Impact spritesheets!
+Author: Inguz Media (OpenGameArt.org submitter)
+Copyright/Attribution Notice (from the page): The only thing I ask you is that don't say it's your creation, or you did this, just tell the truth and tell that Esteban Díaz, some VFX Artist guy, or INGUZ MEDIA STUDIO share this! Visit me, or comment on Intagram /inguzmediastudio if you need anything, or you have an idea.
+License(s) listed on the page: CC-BY 4.0 / CC-BY 3.0 / CC-BY-SA 4.0 / CC-BY-SA 3.0 / GPL 3.0 / GPL 2.0 / OGA-BY 3.0 / CC0
+License chosen by the collector: CC0 (https://creativecommons.org/publicdomain/zero/1.0/)
+Page date: 2021-07-23
+Collected: 2026-11-08
+
+Chosen license: CC0 (public domain dedication); no attribution is legally required.
+The author's request quoted above is a courtesy request, not a license condition.
+This file was written by the collector from the page's license statement; it is not an original license file from the author.
+
+Game changes: Common transparent-margin crop, proportionally resize into192px cells, WebP lossless,400ms playback.
+OriginalSHA256:3d570193e732c2527034efbbf216058d1c15faf3a868bfdf2f1dee0b32ac1ef4

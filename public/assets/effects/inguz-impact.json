@@ -1,0 +1,10 @@
+{
+  "sourceFolder": "2dfx-impact-spritesheets",
+  "frames": 64,
+  "columns": 8,
+  "rows": 8,
+  "cell": 192,
+  "originalSha256": "3d570193e732c2527034efbbf216058d1c15faf3a868bfdf2f1dee0b32ac1ef4",
+  "derivedSha256": "22e9264ea9076cdc76e01f94a894782fe02ad63a832fc4c08c5fe7a2030df298",
+  "changes": "Common transparent-margin crop, proportionally resize into192px cells, WebP lossless,400ms playback."
+}

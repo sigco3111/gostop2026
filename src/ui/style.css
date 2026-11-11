@@ -315,10 +315,8 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 
 /* A local contact accent. It runs inside the existing capture wait, never
    shakes the board, and does not extend the turn. */
-.motion-contact{position:absolute;width:88px;height:70px;pointer-events:none;transform:translate(-50%,-50%);border:2px solid #f5cc78;border-radius:50%;background:radial-gradient(ellipse,#ffe8b524,transparent 65%);box-shadow:0 0 12px #e2ba5540;animation:contact-ring .24s ease-out both;}
-.motion-contact i{position:absolute;left:50%;top:50%;width:3px;height:18px;border-radius:2px;background:linear-gradient(#fff2ce,#e2b057);transform:translate(-50%,-50%) rotate(var(--angle)) translateY(-56px);animation:contact-ray .22s ease-out both;}
+.motion-contact{position:absolute;width:160px;height:160px;pointer-events:none;transform:translate(-50%,-50%);background-size:400% 400%;background-repeat:no-repeat;}
 .motion-match img{animation:contact-card .1s ease-out both;}
-@keyframes contact-ring{0%{opacity:0;scale:.45;}24%{opacity:.95;scale:.8;}100%{opacity:0;scale:1.18;}}
-@keyframes contact-ray{0%{opacity:0;}22%{opacity:.95;}100%{opacity:0;translate:0 -3px;}}
 @keyframes contact-card{0%,100%{scale:1;translate:0 0;}35%{scale:1.055;translate:0 -3px;}65%{scale:.99;translate:0 1px;}}
 @media(prefers-reduced-motion:reduce){.motion-contact{display:none;}.motion-match img{animation:none;}}
+.effect-settings{margin:24px 0;padding:18px 0;border-top:1px solid #4c3b57;border-bottom:1px solid #4c3b57;}.effect-settings>p{font-size:13px;line-height:1.8;}.effect-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px;}.effect-option{background:#17121e;border:1px solid #66516e;border-radius:6px;color:#eee2d4;padding:10px;cursor:pointer;min-width:0;display:flex;flex-direction:column;gap:8px;align-items:center;}.effect-option.selected{border:2px solid #e5c58b;padding:9px;background:#2b2030;}.effect-option>span:not(.effect-thumb),.effect-option small{font-size:12px;line-height:1.65;}.effect-option small{color:#c2afc9;overflow-wrap:anywhere;}.effect-thumb{display:block;width:96px;height:96px;max-width:100%;background-repeat:no-repeat;}.effect-option:focus-visible{outline:3px solid #eee2c2;outline-offset:3px;}@media(max-width:480px){.effect-options{grid-template-columns:1fr;}.effect-option{display:grid;grid-template-columns:76px 1fr;text-align:left;}.effect-thumb{width:72px;height:72px;grid-row:1/4;}.effect-option strong,.effect-option>span:not(.effect-thumb),.effect-option small{grid-column:2;}}
