@@ -5,23 +5,23 @@ import {mkdirSync,writeFileSync} from 'node:fs';
 const out=process.env.QA_OUT??'/tmp/stop-preview';
 const url=process.env.GAME_URL??'http://localhost:4173/gostop2026/';
 const continueGo=process.env.CONTINUE_GO==='1',multiplierFixture=process.env.MULTIPLIER_FIXTURE==='1';
-const reducedMotion=process.env.REDUCED_MOTION==='1',rapidInput=process.env.RAPID_INPUT==='1';mkdirSync(out,{recursive:true});
+const reducedMotion=process.env.REDUCED_MOTION==='1',rapidInput=process.env.RAPID_INPUT==='1',normalTimers=process.env.NORMAL_TIMERS==='1';mkdirSync(out,{recursive:true});
 const server=url.startsWith('http://localhost:4173/')?spawn('node',['node_modules/vite/bin/vite.js','preview','--port','4173'],{stdio:'ignore'}):null;
-let browser;const report={errors:[],rounds:[],story:null,tournament:null};
+let browser;const report={url,normalTimers,reducedMotion,rapidInput,errors:[],rounds:[],story:null,tournament:null};
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 try{
- await pause(800);browser=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',headless:true,timeout:10000,protocolTimeout:10000,args:['--no-sandbox','--no-zygote','--disable-gpu','--renderer-process-limit=2'],defaultViewport:{width:390,height:844,isMobile:true,hasTouch:true}});
+ await pause(800);browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH??'/usr/bin/google-chrome',headless:true,timeout:10000,protocolTimeout:10000,args:['--no-sandbox','--no-zygote','--disable-gpu','--renderer-process-limit=2'],defaultViewport:{width:390,height:844,isMobile:true,hasTouch:true}});
  const page=await browser.newPage();page.on('pageerror',e=>report.errors.push(e.message));
- await page.evaluateOnNewDocument(()=>{
+ await page.evaluateOnNewDocument(normalTimers=>{
   let n=23;Math.random=()=>{n=(Math.imul(n,1664525)+1013904223)>>>0;return n/4294967296;};
-  const timer=window.setTimeout.bind(window);window.setTimeout=(fn,ms,...args)=>timer(fn,ms===950?950:Math.min(ms??0,20),...args);
- });
- const click=async selector=>{const el=await page.$(selector);if(el){await el.focus();if(rapidInput&&selector.startsWith('#hand ')){await el.evaluate(e=>{for(let i=0;i<12;i++)e.dispatchEvent(new MouseEvent('click',{bubbles:true}));});}else await page.keyboard.press('Enter');}};
+  const timer=window.setTimeout.bind(window);if(!normalTimers)window.setTimeout=(fn,ms,...args)=>timer(fn,ms===950?950:Math.min(ms??0,20),...args);
+ },normalTimers);
+ const click=async selector=>{const el=await page.$(selector);if(el&&await el.evaluate(e=>e.isConnected&&!e.closest('[inert]')&&!e.disabled)){await el.focus();if(!await el.evaluate(e=>e===document.activeElement))throw Error('test target did not receive focus: '+selector);if(rapidInput&&selector.startsWith('#hand ')){await el.evaluate(e=>{for(let i=0;i<12;i++)e.dispatchEvent(new MouseEvent('click',{bubbles:true}));});}else await page.keyboard.press('Enter');}};
  async function playRound(tag){
   let played=0,choices=0,prompts=0;
   for(let k=0;k<2500;k++){
    if(!report.fx && await page.$('.fx-burst')){await page.evaluate(()=>document.querySelectorAll('.fx-burst img,.flash').forEach(el=>{for(const a of el.getAnimations()){a.pause();a.currentTime=300;}}));await page.screenshot({path:`${out}/special-effect.png`});report.fx=true;}
-   if(!report.captured && await page.evaluate(()=>window.__game?.turn===0 && !window.__game?.awaitingChoice && !window.__game?.awaitingGoStop && window.__game?.players[0].captured.length>3)){
+   if(!report.captured && await page.evaluate(()=>!window.__game?.over && window.__game?.turn===0 && !window.__game?.awaitingChoice && !window.__game?.awaitingGoStop && window.__game?.players[0].captured.length>3)){
     await pause(100);await click('.capture-toggle');if(await page.$('.capture-overlay')){
      await page.screenshot({path:`${out}/captured-390.png`});
      const start=await page.evaluate(()=>document.activeElement?.className);await page.keyboard.press('Tab');const trapped=await page.evaluate(()=>!!document.activeElement?.closest('.capture-overlay'));if(!trapped)throw new Error('capture focus escaped');
