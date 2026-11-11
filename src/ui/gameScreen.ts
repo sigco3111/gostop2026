@@ -1,3 +1,4 @@
+import { scoreDescription, scoreItems } from '../data/scoreDescription';
 import { cardDescription } from '../data/cardDescription';
 import { focusDialog } from './dialog';
 import { sfx, soundEnabled, setSound } from './audio';
@@ -213,11 +214,8 @@ export class GameScreen {
     let rows = '';
     if (e.result) {
       const br = e.result.breakdown ?? this.g.scoreOf(e.winner!);
-      const items: [string, number][] = [
-        ['광', br.gwang], ['고도리', br.godori], ['홍단', br.hongdan], ['청단', br.cheongdan],
-        ['초단', br.chodan], ['열끗', br.yeol], ['띠', br.tti], ['피', br.pi],
-      ];
-      rows = ['총통','3뻑'].includes(e.reason) ? `<div class="settle-row"><span>${e.reason} 기본 승리</span><span class="v">7점</span></div>` : items.filter(([, v]) => v > 0).map(([k, v]) => `<div class="settle-row"><span>${k}</span><span class="v">${v}점</span></div>`).join('');
+      const items = scoreItems(br);
+      rows = ['총통','3뻑'].includes(e.reason) ? `<div class="settle-row"><span>${e.reason} 기본 승리</span><span class="v">7점</span></div>` : items.map(([k, v]) => `<div class="settle-row"><span>${k}</span><span class="v">${v}점</span></div>`).join('');
     }
     if(e.result?.goAdd) rows += `<div class="settle-row"><span>고 가산 (${e.result.goAdd}회)</span><span class="v">+${e.result.goAdd}점</span></div>`;
     if(e.result?.breakdown && this.g.players[e.winner!].captured.some(c=>c.isGukjin)) rows += `<div class="settle-note">국진: ${e.result.breakdown.gukjinAsPi?'쌍피':'열끗'} (최종 점수 기준 자동 선택)</div>`;
@@ -256,6 +254,8 @@ export class GameScreen {
     for(const player of [0,1] as const){
       const heading=document.createElement('h3');const sc=this.g.scoreOf(player);heading.textContent=`${player===0?'나':this.opponent.name} · ${sc.total}점`;panel.appendChild(heading);
       const detail=document.createElement('p');detail.textContent=`광 ${sc.counts.gwang}장 · 열끗 ${sc.counts.yeol}장 · 띠 ${sc.counts.tti}장 · 피 ${sc.counts.piUnits}장분`;panel.appendChild(detail);
+      const breakdown=document.createElement('p');breakdown.className='capture-breakdown';breakdown.textContent=scoreDescription(sc);panel.appendChild(breakdown);
+      if(this.g.players[player].captured.some(c=>c.isGukjin)){const designation=document.createElement('p');designation.className='capture-gukjin';designation.textContent=`국진은 현재 ${sc.gukjinAsPi?'쌍피 2장분':'열끗 1장'}으로 셉니다. 최종 정산에서는 배수와 7점 조건에 따라 달라질 수 있습니다.`;panel.appendChild(designation);}
       const note=document.createElement('p');note.className='capture-note';note.textContent='현재 원점수입니다. 고·박·흔들기 배수는 마지막 정산에서 적용합니다.';panel.appendChild(note);
       const grid=document.createElement('div');grid.className='captured-grid';
       for(const card of this.g.players[player].captured.slice().sort((a,b)=>a.month-b.month||a.id-b.id)){const item=cardEl(card);item.removeAttribute('tabindex');grid.appendChild(item);}
