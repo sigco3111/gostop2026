@@ -213,3 +213,11 @@ opponent hands remain backs. Rules, AI, one-tap input and save format do not cha
 four sizes, checking public identities, hidden-hand privacy, placeholder cleanup,
 unchanged game/save state and axe/runtime errors. These are controlled requests,
 not evidence of a real service outage or a physical-device network test.
+
+`test/card-loading-round.mjs` holds every card-image request pending throughout
+one 320px, fixed-shuffle story round and compares it with an ordinary-image run.
+Both use normal production timers and real input, without injected state, wins
+or progress. Inputs, every input-boundary state, final state, settlement and
+saved/reloaded records must agree. Images are released after settlement; normal
+art must return without changing the settled game. This covers controlled browser
+requests, not a real network incident, physical phone or every opponent.
