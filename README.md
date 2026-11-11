@@ -232,3 +232,13 @@ rules, AI, audio files and playback levels are unchanged.
 at five viewports, title identity, current choices, warning placement and turn
 survival, unchanged progress, reload, axe and runtime errors. Failures are injected
 in an isolated browser; this does not prove a real storage outage or speaker sound.
+
+`test/capture-touch-round.mjs` compares a normal story round with the same inputs
+interrupted by browsing at least 12 naturally earned captured cards. At 320x568,
+390x844 and 568x320, it sends upward/downward emulated touch swipes, waits for
+scroll momentum to settle, checks both player jumps and the reachable return
+button, and returns by touch with focus restored. Game/save state must not change
+while browsing. Both normal-timer, fixed-shuffle rounds must have identical input
+boundaries, final state, settlement and earned/reloaded records. No captures,
+wins or progress are injected. This does not test taps during momentum, a physical
+phone, all opponents or human balance. GAME_URL and QA_OUT select target/output.
