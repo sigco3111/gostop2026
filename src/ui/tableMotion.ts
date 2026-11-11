@@ -1,6 +1,6 @@
 import { Card } from '../engine/cards';
 import { GameEvent } from '../engine/game';
-import { cardEl, cardUrl } from './cards';
+import { attachCardFallback, cardEl, cardUrl } from './cards';
 import { EFFECTS,effectDefinition,effectUrl } from './effectSettings';
 
 type MotionEvent = Extract<GameEvent, {type:'played'|'flipped'|'placed'|'captured'|'stealPi'}>;
@@ -56,7 +56,7 @@ export class TableMotion {
     const node=document.createElement('div');node.className=`motion-card motion-${kind}`;node.dataset.cardId=String(card.id);
     node.style.left=`${from.x-28}px`;node.style.top=`${from.y-42}px`;
     node.style.setProperty('--dx',`${to.x-from.x+offset}px`);node.style.setProperty('--dy',`${to.y-from.y}px`);
-    const front=document.createElement('img');front.src=cardUrl(card.id);front.alt='';front.className='motion-face';node.appendChild(front);
+    const front=document.createElement('img');attachCardFallback(node,front,card);front.src=cardUrl(card.id);front.alt='';front.className='motion-face';node.appendChild(front);
     if(kind==='flip'){const back=document.createElement('div');back.className='card-back motion-back';node.appendChild(back);}
     this.layer.appendChild(node);return node;
   }

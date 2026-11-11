@@ -111,3 +111,18 @@ GAME_URL=http://localhost:4173/gostop2026/ CHROME_PATH=/path/to/chrome QA_OUT=/t
 설정 화면의48장 미리보기도 대국판과 같은 한국어 월·도상·족보 설명을 사용합니다. 선택 저장 때 상태 안내와 버튼·키보드 초점을 유지합니다. `node test/settings-accessibility.mjs`로4종 설명·저장 성공/실패·초점·320/390/1280배치를 검사할 수 있습니다. 실제 화면낭독기 음성 품질의 검증은 아닙니다.
 
 먹은 패·점수에는 현재 원점수의 족보별 기여와 국진의 현재 집계 방식이 표시됩니다. 최종 정산의 배수·7점 조건에 따른 국진 선택과 구분합니다. `node test/captured-score-detail.mjs`는 공개 먹은 패를 의도적으로 준비한 화면 검수이며 자연 플레이나 사용자 저장 기록이 아닙니다.
+
+### Card image request failure (2026-11-11)
+Failed public-card pictures now show a high-contrast text face with the month,
+scoring type, ribbon set, godori or gukjin where applicable, and "그림 없음".
+Normal downloaded artwork and the default classic deck are unchanged. The same
+fallback follows moving cards, and is removed if that image later loads. Compact
+capture stacks retain their alt descriptions; the detailed capture dialog uses
+the full text face. No opponent hand is revealed.
+
+`node test/card-image-fallback.mjs` compares all four decks with normal and blocked
+card-image requests. Each case uses unchanged production timers and two actual
+single-card UI turns, then compares the full game state, capture dialog, progress,
+image recovery and axe results. Blocked images are a deliberate network fault,
+not evidence of a current public outage. The 320/390/568-landscape/1280 layout
+matrix is not physical-phone or full-round coverage.
