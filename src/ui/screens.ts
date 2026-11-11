@@ -39,8 +39,8 @@ export class App {
     const el = this.mk('title-screen');
     el.style.backgroundImage = `url(${BASE}assets/keyart.webp)`;
     el.innerHTML = `<div class="title-inner">
-      <h1 class="game-title">고스톱 2026</h1>
-      <div class="game-sub">어둠의 판 · 12인의 고수</div>
+      <h1 class="game-title">맞고2026 : 패담</h1>
+      <div class="game-sub">12인의 고수</div>
       <div class="menu">
         <button class="btn primary" id="m-scenario">시나리오 - 밑바닥에서 전설로</button>
         <button class="btn" id="m-tournament">${loadTournament()?'토너먼트 이어하기':'토너먼트'}</button>
@@ -107,7 +107,7 @@ export class App {
       if (mode === 'scenario') {
         if (r.winner === 0) {
           if (!this.save.clearedStages.includes(o.stage)) this.save.clearedStages.push(o.stage);
-          if(o.stage===12&&!this.save.titles.includes('어둠의 판의 새 전설'))this.save.titles.push('어둠의 판의 새 전설');
+          if(o.stage===12&&!this.save.titles.includes('패담의 새 전설'))this.save.titles.push('패담의 새 전설');
           this.save.nagariCarry = 1;
           this.persistSave();
           this.showResultDialogue(o, 'lose', () => o.stage===12?this.showEnding():this.showScenario());
@@ -146,7 +146,7 @@ export class App {
 
   private showEnding() {
     const el=this.mk('ending-screen');el.style.backgroundImage=`linear-gradient(#08060d66,#08060df5),url(${BASE}assets/keyart.webp)`;
-    el.innerHTML=`<div class="ending-copy"><p class="eyebrow">THE LAST HAND</p><h2>전설은 자리를 비웠다.</h2><p>열두 개의 판을 지나, 마지막 패를 내려놓았다.<br>처음 이 골목에 들어왔을 때처럼, 두 손은 가벼웠다.</p><p>남은 것은 빚도, 왕관도 아니다.<br>다음 판 앞에서도 떨리지 않는 손.</p><strong>12인의 고수 돌파 · 어둠의 판의 새 전설</strong><button class="btn primary" id="ending-back">기록으로 돌아가기</button></div>`;
+    el.innerHTML=`<div class="ending-copy"><p class="eyebrow">THE LAST HAND</p><h2>전설은 자리를 비웠다.</h2><p>열두 개의 판을 지나, 마지막 패를 내려놓았다.<br>처음 이 골목에 들어왔을 때처럼, 두 손은 가벼웠다.</p><p>남은 것은 빚도, 왕관도 아니다.<br>다음 판 앞에서도 떨리지 않는 손.</p><strong>12인의 고수 돌파 · 패담의 새 전설</strong><button class="btn primary" id="ending-back">기록으로 돌아가기</button></div>`;
     el.querySelector('#ending-back')!.addEventListener('click',()=>this.showScenario());this.setScreen(el);
   }
 
@@ -194,7 +194,7 @@ export class App {
         ${history}
         ${!finished?`<div class="bracket-round"><h3>${roundNames[t.round]} 대진</h3>${Array.from({length:t.alive.length/2},(_,i)=>`<div class="bracket-match bracket-upcoming"><span>${name(t.alive[i*2])}</span><span class="versus">VS</span><span>${name(t.alive[i*2+1])}</span></div>`).join('')}</div>
           <p class="series">나 ${t.series[0]}승 : ${t.series[1]}승 ${t.opponent?.name} ${carry>1?` · 나가리 ×${carry}`:''}</p>`:''}
-        ${t.champion?`<h3 class="champion-label">트로피 ${this.save.trophies}개 · 어둠의 판의 챔피언</h3>`:''}
+        ${t.champion?`<h3 class="champion-label">트로피 ${this.save.trophies}개 · 패담의 챔피언</h3>`:''}
         <div class="tourney-actions">${!finished?'<button class="btn primary" id="next">대국 시작</button>':''}<button class="btn small" id="back">타이틀로</button></div>
         <small class="tourney-note">${finished?'대회가 종료되었습니다. 타이틀에서 토너먼트를 선택하면 새 대회를 시작합니다.':'완료한 판까지 자동 저장합니다. 타이틀이나 새로고침 후 이어할 수 있습니다. 진행 중인 한 판의 손패는 저장하지 않습니다.'}</small>
       </div>`;
@@ -208,7 +208,7 @@ export class App {
           const result=t.recordPlayerGame(r.winner);
           if(result==='roundWon')carry=1;
           const stored=session.write(t,carry);if(stored==='conflict'){conflict();return;}
-          if(result==='champion'&&!credited){credited=true;this.save=refreshSave(this.save,!this.saveAvailable);this.save.trophies++;if(!this.save.titles.includes('어둠의 판의 챔피언'))this.save.titles.push('어둠의 판의 챔피언');this.persistSave();}
+          if(result==='champion'&&!credited){credited=true;this.save=refreshSave(this.save,!this.saveAvailable);this.save.trophies++;if(!this.save.titles.includes('패담의 챔피언'))this.save.titles.push('패담의 챔피언');this.persistSave();}
           render(stored);
         },carry,()=>this.showTitle(),checkpointSaved);gs.start();
       });

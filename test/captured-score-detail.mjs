@@ -1,5 +1,6 @@
 // Deliberate public-capture fixture, not a naturally played round or saved progress.
 import puppeteer from 'puppeteer-core';
+import {readyImages} from './ready-images.mjs';
 import {spawn} from 'node:child_process';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const out=process.env.QA_OUT||'/tmp/captured-score-detail';mkdirSync(out,{recursive:true});
@@ -12,7 +13,7 @@ try{
  for(const mode of ['pi','yeol','zero']){
   await p.evaluate(mode=>{const g=window.__game,d=window.__canonical;let captured=[];if(mode==='pi')captured=[d.find(c=>c.isGukjin),...d.filter(c=>c.kind==='pi'&&c.piValue===1).slice(0,13),...d.filter(c=>c.kind==='yeol'&&!c.isGukjin&&!c.isGodori),d.find(c=>c.isGodori)];if(mode==='yeol')captured=[d.find(c=>c.isGukjin),...d.filter(c=>c.kind==='yeol'&&!c.isGukjin)];const ids=new Set(captured.map(c=>c.id));const remaining=d.filter(c=>!ids.has(c.id));g.players[0].captured=captured;g.players[1].captured=[];g.players[0].hand=remaining.splice(0,1);g.players[1].hand=remaining.splice(0,1);g.floor=remaining.splice(0,4);g.deck=remaining;g.turn=0;g.awaitingChoice=null;g.awaitingGoStop=false;g.over=false;},mode);
   await p.click('.sound-toggle');
-  if(mode==='pi')for(const [width,height]of [[320,568],[390,844],[844,320],[1280,844]]){await p.setViewport({width,height});await p.screenshot({path:`${out}/board-${width}.png`});if(await p.evaluate(()=>document.body.scrollWidth>innerWidth))throw Error('compact board overflow');}
+  if(mode==='pi')for(const [width,height]of [[320,568],[390,844],[844,320],[1280,844]]){await p.setViewport({width,height});await readyImages(p);await p.screenshot({path:`${out}/board-${width}.png`});if(await p.evaluate(()=>document.body.scrollWidth>innerWidth))throw Error('compact board overflow');}
   await p.click('.capture-toggle');await p.waitForSelector('.capture-overlay');
   const texts=await p.$$eval('.capture-breakdown',els=>els.map(e=>e.textContent));const note=await p.$eval('.capture-panel',e=>e.innerText);
   if(texts.length!==2||!texts[1].includes('현재 0점'))throw Error('missing two-player score descriptions');
@@ -24,7 +25,7 @@ try{
   if(mode==='yeol'&&(groups.length!==1||groups[0].label!=='열끗 9'||!groups[0].cards.some(c=>c.includes('국진'))))throw Error('compact yeol designation differs from score');
   if(mode==='zero'&&groups.length)throw Error('invented compact capture group');
   report.cases.push({mode,texts,note,groups});
-  if(mode==='pi')for(const [width,height]of [[320,568],[390,844],[844,320],[1280,844]]){await p.setViewport({width,height});await p.screenshot({path:`${out}/capture-${width}.png`});await p.addScriptTag({path:'node_modules/axe-core/axe.min.js'});const axe=await p.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa']}}));if(axe.violations.length)throw Error('axe violations '+JSON.stringify(axe.violations));if(await p.evaluate(()=>document.body.scrollWidth>innerWidth||document.querySelector('.capture-panel').getBoundingClientRect().height>innerHeight))throw Error('overflow');await p.keyboard.press('Tab');if(!await p.evaluate(()=>!!document.activeElement.closest('.capture-overlay')))throw Error('focus escaped');report.views.push({width,height,axe:0});}
+  if(mode==='pi')for(const [width,height]of [[320,568],[390,844],[844,320],[1280,844]]){await p.setViewport({width,height});await readyImages(p);await p.screenshot({path:`${out}/capture-${width}.png`});await p.addScriptTag({path:'node_modules/axe-core/axe.min.js'});const axe=await p.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa']}}));if(axe.violations.length)throw Error('axe violations '+JSON.stringify(axe.violations));if(await p.evaluate(()=>document.body.scrollWidth>innerWidth||document.querySelector('.capture-panel').getBoundingClientRect().height>innerHeight))throw Error('overflow');await p.keyboard.press('Tab');if(!await p.evaluate(()=>!!document.activeElement.closest('.capture-overlay')))throw Error('focus escaped');report.views.push({width,height,axe:0});}
   await p.keyboard.press('Escape');if(await p.$('.capture-overlay'))throw Error('Escape failed');if(!await p.evaluate(()=>document.activeElement.classList.contains('capture-toggle')))throw Error('focus not returned');
  }
  if(report.errors.length)throw Error('runtime errors');console.log(JSON.stringify(report));
