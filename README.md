@@ -464,3 +464,14 @@ change rules, introduce purchases or add multiplayer. The product remains a
 single-player12-opponent game. Source comparison and visual evidence are kept
 in the separate design report; this section is not a claim of current ranking
 or direct Android-client testing.
+
+### Draw stock and matching cues (2026-11-12)
+The red-backed draw stock now sits in its own fixed slot inside the central
+board, with a visible physical stack and remaining-card count. Flips depart
+from that stack; the count drops on each shown flip and zero leaves an empty
+stock outline. Public hand/floor month matches are marked on both sides with
+the same month label before touch. Focus/hover strengthens the selected pair.
+Cues disappear during motion and are recomputed at decision boundaries; they
+never use hidden deck/opponent identities or change single-tap play, choices,
+AI, rules or saves. Six responsive layouts and paired production-timer rounds
+check cue accuracy, 48-card integrity and identical play outcomes.

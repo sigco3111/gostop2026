@@ -322,6 +322,8 @@ export class GameScreen {
     const g = this.g;
     const me = g.players[0], opp = g.players[1];
     const myScore = g.scoreOf(0), oppScore = g.scoreOf(1);
+    const showMatches=g.turn===0&&!g.awaitingChoice&&!g.awaitingGoStop;
+    const matchingMonths=new Set(showMatches?me.hand.filter(c=>g.floor.some(f=>f.month===c.month)).map(c=>c.month):[]);
     const specialLabel=me.bombPasses?'빈패':g.canBomb(0).length?'폭탄':g.canShakeOnly(0).length?'흔들기':null;
 
     const capSummary = (breakdown:ScoreBreakdown) => ['광','열끗','띠','피'].map((label,i)=>`<span class="capture-count">${label} <b>${[breakdown.counts.gwang,breakdown.counts.yeol,breakdown.counts.tti,breakdown.counts.piUnits][i]}</b></span>`).join('');
@@ -341,10 +343,9 @@ export class GameScreen {
       <div class="table-area">
         <div class="opp-zone">
           <div class="opp-hand" role="img" aria-label="${this.opponent.name} 손패 ${opp.hand.length}장, 뒷면">${opp.hand.map(() => '<div class="card-back"></div>').join('')}</div>
-          <div class="opponent-deck"></div>
           <div class="opp-captured" aria-label="상대 먹은 패 개수">${capSummary(oppScore)}</div>
         </div>
-        <div class="floor-frame"><div class="floor-heading"><span>바닥패 <b>${g.floor.length}</b>장</span><span class="floor-scroll-note">위아래로 밀어 전체 보기</span></div><div class="floor-zone" id="floor" tabindex="0" role="group" aria-label="바닥패 ${g.floor.length}장, 넘치면 위아래로 스크롤"></div></div>
+        <div class="floor-frame"><div class="floor-heading"><span>바닥패 <b>${g.floor.length}</b>장</span><span class="floor-match-guide">${matchingMonths.size?`같은 월 짝 ${matchingMonths.size}종`:showMatches?'맞는 월 없음':''}</span><span class="floor-scroll-note">밀어 전체 보기</span></div><div class="floor-body"><div class="draw-pile-slot"></div><div class="floor-zone" id="floor" tabindex="0" role="group" aria-label="바닥패 ${g.floor.length}장, 넘치면 위아래로 스크롤"></div></div></div>
         <div class="player-summary"><div class="my-score">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div><div class="my-captured" aria-label="내 먹은 패 개수">${capSummary(myScore)}</div></div>
         <div class="action-bar" id="actionbar" tabindex="-1" role="group" aria-label="특수 행동"></div>
         <div class="my-hand" id="hand" tabindex="-1" role="group" aria-label="내 손패 ${me.hand.length}장"></div>
@@ -372,9 +373,10 @@ export class GameScreen {
       byMonth.get(f.month)!.push(f);
     }
     const cells: HTMLElement[] = [];
-    for (const [, cards] of [...byMonth.entries()].sort((a, b) => a[0] - b[0])) {
+    for (const [month, cards] of [...byMonth.entries()].sort((a, b) => a[0] - b[0])) {
       const cell = document.createElement('div');
-      cell.className = 'floor-cell';
+      cell.className = 'floor-cell';cell.dataset.month=String(month);
+      if(matchingMonths.has(month)){cell.classList.add('has-hand-match');cell.setAttribute('role','group');cell.setAttribute('aria-label',`${month}월 짝, 바닥패 ${cards.length}장, 손패와 짝 있음`);}
       if(cards.length>1)cell.dataset.stackCount=`${cards.length}장`;
       cards.forEach((c, i) => {
         const ce = cardEl(c,{interactive:!!this.selectedCard&&c.month===this.selectedCard.month});
@@ -385,18 +387,19 @@ export class GameScreen {
         }
         cell.appendChild(ce);
       });
+      if(matchingMonths.has(month)){const cue=document.createElement('span');cue.className='match-cue';cue.textContent=`${month}월 짝`;cue.setAttribute('aria-hidden','true');cell.appendChild(cue);}
       floorEl.appendChild(cell);
       cells.push(cell);
     }
     // 덱 더미 표시
     const pile = document.createElement('div');
-    pile.className = 'deck-pile';pile.setAttribute('role','img');pile.setAttribute('aria-label',`남은 더미 ${g.deck.length}장`);
-    pile.appendChild(cardBackEl());
+    pile.className = 'deck-pile';pile.dataset.remaining=String(g.deck.length);pile.setAttribute('role','img');pile.setAttribute('aria-label',`남은 더미 ${g.deck.length}장`);
+    for(let i=0;i<Math.min(3,g.deck.length);i++){const back=cardBackEl();back.setAttribute('aria-hidden','true');pile.appendChild(back);}
+    if(!g.deck.length)pile.classList.add('deck-empty');
     const count = document.createElement('div');
-    count.style.cssText = 'color:#8a84a0;font-size:11px;text-align:center;margin-top:2px';
-    count.textContent = `${g.deck.length}`;
+    count.className='deck-count';count.textContent = `더미 ${g.deck.length}장`;
     pile.appendChild(count);
-    this.el.querySelector('.opponent-deck')!.appendChild(pile);
+    this.el.querySelector('.draw-pile-slot')!.appendChild(pile);
 
     // 내 손패
     const handEl = this.el.querySelector('#hand')!;
@@ -409,7 +412,15 @@ export class GameScreen {
       const active=g.turn===0&&!g.awaitingChoice&&!g.awaitingGoStop;
       const ce = cardEl(c, { big: true,interactive:active });
       if(!active)ce.setAttribute('aria-disabled','true');
-      if(active){const mark=(on:boolean)=>this.el.querySelectorAll<HTMLElement>('.floor-cell').forEach(cell=>cell.classList.toggle('matching-month',on&&!!cell.querySelector(`[data-card-id="${g.floor.find(f=>f.month===c.month)?.id}"]`)));ce.addEventListener('mouseenter',()=>mark(true));ce.addEventListener('mouseleave',()=>mark(false));ce.addEventListener('focus',()=>mark(true));ce.addEventListener('blur',()=>mark(false));}
+      if(matchingMonths.has(c.month)){
+        ce.classList.add('has-floor-match');
+        const cue=document.createElement('span');cue.className='match-cue';cue.textContent=`${c.month}월 짝`;cue.setAttribute('aria-hidden','true');ce.appendChild(cue);
+        ce.setAttribute('aria-label',`${ce.getAttribute('aria-label')?.replace(`${c.month}월`,`${c.month}월 짝`)}, 바닥에 맞는 패 ${g.floor.filter(f=>f.month===c.month).length}장`);
+      }
+      if(active){const mark=(on:boolean)=>{
+        this.el.querySelectorAll<HTMLElement>('.floor-cell').forEach(cell=>cell.classList.toggle('matching-month',on&&Number(cell.dataset.month)===c.month));
+        handEl.querySelectorAll<HTMLElement>('.hcard').forEach(card=>card.classList.toggle('matching-hand',on&&Number(card.dataset.cardId)===c.id));
+      };ce.addEventListener('mouseenter',()=>mark(true));ce.addEventListener('mouseleave',()=>mark(false));ce.addEventListener('focus',()=>mark(true));ce.addEventListener('blur',()=>mark(false));}
       if (this.selectedCard?.id === c.id) ce.classList.add('playable-hint');
       ce.addEventListener('click', () => this.onHandClick(c));
       handEl.appendChild(ce);

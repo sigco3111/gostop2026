@@ -84,18 +84,24 @@ export class TableMotion {
     animation.finished.catch(()=>{}).finally(()=>node.remove());
     return node;
   }
+  private drawStock(){
+    const pile=this.board.querySelector<HTMLElement>('.deck-pile');if(!pile)return;
+    const remaining=Math.max(0,Number(pile.dataset.remaining??0)-1);pile.dataset.remaining=String(remaining);
+    pile.setAttribute('aria-label',`남은 더미 ${remaining}장`);const count=pile.querySelector('.deck-count');if(count)count.textContent=`더미 ${remaining}장`;
+    pile.querySelectorAll('.card-back').forEach((back,i)=>{if(i>=remaining)back.remove();});pile.classList.toggle('deck-empty',remaining===0);
+  }
   async show(e:MotionEvent){
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    if(matchMedia('(prefers-reduced-motion: reduce)').matches){if(e.type==='flipped')this.drawStock();return;}
     this.layer.dataset.phase=e.type;
     const garbage:HTMLElement[]=[];
     try{
       if(e.type==='played'||e.type==='flipped'){
         this.reveal(e.card);
         const target=this.spot(e.card);
-        const source=e.type==='played'?this.board.querySelector(e.player===0?`#hand [data-card-id="${e.card.id}"]`:'.opp-hand .card-back'):this.board.querySelector('.deck-pile');
+        const source=e.type==='played'?this.board.querySelector(e.player===0?`#hand [data-card-id="${e.card.id}"]`:'.opp-hand .card-back'):[...this.board.querySelectorAll('.deck-pile .card-back')].at(-1)??this.board.querySelector('.deck-pile');
         const moving=this.ghost(e.card,this.center(source),target,e.type==='played'?'play':'flip');garbage.push(moving);
         if(e.type==='played'&&source instanceof HTMLElement)source.style.visibility='hidden';
-        await this.landed(moving,e.type==='played'?190:280);this.hitAtLanding(e.card,target);this.place(e.card,target);
+        await this.landed(moving,e.type==='played'?190:280);this.hitAtLanding(e.card,target);this.place(e.card,target);if(e.type==='flipped')this.drawStock();
       }else if(e.type==='placed'){
         if(!this.find(e.card))this.place(e.card,this.spot(e.card));
       }else{
@@ -130,7 +136,7 @@ export class TableMotion {
           cards.forEach(card=>this.contacted.delete(card.id));
         }
         await wait(110);
-        cards.forEach((card,i)=>{garbage.push(this.ghost(card,origins[i],target,'capture',i*3));const el=sources[i];if(el){const cell=el.closest('.floor-cell');if(cell){el.remove();if(!cell.children.length)cell.remove();}else el.style.visibility='hidden';}});
+        cards.forEach((card,i)=>{garbage.push(this.ghost(card,origins[i],target,'capture',i*3));const el=sources[i];if(el){const cell=el.closest('.floor-cell');if(cell){el.remove();if(!cell.querySelector('[data-card-id]'))cell.remove();}else el.style.visibility='hidden';}});
         await wait(300);
       }
     }finally{garbage.forEach(node=>node.remove());delete this.layer.dataset.phase;}

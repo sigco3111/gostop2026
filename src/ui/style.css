@@ -542,3 +542,24 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
  #game-screen .action-bar{grid-column:2;grid-row:3;}
  #game-screen .my-hand{grid-column:1/-1;grid-row:4;}
 }
+
+/* Month-matched pairs remain visible before a touch, not only on hover. */
+#game-screen .floor-match-guide{color:#f9df9e;font-size:10px;white-space:nowrap;}
+#game-screen .match-cue{position:absolute;bottom:1px;left:1px;z-index:5;pointer-events:none;border:1px solid #f4d587;border-radius:3px;background:#34270bf5;color:#fff1bf;font-size:10px;font-weight:800;line-height:16px;padding:0 3px;white-space:nowrap;}
+#game-screen .floor-cell>.match-cue{bottom:auto;top:0;left:0;}
+#game-screen .floor-cell.has-hand-match{background:#e7cc7615;box-shadow:inset 0 0 0 1px #c3a86488;}
+#game-screen .floor-cell.matching-month{outline:2px solid #ffe5a0;outline-offset:-2px;background:#dfbd6440;}
+#game-screen .matching-month>.match-cue,#game-screen .matching-hand>.match-cue{background:#ffe5a0;color:#241908;}
+#game-screen[aria-busy=true] .match-cue,#game-screen[aria-busy=true] .floor-match-guide{visibility:hidden;}
+#game-screen[aria-busy=true] .floor-cell.has-hand-match{background:none;box-shadow:none;outline:none;}
+/* The draw stock is a real, fixed stack inside the table, separate from floor pairs. */
+#game-screen .floor-body{display:grid;grid-template-columns:52px minmax(0,1fr);min-height:0;min-width:0;}
+#game-screen .draw-pile-slot{display:grid;place-items:center;min-width:0;border-right:1px solid #9eab8433;background:#08170f33;}
+#game-screen .draw-pile-slot .deck-pile{position:relative;inset:auto;display:block;width:40px;height:78px;margin:0 2px 0 0;}
+#game-screen .draw-pile-slot .card-back{position:absolute;width:32px;height:48px;border-radius:3px;left:2px;top:10px;box-shadow:1px 2px 2px #000b;border:1px solid #ae3d42;}
+#game-screen .draw-pile-slot .card-back:nth-child(2){left:5px;top:7px;}
+#game-screen .draw-pile-slot .card-back:nth-child(3){left:8px;top:4px;}
+#game-screen .deck-count{position:absolute;bottom:0;left:-3px;right:-3px;color:#e9dfc6;font-size:10px;line-height:16px;white-space:nowrap;text-align:center;}
+#game-screen .deck-empty::before{content:'';position:absolute;left:4px;top:7px;width:32px;height:48px;border:1px dashed #82937a66;border-radius:3px;}
+@media(min-width:370px) and (min-height:650px){#game-screen .floor-body{grid-template-columns:60px minmax(0,1fr);}#game-screen .draw-pile-slot .deck-pile{width:44px;height:94px;}#game-screen .draw-pile-slot .card-back{width:36px;height:60px;}}
+@media(min-width:1000px) and (min-height:650px){#game-screen .floor-body{grid-template-columns:94px minmax(0,1fr);}#game-screen .draw-pile-slot .deck-pile{width:64px;height:130px;}#game-screen .draw-pile-slot .card-back{width:54px;height:88px;}#game-screen .deck-count{font-size:13px;}}
