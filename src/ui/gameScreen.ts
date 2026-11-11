@@ -1,3 +1,4 @@
+import { settlementDescription } from '../data/settlementDescription';
 import { captureGroups } from '../data/captureGroups';
 import { ScoreBreakdown } from '../engine/scoring';
 import { scoreDescription, scoreItems } from '../data/scoreDescription';
@@ -194,6 +195,8 @@ export class GameScreen {
       <div class="pts">${score}점</div>
       <div class="ask">고 하시겠습니까?</div>
       <p class="stop-preview">지금 스톱하면 <strong>${now.finalScore}점</strong></p>
+      <p class="stop-breakdown">${settlementDescription(now)}</p>
+      ${this.g.players[0].captured.some(c=>c.isGukjin)?`<p class="stop-designation">국진: ${now.breakdown?.gukjinAsPi?'쌍피':'열끗'}로 정산</p>`:''}
       <p class="go-risk">${this.g.deck.length===0?'마지막 뒤집기입니다. 고를 하면 나가리로 끝납니다.':`남은 더미 ${this.g.deck.length}장 · 고를 한 뒤 상대가 먼저 나면 고박입니다.`}</p>
       <div class="row">
         <button class="btn go" data-a="go">고!</button>
@@ -206,6 +209,8 @@ export class GameScreen {
       await this.processEvents(ev);
       this.loop();
     }));
+    // The next answer redraws the board, so background inertness ends with this modal.
+    [...this.el.children].forEach(child=>{(child as HTMLElement).inert=true;});
     this.el.appendChild(ov);focusDialog(ov,ov.querySelector<HTMLElement>('.stop'));
   }
 

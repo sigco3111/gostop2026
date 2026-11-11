@@ -292,3 +292,5 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 
 /* Accessible event log stays mounted while the visual board redraws. */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
+
+.stop-breakdown,.stop-designation{max-width:340px;margin:8px auto;color:#d6c7df;font-size:12px;line-height:1.8;word-break:keep-all;overflow-wrap:anywhere;}.stop-designation{color:#f0cb86;}
