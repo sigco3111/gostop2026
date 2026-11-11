@@ -68,7 +68,7 @@ export class TableMotion {
         });
         const origins=cards.map((card,i)=>e.type==='stealPi'?this.capturePoint(e.from):this.center(sources[i]??this.board.querySelector('#floor')));
         const point=this.center(cards.map(card=>this.find(card)).find(Boolean)??this.board.querySelector('#floor'));
-        const impact=document.createElement('div');impact.className='motion-impact';impact.style.left=`${point.x}px`;impact.style.top=`${point.y}px`;impact.textContent=e.type==='stealPi'?'피 가져감':`${cards[0].month}월 · ${cards.length}장 획득`;this.layer.appendChild(impact);garbage.push(impact);
+        const impact=document.createElement('div');impact.className='motion-impact';impact.style.left=`${Math.max(80,Math.min(innerWidth-80,point.x))}px`;impact.style.top=`${Math.max(80,Math.min(innerHeight-80,point.y))}px`;impact.textContent=e.type==='stealPi'?'피 가져감':`${cards[0].month}월 · ${cards.length}장 획득`;this.layer.appendChild(impact);garbage.push(impact);
         sources.forEach(el=>el?.classList.add('motion-match'));
         if(e.type==='captured')garbage.push(this.contact(point));
         await wait(110);

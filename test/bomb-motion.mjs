@@ -11,7 +11,10 @@ try{
   await page.evaluateOnNewDocument(()=>{let n=49;Math.random=()=>{n=(Math.imul(n,1664525)+1013904223)>>>0;return n/4294967296;};const t=window.setTimeout.bind(window);window.setTimeout=(fn,ms,...args)=>t(fn,[110,300].includes(ms)?900:ms,...args);});
   await page.goto(url,{waitUntil:'networkidle0'});await page.click('#m-free');await page.click('.stage-card');await page.waitForSelector('#actionbar .danger');
   const expected=await page.evaluate(()=>{const g=window.__game,m=g.canBomb(0)[0];return {month:m,hand:g.players[0].hand.filter(c=>c.month===m).map(c=>{const r=document.querySelector(`#hand [data-card-id="${c.id}"]`).getBoundingClientRect();return {id:c.id,x:r.x+r.width/2,y:r.y+r.height/2};})};});
-  await page.click('#actionbar .danger');await page.waitForSelector('.motion-capture',{timeout:10000});
+  await page.click('#actionbar .danger');await page.waitForSelector('.motion-contact',{timeout:10000});
+  const label=await page.$eval('.motion-impact',el=>{const r=el.getBoundingClientRect();return {left:r.left,right:r.right,top:r.top};});if(label.left<0||label.right>width||label.top<0)throw Error('edge contact label clipped');
+  await page.screenshot({path:`${out}/bomb-impact-${width}.png`});
+  await page.waitForSelector('.motion-capture',{timeout:10000});
   const origins=await page.$$eval('.motion-capture',nodes=>nodes.map(n=>({id:Number(n.dataset.cardId),x:parseFloat(n.style.left)+28,y:parseFloat(n.style.top)+42})));
   await page.screenshot({path:`${out}/bomb-${width}.png`});
   const correct=expected.hand.every(h=>origins.some(n=>n.id===h.id&&Math.abs(n.x-h.x)<1&&Math.abs(n.y-h.y)<1));
