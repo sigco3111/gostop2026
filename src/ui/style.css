@@ -366,3 +366,12 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
  .gostop-panel .ask{margin:6px 0 10px;}
  .gostop-panel .stop-preview,.gostop-panel .stop-breakdown,.gostop-panel .stop-designation,.gostop-panel .go-risk{margin-top:4px;margin-bottom:4px;}
 }
+
+/* Keep guide sections and title return within reach after reading a long section. */
+.guide-navigation{position:sticky;top:0;z-index:5;background:#12101a;border-bottom:1px solid #49344f;padding:6px 0;margin:20px 0;}
+.guide-nav-head{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+.guide-nav-head>span{font-size:12px;color:#d4c7de;}
+.guide-navigation .guide-back{margin:0;min-height:44px;}
+.guide-navigation .guide-tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;flex-wrap:nowrap;margin:6px 0 0;}
+.guide-navigation .guide-tabs .btn{padding:8px 4px;min-width:0;}
+@media(max-width:500px){.guide-navigation .guide-tabs .btn{font-size:11px;}}

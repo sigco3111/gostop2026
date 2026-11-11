@@ -8,7 +8,7 @@ import { cardEl } from './cards';
 export function guideScreen(back:()=>void, sessionSave?:SaveData, saved=true):HTMLElement {
  const el=document.createElement('div');el.className='screen guide-screen';el.id='guide-screen';
  el.innerHTML=`<div class="guide-wrap"><header><p class="eyebrow">HOW TO PLAY</p><h2>판에 들어가기 전에</h2><p class="guide-lead">같은 월의 패를 모아 7점. 더 갈지, 지금 멈출지.</p></header>
- <nav class="guide-tabs" aria-label="안내 항목"><button class="btn small" data-tab="rules">게임 방법</button><button class="btn small" data-tab="deck">48장 도감</button><button class="btn small" data-tab="rivals">고수 열전</button><button class="btn small" data-tab="credits">제작·기록</button></nav><div id="guide-content"></div><button class="btn small guide-back">← 타이틀</button></div>`;
+ <div class="guide-navigation"><div class="guide-nav-head"><span>안내 항목</span><button class="btn small guide-back">← 타이틀</button></div><nav class="guide-tabs" aria-label="안내 항목"><button class="btn small" data-tab="rules">게임 방법</button><button class="btn small" data-tab="deck">48장 도감</button><button class="btn small" data-tab="rivals">고수 열전</button><button class="btn small" data-tab="credits">제작·기록</button></nav></div><div id="guide-content"></div></div>`;
  const content=el.querySelector('#guide-content')!;
  const show=(tab:string)=>{
   const openRival=(index:number,origin:HTMLElement)=>{
@@ -44,6 +44,12 @@ export function guideScreen(back:()=>void, sessionSave?:SaveData, saved=true):HT
    <section class="guide-block"><h3>이 게임의 채택 규칙</h3><p>화투 48장, 보너스패 없음. 2인 맞고. 규칙은 서비스·지역마다 다릅니다. 이 게임의 선택을 위에 명시했습니다.</p><p class="guide-links"><a href="https://moamoang.co.kr/gostop-rules/" target="_blank" rel="noopener">맞고 룰·점수 계산 ↗</a> <a href="https://mgostop.hangame.com/guide/combine/02_03_rule.html" target="_blank" rel="noopener">한게임 족보 안내 ↗</a></p></section>`;
   }
  };
- el.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>show((b as HTMLElement).dataset.tab!)));
+ el.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{
+  show((b as HTMLElement).dataset.tab!);
+  const navigation=el.querySelector<HTMLElement>('.guide-navigation')!;
+  // New sections start below the pinned controls, not at the old section's scroll depth.
+  el.scrollTop+=content.getBoundingClientRect().top-navigation.offsetHeight-20;
+  (b as HTMLElement).focus({preventScroll:true});
+ }));
  el.querySelector('.guide-back')!.addEventListener('click',back);show('rules');return el;
 }
