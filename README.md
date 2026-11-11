@@ -148,3 +148,10 @@ scroll reachability, scenario/freeplay/settings/guide return paths, music toggle
 and reload, keyboard traversal, preserved fixture progress/deck selection and
 axe. The progress fixture tests preservation only; it is not an earned win or
 physical-phone test.
+
+When the progress-storage warning is present, the title menu now leaves at least
+42px below its final button so the fixed warning cannot cover part of the touch
+target. `FAIL_STORAGE=1 node test/title-navigation.mjs` repeats all five title
+viewports with deliberate progress-write failure and checks that the last menu
+button and notice do not overlap. This does not simulate a real device failure.
+Normal storage retains the existing layout.
