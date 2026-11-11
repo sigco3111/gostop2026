@@ -294,3 +294,12 @@ The dossier's previous/next/close controls stay pinned at every width, including
 profiles at five sizes, checks the complete final quote and all 44px controls,
 then uses Next and Close without scrolling back to the top. Navigation focus,
 wrapping, origin focus and progress storage remain unchanged.
+
+### Held keys are one decision (2026-11-11)
+Holding Enter or Space no longer plays more cards when the next turn restores
+focus. The game ignores activation-key repeat events, including across choice
+and go/stop controls; releasing and pressing again still works normally.
+`test/held-key.mjs` checks both keys at three sizes. `test/held-decision-round.mjs`
+compares a normal touch round with Enter and Space rounds, holding each at the
+first hand play, first two-card choice and Stop. The full decision-boundary state,
+settlement, saved progress and reloaded record must match the touch baseline.

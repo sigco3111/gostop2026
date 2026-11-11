@@ -54,7 +54,13 @@ export class GameScreen {
     this.el = document.createElement('div');
     this.el.id = 'game-screen';
     this.el.className = 'screen';
-    this.el.addEventListener('keydown',()=>{this.keyboardNavigation=true;},true);
+    this.el.addEventListener('keydown',(event)=>{
+      this.keyboardNavigation=true;
+      // A held activation key is one decision, even after a new turn restores focus.
+      if(event.repeat&&(event.key==='Enter'||event.key===' ')){
+        event.preventDefault();event.stopPropagation();
+      }
+    },true);
     this.el.addEventListener('pointerdown',()=>{this.keyboardNavigation=false;},true);
     this.el.style.backgroundImage=`linear-gradient(#07060aaf,#07060af5),url(${BASE}${this.opponent.background})`;
     this.el.style.backgroundSize='cover';
