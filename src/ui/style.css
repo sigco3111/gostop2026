@@ -388,3 +388,9 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 /* A failed flip face follows the same reveal as a downloaded picture. */
 .motion-flip>.card-fallback{backface-visibility:hidden;animation:reveal-face .28s ease-out both;}
 .mini{color:#261b16;font-size:9px;}
+/* Auto top margin keeps the desktop composition low but never hides the title
+   above the scroll origin when the full menu is taller than a short viewport. */
+#title-screen{justify-content:flex-start;}
+.title-inner{margin-top:auto;}
+.menu .btn{min-height:44px;}
+#title-screen::before{position:fixed;pointer-events:none;}

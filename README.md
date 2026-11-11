@@ -134,3 +134,17 @@ and failed-image conditions each made 8 single-card plays, 2 capture choices and
 game states, settlement, saved values and records agreed, including after reload.
 This is one fixed-shuffle browser case per condition, not physical-device or
 all-opponent coverage. Production code and deployment do not change for this QA.
+
+### Short-screen title navigation (2026-11-11)
+The title content now uses an auto top margin instead of unsafe end alignment:
+on tall screens it stays low as before, but on short screens it starts at a
+reachable scroll origin. Every title-menu button is at least 44px high, and the
+background shade stays over the viewport while scrolling. Menu order, artwork,
+preferences, game rules and save format are unchanged.
+
+`node test/title-navigation.mjs` checks five viewports (320/390 portrait,
+568/844 landscape and 1280), title visibility, all six menu target sizes and
+scroll reachability, scenario/freeplay/settings/guide return paths, music toggle
+and reload, keyboard traversal, preserved fixture progress/deck selection and
+axe. The progress fixture tests preservation only; it is not an earned win or
+physical-phone test.
