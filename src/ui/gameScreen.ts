@@ -316,6 +316,7 @@ export class GameScreen {
     const g = this.g;
     const me = g.players[0], opp = g.players[1];
     const myScore = g.scoreOf(0), oppScore = g.scoreOf(1);
+    const specialLabel=me.bombPasses?'빈패':g.canBomb(0).length?'폭탄':g.canShakeOnly(0).length?'흔들기':null;
 
     const capGroup = (cards: Card[], breakdown:ScoreBreakdown) => captureGroups(cards,breakdown).map(({label,cards:cs,count}) =>
       `<div class="cap-group"><div class="cap-stack">${cs.map((c) => `<img class="mini" src="${cardUrl(c.id)}" alt="${cardDescription(c)}">`).join('')}</div><div class="cap-label">${label} ${count}</div></div>`).join('');
@@ -330,7 +331,7 @@ export class GameScreen {
         <div class="score-pill">${this.opponent.name} <b>${oppScore.total}</b>점</div>
         <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
       </div>
-      <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':'<button class="hand-jump" aria-controls="hand">내 차례 · 손패 보기</button>'):`${this.opponent.name}의 차례`}</span><div class="turn-actions"><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button><button class="exit-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''} aria-label="대국 나가기">나가기</button></div></div>
+      <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':`<button class="hand-jump" aria-controls="${specialLabel?'actionbar':'hand'}">내 차례 · ${specialLabel??'손패'} 보기</button>`):`${this.opponent.name}의 차례`}</span><div class="turn-actions"><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button><button class="exit-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''} aria-label="대국 나가기">나가기</button></div></div>
       <p class="audio-save-status" role="status" aria-live="polite">${audioSaveWarning()}</p>
       <div class="table-area">
         <div class="opp-zone">
@@ -342,7 +343,7 @@ export class GameScreen {
         <div class="opp-zone" style="justify-content:flex-end">
           <div class="my-captured">${capGroup(me.captured,myScore)}</div>
         </div>
-        <div class="action-bar" id="actionbar"></div>
+        <div class="action-bar" id="actionbar" tabindex="-1" role="group" aria-label="특수 행동"></div>
         <div class="my-hand" id="hand" tabindex="-1" role="group" aria-label="내 손패 ${me.hand.length}장"></div>
       </div>`;
 
@@ -354,9 +355,9 @@ export class GameScreen {
       this.el.querySelector('.audio-save-status')!.textContent=audioSaveWarning();
     });
     this.el.querySelector('.hand-jump')?.addEventListener('click',()=>{
-      const hand=this.el.querySelector<HTMLElement>('#hand');
-      hand?.focus({preventScroll:true});
-      hand?.scrollIntoView({block:'end',behavior:'instant'});
+      const target=this.el.querySelector<HTMLElement>(specialLabel?'#actionbar':'#hand');
+      target?.focus({preventScroll:true});
+      target?.scrollIntoView({block:specialLabel?'start':'end',behavior:'instant'});
     });
     this.el.querySelector('.capture-toggle')?.addEventListener('click',()=>this.showCaptured());
     this.el.querySelector('.exit-toggle')?.addEventListener('click',()=>this.showExit());

@@ -333,3 +333,13 @@ held Enter and held Space, state/save invariance, capture-dialog return,
 next-turn availability and axe. `HAND_JUMP=1 node test/capture-touch-round.mjs`
 also uses the shortcut at each ordinary turn in the touch-inspection run,
 which must match the baseline through settlement, saved progress and records.
+
+When shake, bomb or earned blank-pass actions are available, the same turn
+shortcut names that action and focuses/scrolls the action group first. This
+keeps the special-action button out from behind the fixed header in short
+landscape. Hand cards remain below and can be scrolled into view. The shortcut
+never declares the action or changes game/save state. `TURN_JUMP=1 node
+test/special-action-input.mjs` checks these boundaries, Tab into the action,
+and normal held-key action/earned-pass behavior. Ordinary turns retain the
+hand shortcut. This is not a promise that actions and every hand card fit
+simultaneously on short screens.
