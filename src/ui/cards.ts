@@ -14,15 +14,19 @@ export function cardUrl(id: number): string { return deckCardUrl(id); }
 
 /** Keep known public cards legible if their picture cannot be downloaded. */
 export function attachCardFallback(host:HTMLElement,img:HTMLImageElement,card:Card):void {
-  const show=()=>{
-    if(host.querySelector('.card-fallback'))return;
+  const show=(loading:boolean)=>{
+    host.querySelector('.card-fallback')?.remove();
     const fallback=document.createElement('div');fallback.className='card-fallback';fallback.setAttribute('aria-hidden','true');
-    cardFallbackLines(card).forEach((line,index)=>{const text=document.createElement(index===0?'strong':index===3?'em':'span');text.textContent=line;fallback.appendChild(text);});
-    host.appendChild(fallback);host.classList.add('card-image-failed');
+    const lines=cardFallbackLines(card);if(loading)lines[3]='그림 받는 중';
+    lines.forEach((line,index)=>{const text=document.createElement(index===0?'strong':index===3?'em':'span');text.textContent=line;fallback.appendChild(text);});
+    host.appendChild(fallback);host.classList.toggle('card-image-loading',loading);host.classList.toggle('card-image-failed',!loading);
   };
-  img.addEventListener('error',show);
-  img.addEventListener('load',()=>{host.classList.remove('card-image-failed');host.querySelector('.card-fallback')?.remove();});
-  if(img.complete&&!img.naturalWidth&&img.getAttribute('src'))show();
+  img.addEventListener('error',()=>show(false));
+  img.addEventListener('load',()=>{host.classList.remove('card-image-loading','card-image-failed');host.querySelector('.card-fallback')?.remove();});
+  // Most callers set src just after attaching. Give public cards their identity
+  // immediately, rather than waiting for an error event from a slow request.
+  if(img.complete&&img.naturalWidth)return;
+  show(!img.getAttribute('src')||!img.complete);
 }
 
 export function cardEl(card: Card, opts: { big?: boolean; interactive?: boolean } = {}): HTMLElement {

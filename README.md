@@ -203,3 +203,13 @@ card's position while the board is input-locked, on every player play. Its
 normal-timer paired round must preserve inputs, all boundary states, settlement,
 final state and saved/reloaded progress. This is browser touch emulation, not
 physical-device latency testing. Neither test injects wins or saved progress.
+
+### Card identity while pictures load (2026-11-11)
+Public card faces show month, scoring identity and a loading note while their
+picture request is pending, then return to the selected deck's normal art on
+load. Failed requests retain the existing distinct missing-picture note. Hidden
+opponent hands remain backs. Rules, AI, one-tap input and save format do not change.
+`test/card-loading.mjs` holds then releases card requests across four decks and
+four sizes, checking public identities, hidden-hand privacy, placeholder cleanup,
+unchanged game/save state and axe/runtime errors. These are controlled requests,
+not evidence of a real service outage or a physical-device network test.
