@@ -33,8 +33,8 @@ export class TableMotion {
   }
   private ghost(card:Card,from:Point,to:Point,kind:string,offset=0){
     const node=document.createElement('div');node.className=`motion-card motion-${kind}`;node.dataset.cardId=String(card.id);
-    node.style.left=`${from.x-28+offset}px`;node.style.top=`${from.y-42}px`;
-    node.style.setProperty('--dx',`${to.x-from.x}px`);node.style.setProperty('--dy',`${to.y-from.y}px`);
+    node.style.left=`${from.x-28}px`;node.style.top=`${from.y-42}px`;
+    node.style.setProperty('--dx',`${to.x-from.x+offset}px`);node.style.setProperty('--dy',`${to.y-from.y}px`);
     const front=document.createElement('img');front.src=cardUrl(card.id);front.alt='';front.className='motion-face';node.appendChild(front);
     if(kind==='flip'){const back=document.createElement('div');back.className='card-back motion-back';node.appendChild(back);}
     this.layer.appendChild(node);return node;
@@ -55,12 +55,16 @@ export class TableMotion {
       }else{
         const cards=e.type==='captured'?e.cards:[e.card];
         const target=this.capturePoint(e.type==='captured'?e.player:e.to);
-        const origins=cards.map(card=>e.type==='stealPi'?this.capturePoint(e.from):this.center(this.find(card)??this.board.querySelector('#floor')));
-        const point=origins[0];
+        const sources=cards.map((card,i)=>{
+          if(e.type==='stealPi')return null;
+          return this.find(card)??(e.via==='bomb'?(e.player===0?this.board.querySelector<HTMLElement>(`#hand [data-card-id="${card.id}"]`):this.board.querySelectorAll<HTMLElement>('.opp-hand .card-back')[i]):null);
+        });
+        const origins=cards.map((card,i)=>e.type==='stealPi'?this.capturePoint(e.from):this.center(sources[i]??this.board.querySelector('#floor')));
+        const point=this.center(cards.map(card=>this.find(card)).find(Boolean)??this.board.querySelector('#floor'));
         const impact=document.createElement('div');impact.className='motion-impact';impact.style.left=`${point.x}px`;impact.style.top=`${point.y}px`;impact.textContent=e.type==='stealPi'?'피 가져감':`${cards[0].month}월 · ${cards.length}장 획득`;this.layer.appendChild(impact);garbage.push(impact);
-        cards.forEach(card=>this.find(card)?.classList.add('motion-match'));
+        sources.forEach(el=>el?.classList.add('motion-match'));
         await wait(110);
-        cards.forEach((card,i)=>{garbage.push(this.ghost(card,origins[i],target,'capture',i*3));const el=this.find(card);if(el){const cell=el.closest('.floor-cell')!;el.remove();if(!cell.children.length)cell.remove();}});
+        cards.forEach((card,i)=>{garbage.push(this.ghost(card,origins[i],target,'capture',i*3));const el=sources[i];if(el){const cell=el.closest('.floor-cell');if(cell){el.remove();if(!cell.children.length)cell.remove();}else el.style.visibility='hidden';}});
         await wait(300);
       }
     }finally{garbage.forEach(node=>node.remove());delete this.layer.dataset.phase;}
