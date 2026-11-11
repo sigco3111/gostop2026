@@ -381,3 +381,12 @@ navigation fixture (not12 earned wins), checks all14 actual lines at320x568,
 bounds/no horizontal overflow/axe0 and unchanged fixture progress. The story
 repeat harness also decodes CSS backgrounds and fixes seed23 to avoid random
 instant-ending deals when testing cancel/exit, without changing production.
+
+`motion-preference-round.mjs` compares normal play with turning on the OS
+reduced-motion preference during the first card flight, using production timers
+and naturally earned progress. Later reduced plays emit no motion nodes and
+settlement has no running animations. `missing-impact-round.mjs` blocks all
+three impact-sprite downloads in isolated sessions selecting A/B/C. Both checks
+compare complete decision-boundary game state, earned saves and records with a
+normal round, check reload continuity and axe0. Network failures are deliberate
+fixtures, not evidence of an actual public outage.
