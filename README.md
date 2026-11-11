@@ -360,3 +360,9 @@ settlement, saved progress and reload records must match.
 seed95(bomb plus shake) at320/568 widths with touch and held activation keys.
 Both special actions stay reachable; Tab visits both actions then the hand.
 Browsing alone must leave whole game state and saved progress unchanged.
+
+The first rules section now separates controls into seven labeled instructions,
+replacing the long mixed paragraph. Existing control behavior and rule text are
+unchanged. `guide-controls-copy.mjs` checks every instruction's heading and
+start of its description remains reachable below the pinned navigation at
+320/390/568/1280 widths, with no horizontal overflow or progress changes.

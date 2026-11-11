@@ -438,3 +438,7 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .capture-kind{min-width:0;min-height:44px;border:1px solid #66516e;border-radius:5px;background:#24202c;color:#eee6f2;font:inherit;font-size:12px;padding:6px 2px;cursor:pointer;}
 .capture-kind:disabled{background:transparent;color:#afa1b7;border-color:#463b4c;cursor:default;}
 .capture-kind:focus-visible,.capture-category h4:focus{outline:2px solid #4ee8ff;outline-offset:2px;}
+
+.guide-controls{margin:16px 0 0;display:grid;gap:0;}
+.guide-controls dt{font-size:14px;color:#e6ca9e;font-weight:600;margin-top:14px;}
+.guide-controls dd{font-size:14px;color:#c6becf;line-height:1.8;margin:5px 0 0;word-break:keep-all;overflow-wrap:anywhere;}
