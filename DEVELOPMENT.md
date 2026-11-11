@@ -212,3 +212,7 @@ GAME_URL=https://sigco3111.github.io/gostop2026/ QA_WIDTH=844 QA_HEIGHT=320 node
 ### 2026-11-11 13:02 - Sound toggle preserves the board
 - Reproduced on public844x320: after scrolling45px to the hand, changing sound rebuilt the whole board and reset scroll to0. The sound handler now updates only its own text and aria-pressed after the existing setSound call. No audio policy, game rendering on turns, rules, AI, save format or timers changed.
 - `test/sound-position.mjs` checks320/390/844/1280, real touch or keyboard toggle both ways, sound preference writes, unchanged board/hand/button nodes, scroll, game state and progression storage, keyboard focus, axe0. Browser-emulated touch and automated DOM checks do not verify physical-phone use or speaker output.
+
+### 2026-11-11 13:11 - Capture fixture does not depend on sound rendering
+- The old captured-score fixture mutated engine captures then clicked sound to request a board redraw. Sound correctly stopped redrawing the board in13:03, so that test inspected stale compact cards, not a production capture defect.
+- The deliberate fixture now wraps deal only in its isolated test page, installs captures before initial board render, and enters a fresh free match through normal exit/menu UI for each case. It does not change production behavior or the inspected scoring assertions. Latest public build passes320/390/844/1280, pi/yeol designation, empty groups, sticky jumps/focus/return, axe0/errors0. These are synthetic score fixtures, not naturally played rounds.
