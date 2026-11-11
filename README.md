@@ -405,3 +405,13 @@ restores writes without reloading, naturally wins against the second rival,
 and requires both stages to persist together, the warning to clear and reload
 to retain2/12. It never injects wins/cards/progress. This simulates storage
 failure and recovery, not a real public outage or user-record loss.
+
+`decision-background-round.mjs` compares a baseline with a production-timer
+natural round that backgrounds the page at both capture choices, the captured
+panel, Go/Stop and settlement. At each interruption it observes hidden/visible,
+changes to568x240 then returns to320x568, checks unchanged whole game/save state
+and dialog focus/Tab containment, and verifies scroll access to the title and
+44px action target. Short-height panels can require scrolling between their
+heading and buttons; they need not fit together. Both rounds must have identical
+inputs, boundary states, result, earned save, reload and records, with axe0.
+This is desktop-browser tab/viewport simulation, not phone app suspension.
