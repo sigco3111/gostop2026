@@ -366,3 +366,11 @@ replacing the long mixed paragraph. Existing control behavior and rule text are
 unchanged. `guide-controls-copy.mjs` checks every instruction's heading and
 start of its description remains reachable below the pinned navigation at
 320/390/568/1280 widths, with no horizontal overflow or progress changes.
+
+Story and roster keyboard activation now ignores held-key repeat events, just
+like card play: entering a story while holding Enter/Space keeps its first line,
+and each fresh press advances one line. Result-dialogue return cannot let a
+held key start the highlighted roster card. `story-key-repeat.mjs` checks both
+keys at320/568/1280 widths,30repeats at each boundary, fresh-press continuation,
+cancel/exit, and unchanged progress. `RESULT_HOLD=1 capture-touch-round.mjs`
+checks the result return after a naturally completed paired normal-speed round.

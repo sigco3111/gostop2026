@@ -71,7 +71,7 @@ export class App {
       card.className = `stage-card${locked ? ' locked' : ''}`;
       card.dataset.stage=String(o.stage);
       card.setAttribute('role','button');card.tabIndex=locked?-1:0;card.setAttribute('aria-disabled',String(locked));
-      card.addEventListener('keydown',e=>{if(!locked&&(e.key==='Enter'||e.key===' ')){e.preventDefault();card.click();}});
+      card.addEventListener('keydown',e=>{if(!locked&&(e.key==='Enter'||e.key===' ')){e.preventDefault();if(!e.repeat)card.click();}});
       card.innerHTML = `<div class="num">${o.stage}</div>${cleared ? '<div class="cleared">CLEARED</div>' : ''}
         <img src="${BASE}${o.portrait}" alt="${o.name}">
         <div class="meta"><div class="name">${o.name}</div><div class="title">${o.title}</div></div>`;
@@ -104,7 +104,7 @@ export class App {
     };
     render();
     el.tabIndex=0;el.setAttribute('role','button');
-    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(!e.repeat)el.click();}});
     el.addEventListener('click', () => { i++; if (i >= lines.length) next(); else render(); });
     this.setScreen(el);
   }
@@ -146,7 +146,7 @@ export class App {
         <div class="dialogue-text">${text}</div>
         <div class="dialogue-next">클릭하여 계속 ▶</div>
       </div>`;
-    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',`${el.textContent?.replace(/\s+/g,' ').trim()}. Enter 키로 진행`);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}});
+    el.tabIndex=0;el.setAttribute('role','button');el.setAttribute('aria-label',`${el.textContent?.replace(/\s+/g,' ').trim()}. Enter 키로 진행`);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(!e.repeat)el.click();}});
     el.addEventListener('click', back);
     this.setScreen(el);
   }
@@ -165,7 +165,7 @@ export class App {
     const grid = el.querySelector('.stage-grid')!;
     for (const o of OPPONENTS) {
       const card = document.createElement('div');
-      card.className = 'stage-card';card.setAttribute('role','button');card.tabIndex=0;card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();card.click();}});
+      card.className = 'stage-card';card.setAttribute('role','button');card.tabIndex=0;card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();if(!e.repeat)card.click();}});
       card.innerHTML = `<img src="${BASE}${o.portrait}" alt="${o.name}">
         <div class="meta"><div class="name">${o.name}</div><div class="title">${o.title} · 난이도 ${o.difficulty}</div></div>`;
       card.addEventListener('click', () => this.startMatch(o, 'free'));
