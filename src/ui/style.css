@@ -345,3 +345,8 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 #scenario-screen .stage-card{scroll-margin-top:calc(76px + 4vh);}
 
 #scenario-screen .roster-navigation{top:-4vh;}
+
+/* Keep the speaker's face in frame on short landscape displays. */
+@media (max-height:480px) and (orientation:landscape){
+  .dialogue-portrait{height:72vh;height:72dvh;width:auto;max-width:40vw;object-fit:contain;}
+}
