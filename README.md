@@ -183,3 +183,10 @@ final state and earned progress/records after reload. Axe runs only after the
 round so its random draws cannot contaminate the seeded AI stream. These are
 emulated viewport changes, not physical-device rotation or a balance verdict.
 Set GAME_URL and QA_OUT for the target and output directory.
+
+`test/motion-rotation-round.mjs` changes size during all eight player card-play
+animations in one fixed-shuffle story round, after observing one moving card and
+input lock. It compares every subsequent input boundary, full final state,
+settlement and earned/reloaded progress with an unchanged-size run, using normal
+production timers. The check proves turn/input recovery for that case, not every
+intermediate animation coordinate, phone sensor rotation or all opponents.
