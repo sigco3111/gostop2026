@@ -303,3 +303,6 @@ and go/stop controls; releasing and pressing again still works normally.
 compares a normal touch round with Enter and Space rounds, holding each at the
 first hand play, first two-card choice and Stop. The full decision-boundary state,
 settlement, saved progress and reloaded record must match the touch baseline.
+The optional `GO_FIRST=1` run chooses Go at the first prompt, then Stop at the
+next prompt. This checks that a held Go key does not play the returned hand or
+answer the next prompt. Its touch/Enter/Space runs must still match in full.
