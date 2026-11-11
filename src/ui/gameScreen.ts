@@ -331,7 +331,12 @@ export class GameScreen {
         <div class="my-hand" id="hand" role="group" aria-label="내 손패 ${me.hand.length}장"></div>
       </div>`;
 
-    this.el.querySelector('.sound-toggle')?.addEventListener('click', () => {setSound(!soundEnabled());this.render();});
+    this.el.querySelector('.sound-toggle')?.addEventListener('click', (event) => {
+      setSound(!soundEnabled());
+      const button=event.currentTarget as HTMLButtonElement;
+      button.textContent=soundEnabled()?'소리 켬':'소리 끔';
+      button.setAttribute('aria-pressed',String(soundEnabled()));
+    });
     this.el.querySelector('.capture-toggle')?.addEventListener('click',()=>this.showCaptured());
     this.el.querySelector('.exit-toggle')?.addEventListener('click',()=>this.showExit());
     // 바닥

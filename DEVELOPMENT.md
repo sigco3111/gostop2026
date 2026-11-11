@@ -208,3 +208,7 @@ GAME_URL=https://sigco3111.github.io/gostop2026/ QA_WIDTH=844 QA_HEIGHT=320 node
 ### 2026-11-11 12:54 - Special action touch targets
 - Extended coarse-pointer44px hit areas to shake/bomb/bomb-pass actions, with8px action spacing and a non-shrinking action bar. Previously these were28px high at320px. Cards, rules, AI, timers, save formats and single-tap actions are unchanged.
 - `test/special-touch-controls.mjs` uses ordinary seeded deals (8 shake,49 bomb), production timers, isolated fresh progress.320x568/390x844/844x320: swipe on action does not play; edge tap performs one shake or three-card bomb; the naturally earned bomb pass spends one pass without another hand card. All targets44px and scroll-reachable, axe0 after the complete turn, no progression writes/runtime errors. This is CDP touch emulation, not physical-phone testing.
+
+### 2026-11-11 13:02 - Sound toggle preserves the board
+- Reproduced on public844x320: after scrolling45px to the hand, changing sound rebuilt the whole board and reset scroll to0. The sound handler now updates only its own text and aria-pressed after the existing setSound call. No audio policy, game rendering on turns, rules, AI, save format or timers changed.
+- `test/sound-position.mjs` checks320/390/844/1280, real touch or keyboard toggle both ways, sound preference writes, unchanged board/hand/button nodes, scroll, game state and progression storage, keyboard focus, axe0. Browser-emulated touch and automated DOM checks do not verify physical-phone use or speaker output.
