@@ -260,14 +260,19 @@ export class GameScreen {
       const section=document.createElement('section');section.className='capture-player';section.id=`capture-player-${player}`;section.setAttribute('aria-labelledby',`capture-heading-${player}`);
       const heading=document.createElement('h3');heading.id=`capture-heading-${player}`;heading.tabIndex=-1;heading.textContent=`${name} · ${sc.total}점`;section.appendChild(heading);panel.appendChild(section);
       const jump=document.createElement('button');jump.className='capture-jump';jump.textContent=`${name} · ${sc.total}점`;jump.setAttribute('aria-controls',section.id);jump.addEventListener('click',()=>{heading.focus({preventScroll:true});panel.scrollTop=section.offsetTop-controls.offsetHeight-8;});navigation.appendChild(jump);
-      const detail=document.createElement('p');detail.textContent=`광 ${sc.counts.gwang}장 · 열끗 ${sc.counts.yeol}장 · 띠 ${sc.counts.tti}장 · 피 ${sc.counts.piUnits}장분`;section.appendChild(detail);
+      const detail=document.createElement('div');detail.className='capture-kinds';detail.setAttribute('role','group');detail.setAttribute('aria-label',`${name} 먹은 패 종류 바로 이동`);section.appendChild(detail);
+      const groups=captureGroups(this.g.players[player].captured,sc);
+      for(const [kind,count] of [['광',sc.counts.gwang],['열끗',sc.counts.yeol],['띠',sc.counts.tti],['피',sc.counts.piUnits]] as const){
+        const button=document.createElement('button');button.className='capture-kind';button.textContent=`${kind} ${count}${kind==='피'?'장분':'장'}`;button.disabled=!groups.some(g=>g.label===kind);
+        const targetId=`capture-kind-${player}-${kind}`;if(!button.disabled)button.setAttribute('aria-controls',targetId);
+        button.addEventListener('click',()=>{const target=section.querySelector<HTMLElement>(`[id="${targetId}"]`);if(!target)return;target.focus({preventScroll:true});panel.scrollTop+=target.getBoundingClientRect().top-controls.getBoundingClientRect().bottom-8;});detail.appendChild(button);
+      }
       const breakdown=document.createElement('p');breakdown.className='capture-breakdown';breakdown.textContent=scoreDescription(sc);section.appendChild(breakdown);
       if(this.g.players[player].captured.some(c=>c.isGukjin)){const designation=document.createElement('p');designation.className='capture-gukjin';designation.textContent=`국진은 현재 ${sc.gukjinAsPi?'쌍피 2장분':'열끗 1장'}으로 셉니다. 최종 정산에서는 배수와 7점 조건에 따라 달라질 수 있습니다.`;section.appendChild(designation);}
       const note=document.createElement('p');note.className='capture-note';note.textContent='현재 원점수입니다. 고·박·흔들기 배수는 마지막 정산에서 적용합니다.';section.appendChild(note);
-      const groups=captureGroups(this.g.players[player].captured,sc);
       for(const {label,cards,count} of groups){
         const group=document.createElement('div');group.className='capture-category';
-        const title=document.createElement('h4');title.textContent=`${label} · ${count}${label==='피'?'장분':'장'}`;group.appendChild(title);
+        const title=document.createElement('h4');title.id=`capture-kind-${player}-${label}`;title.tabIndex=-1;title.textContent=`${label} · ${count}${label==='피'?'장분':'장'}`;group.appendChild(title);
         const grid=document.createElement('div');grid.className='captured-grid';grid.setAttribute('role','group');grid.setAttribute('aria-label',title.textContent);
         for(const card of cards.slice().sort((a,b)=>a.month-b.month||a.id-b.id)){const item=cardEl(card);item.removeAttribute('tabindex');grid.appendChild(item);}
         group.appendChild(grid);section.appendChild(group);

@@ -343,3 +343,20 @@ test/special-action-input.mjs` checks these boundaries, Tab into the action,
 and normal held-key action/earned-pass behavior. Ordinary turns retain the
 hand shortcut. This is not a promise that actions and every hand card fit
 simultaneously on short screens.
+
+### Captured-card category jumps (2026-11-12)
+The existing category counts in each player's captured panel are now 44px jump
+buttons. A count jumps to that category heading below the pinned player/close
+controls, without scoring or changing any card. Empty categories stay visible
+as disabled counts. Gukjin uses its current scoring group, as before. No extra
+pinned row was added. `captured-score-detail.mjs` checks deliberate captured-card
+fixtures (not earned play), all category jumps, both players, empty categories,
+Gukjin pi/yeol, focus/close and axe at five sizes. `KIND_JUMP=1 node
+test/capture-touch-round.mjs` compares a natural normal-speed round with one
+that browses each earned category, swipes and returns. Whole decision states,
+settlement, saved progress and reload records must match.
+
+`turn-shortcut-options.mjs` checks naturally dealt seed51(two shakes) and
+seed95(bomb plus shake) at320/568 widths with touch and held activation keys.
+Both special actions stay reachable; Tab visits both actions then the hand.
+Browsing alone must leave whole game state and saved progress unchanged.

@@ -432,3 +432,9 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .hand-jump{min-height:44px;min-width:44px;padding:6px 4px;border:0;border-radius:4px;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;}
 .hand-jump:hover{background:#ffffff0c;}
 .hand-jump:focus-visible,#hand:focus-visible,#actionbar:focus-visible{outline:2px solid #4ee8ff;outline-offset:-2px;}
+
+/* Category counts double as jumps without another pinned toolbar. */
+.capture-kinds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:12px 0;}
+.capture-kind{min-width:0;min-height:44px;border:1px solid #66516e;border-radius:5px;background:#24202c;color:#eee6f2;font:inherit;font-size:12px;padding:6px 2px;cursor:pointer;}
+.capture-kind:disabled{background:transparent;color:#afa1b7;border-color:#463b4c;cursor:default;}
+.capture-kind:focus-visible,.capture-category h4:focus{outline:2px solid #4ee8ff;outline-offset:2px;}

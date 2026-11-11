@@ -9,6 +9,9 @@ const before=await p.evaluate(()=>({game:JSON.stringify(window.__game),save:loca
 await p.tap('.capture-toggle');await p.waitForSelector('.capture-overlay');
 for(const[w,h]of[[320,568],[390,844],[568,320]]){
 await p.setViewport({width:w,height:h,isMobile:true,hasTouch:true});await readyImages(p);
+if(process.env.KIND_JUMP){for(const player of[0,1]){await p.tap(`.capture-jump:nth-child(${player+1})`);const kinds=await p.$$eval(`#capture-player-${player} .capture-kind`,es=>es.map((e,i)=>({i,target:e.getAttribute('aria-controls'),disabled:e.disabled})));for(const k of kinds){if(k.disabled)continue;await p.tap(`.capture-jump:nth-child(${player+1})`);const selector=`#capture-player-${player} .capture-kind:nth-child(${k.i+1})`;await p.$eval(selector,e=>e.scrollIntoView({block:'center'}));await p.tap(selector);const visible=await p.evaluate(id=>{const h=document.getElementById(id),r=h.getBoundingClientRect(),controls=document.querySelector('.capture-controls').getBoundingClientRect(),panel=document.querySelector('.capture-panel').getBoundingClientRect();return document.activeElement===h&&r.top>=controls.bottom-1&&r.bottom<=panel.bottom;},k.target);if(!visible)throw Error('natural category heading hidden');}}}
+
+await p.$eval('.capture-panel',e=>e.scrollTop=0);
 const cdp=await p.createCDPSession();const starts=[];
 for(const direction of[1,-1]){
 const r=await p.$eval('.capture-panel',e=>e.getBoundingClientRect().toJSON());const x=r.x+r.width*.6,y=direction===1?r.bottom-25:r.y+Math.min(155,r.height*.55);
