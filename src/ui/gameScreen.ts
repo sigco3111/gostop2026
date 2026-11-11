@@ -209,8 +209,6 @@ export class GameScreen {
       await this.processEvents(ev);
       this.loop();
     }));
-    // The next answer redraws the board, so background inertness ends with this modal.
-    [...this.el.children].forEach(child=>{(child as HTMLElement).inert=true;});
     this.el.appendChild(ov);focusDialog(ov,ov.querySelector<HTMLElement>('.stop'));
   }
 

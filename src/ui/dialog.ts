@@ -3,6 +3,22 @@ export function focusDialog(el: HTMLElement, initial?: HTMLElement | null, onEsc
   el.setAttribute('role', 'dialog');
   el.setAttribute('aria-modal', 'true');
   el.tabIndex = -1;
+  // A modal must hide its background from pointer and assistive navigation,
+  // not merely wrap Tab. Restore each sibling's original state on dismissal.
+  const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+  const parent = el.parentElement;
+  const background = parent ? [...parent.children].filter(node => node !== el).map(node => [node as HTMLElement, (node as HTMLElement).inert] as const) : [];
+  background.forEach(([node]) => { node.inert = true; });
+  if (parent) {
+    const observer = new MutationObserver(() => {
+      if (el.parentElement === parent) return;
+      background.forEach(([node, wasInert]) => { node.inert = wasInert; });
+      observer.disconnect();
+      if (document.activeElement === document.body && previousFocus?.isConnected) previousFocus.focus();
+    });
+    observer.observe(parent, { childList: true });
+  }
+
   const focusables = () => [...el.querySelectorAll<HTMLElement>('button:not([disabled]),[tabindex="0"],a[href]')];
   el.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && onEscape) { e.preventDefault(); onEscape(); return; }

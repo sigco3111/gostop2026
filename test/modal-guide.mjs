@@ -1,0 +1,13 @@
+import puppeteer from 'puppeteer-core';
+import {spawn} from 'node:child_process';
+import {mkdirSync,writeFileSync} from 'node:fs';
+import {readyImages} from './ready-images.mjs';
+const out=process.env.QA_OUT||'/tmp/modal-guide';mkdirSync(out,{recursive:true});const server=process.env.GAME_URL?null:spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--port','4176'],{stdio:'ignore'});let b;const report={errors:[],views:[]};
+try{
+ await new Promise(r=>setTimeout(r,400));b=await puppeteer.launch({executablePath:process.env.CHROME_PATH||'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});const p=await b.newPage();p.on('pageerror',e=>report.errors.push(e.message));await p.goto(process.env.GAME_URL||'http://localhost:4176/gostop2026/');await p.click('#m-guide');await p.click('[data-tab=rivals]');
+ await p.evaluate(()=>{const dummy=document.createElement('div');dummy.id='already-inert';dummy.inert=true;document.querySelector('#guide-screen').appendChild(dummy);});
+ for(const width of [320,390,1280]){await p.setViewport({width,height:width===320?568:844});await p.click('.rival-entry');await p.waitForSelector('.rival-overlay');await readyImages(p);if(!await p.evaluate(()=>[...document.querySelector('#guide-screen').children].filter(n=>!n.matches('.rival-overlay')).every(n=>n.inert)))throw Error('rival background accessible');await p.screenshot({path:`${out}/rival-${width}.png`});await p.addScriptTag({path:'node_modules/axe-core/axe.min.js'});const a=await p.evaluate(()=>axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa']}}));if(a.violations.length)throw Error(JSON.stringify(a.violations));
+ await p.click('[data-action=next]');await p.click('[data-action=prev]');await p.keyboard.press('Tab');if(!await p.evaluate(()=>document.activeElement.closest('.rival-overlay')))throw Error('Tab escaped');await p.keyboard.press('Escape');await p.waitForFunction(()=>!document.querySelector('.guide-wrap').inert&&document.activeElement.matches('.rival-entry'));if(!await p.$eval('#already-inert',e=>e.inert))throw Error('original inert state lost');
+ await p.click('.rival-entry');await p.click('[data-action=close]');await p.waitForFunction(()=>!document.querySelector('.guide-wrap').inert&&document.activeElement.matches('.rival-entry'));report.views.push({width,axe:0,escapeRestored:true,buttonRestored:true,priorInertPreserved:true});}
+ if(report.errors.length)throw Error('runtime error');console.log(JSON.stringify(report));
+}finally{writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));await b?.close();server?.kill();}
