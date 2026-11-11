@@ -126,3 +126,11 @@ single-card UI turns, then compares the full game state, capture dialog, progres
 image recovery and axe results. Blocked images are a deliberate network fault,
 not evidence of a current public outage. The 320/390/568-landscape/1280 layout
 matrix is not physical-phone or full-round coverage.
+
+`node test/card-failure-round.mjs` adds a separate public normal-timer story-round
+comparison: with the same fixed shuffle and no progress/result injection, normal
+and failed-image conditions each made 8 single-card plays, 2 capture choices and
+1 stop decision, earned 16 points and saved the first stage. Inputs, boundary
+game states, settlement, saved values and records agreed, including after reload.
+This is one fixed-shuffle browser case per condition, not physical-device or
+all-opponent coverage. Production code and deployment do not change for this QA.
