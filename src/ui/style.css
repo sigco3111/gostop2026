@@ -397,3 +397,6 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 
 /* Leave the full last menu target above the storage-failure notice. */
 #title-screen:has(>.save-warning) .title-inner{padding-bottom:max(42px,7vh);}
+
+/* Reserve the settings column before card images resolve. */
+.settings-wrap{width:100%;}

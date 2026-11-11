@@ -155,3 +155,13 @@ target. `FAIL_STORAGE=1 node test/title-navigation.mjs` repeats all five title
 viewports with deliberate progress-write failure and checks that the last menu
 button and notice do not overlap. This does not simulate a real device failure.
 Normal storage retains the existing layout.
+
+### Settings image-load stability (2026-11-11)
+The settings column reserves its full available width (up to the existing 880px
+limit) before card images load. Loading images no longer moves the title-return
+button sideways. No option, game rule, AI or save format changes.
+`test/settings-cold-layout.mjs` deliberately holds card requests, scrolls the
+return button into view, then releases the images and confirms identical button
+coordinates plus a successful tap at the original point across five viewports.
+Set GAME_URL for a public build, or run Vite preview on port 4178 for local QA.
+This is a controlled browser load test, not a physical-device network test.
