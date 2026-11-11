@@ -1,0 +1,47 @@
+{
+  "method": "1000 seeded deals per pair, both seat assignments; independent seeded policy randomness; heuristic bot versus bot, not human testing",
+  "result": [
+    {
+      "low": 1,
+      "high": 2,
+      "rounds": 2000,
+      "lowWins": 706,
+      "highWins": 1155,
+      "draws": 139,
+      "seat0Wins": 938,
+      "seat1Wins": 923,
+      "stalled": 0,
+      "totalActions": 37031,
+      "highPoints": 25277,
+      "lowPoints": 11136
+    },
+    {
+      "low": 1,
+      "high": 3,
+      "rounds": 2000,
+      "lowWins": 706,
+      "highWins": 1199,
+      "draws": 95,
+      "seat0Wins": 975,
+      "seat1Wins": 930,
+      "stalled": 0,
+      "totalActions": 36366,
+      "highPoints": 25458,
+      "lowPoints": 10700
+    },
+    {
+      "low": 2,
+      "high": 3,
+      "rounds": 2000,
+      "lowWins": 946,
+      "highWins": 1023,
+      "draws": 31,
+      "seat0Wins": 985,
+      "seat1Wins": 984,
+      "stalled": 0,
+      "totalActions": 36021,
+      "highPoints": 20505,
+      "lowPoints": 18436
+    }
+  ]
+}

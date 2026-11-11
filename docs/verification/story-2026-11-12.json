@@ -1,0 +1,249 @@
+{
+  "errors": [],
+  "rounds": [
+    {
+      "tag": "stage-1-try-1",
+      "played": 8,
+      "choices": 2,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n피\n8점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n피박 ×2\n최종\n16점\n확인"
+    },
+    {
+      "tag": "stage-2-try-1",
+      "played": 0,
+      "choices": 0,
+      "prompts": 0,
+      "text": "패배\n총통 · 승자: 백수학\n총통 기본 승리\n7점\n최종\n7점\n확인"
+    },
+    {
+      "tag": "stage-2-try-2",
+      "recoveredFromScreenshot": true,
+      "text": null
+    },
+    {
+      "tag": "stage-3-try-1",
+      "recoveredFromScreenshot": true,
+      "text": null
+    },
+    {
+      "tag": "stage-3-try-2",
+      "recoveredFromScreenshot": true,
+      "text": null
+    },
+    {
+      "tag": "stage-4-try-1",
+      "recoveredFromScreenshot": true,
+      "text": null
+    },
+    {
+      "tag": "stage-5-try-1",
+      "played": 10,
+      "choices": 0,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n피\n7점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n고박 ×2\n최종\n14점\n확인"
+    },
+    {
+      "tag": "stage-6-try-1",
+      "played": 9,
+      "choices": 1,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n광\n3점\n띠\n1점\n피\n6점\n최종\n10점\n확인"
+    },
+    {
+      "tag": "stage-7-try-1",
+      "played": 4,
+      "choices": 1,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n고도리\n5점\n피\n2점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n피박 ×2\n최종\n14점\n확인"
+    },
+    {
+      "tag": "stage-8-try-1",
+      "played": 10,
+      "choices": 1,
+      "prompts": 0,
+      "text": "패배\n스톱 · 승자: 거울\n광\n2점\n홍단\n3점\n띠\n3점\n피\n5점\n최종\n13점\n확인"
+    },
+    {
+      "tag": "stage-8-try-2",
+      "played": 9,
+      "choices": 0,
+      "prompts": 0,
+      "text": "패배\n스톱 · 승자: 거울\n광\n2점\n홍단\n3점\n띠\n1점\n피\n6점\n최종\n12점\n확인"
+    },
+    {
+      "tag": "stage-8-try-3",
+      "played": 9,
+      "choices": 1,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n광\n2점\n열끗\n1점\n띠\n2점\n피\n3점\n최종\n8점\n확인"
+    },
+    {
+      "tag": "stage-9-try-1",
+      "played": 10,
+      "choices": 0,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n열끗\n1점\n띠\n1점\n피\n8점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n최종\n10점\n확인"
+    },
+    {
+      "tag": "stage-10-try-1",
+      "played": 9,
+      "choices": 2,
+      "prompts": 0,
+      "text": "패배\n스톱 · 승자: 칼잡이\n광\n2점\n띠\n1점\n피\n6점\n광박 ×2\n최종\n18점\n확인"
+    },
+    {
+      "tag": "stage-10-try-2",
+      "played": 9,
+      "choices": 1,
+      "prompts": 0,
+      "text": "패배\n스톱 · 승자: 칼잡이\n광\n2점\n띠\n1점\n피\n5점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n최종\n8점\n확인"
+    },
+    {
+      "tag": "stage-10-try-3",
+      "played": 9,
+      "choices": 1,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n광\n4점\n홍단\n3점\n띠\n2점\n피\n7점\n피박 ×2\n최종\n32점\n확인"
+    },
+    {
+      "tag": "stage-11-try-1",
+      "played": 9,
+      "choices": 1,
+      "prompts": 0,
+      "text": "패배\n스톱 · 승자: 여왕\n광\n2점\n홍단\n3점\n초단\n3점\n띠\n3점\n피\n9점\n고 가산 (1회)\n+1점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n최종\n21점\n확인"
+    },
+    {
+      "tag": "stage-11-try-2",
+      "played": 10,
+      "choices": 0,
+      "prompts": 0,
+      "text": "패배\n스톱 · 승자: 여왕\n청단\n3점\n띠\n2점\n피\n8점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n최종\n13점\n확인"
+    },
+    {
+      "tag": "stage-11-try-3",
+      "played": 8,
+      "choices": 2,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n피\n10점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n피박 ×2\n최종\n20점\n확인"
+    },
+    {
+      "tag": "stage-12-try-1",
+      "played": 8,
+      "choices": 0,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n홍단\n3점\n초단\n3점\n띠\n2점\n피\n2점\n최종\n10점\n확인"
+    }
+  ],
+  "productionTimers": true,
+  "stages": [
+    {
+      "stage": 1,
+      "attempt": 1,
+      "recoveredAfterInterruptedTest": true
+    },
+    {
+      "stage": 2,
+      "attempt": 2,
+      "recoveredAfterInterruptedTest": true
+    },
+    {
+      "stage": 3,
+      "attempt": 2,
+      "recoveredAfterInterruptedTest": true
+    },
+    {
+      "stage": 4,
+      "attempt": 1,
+      "recoveredAfterInterruptedTest": true
+    },
+    {
+      "stage": 5,
+      "attempt": 1
+    },
+    {
+      "stage": 6,
+      "attempt": 1
+    },
+    {
+      "stage": 7,
+      "attempt": 1
+    },
+    {
+      "stage": 8,
+      "attempt": 3
+    },
+    {
+      "stage": 9,
+      "attempt": 1
+    },
+    {
+      "stage": 10,
+      "attempt": 3
+    },
+    {
+      "stage": 11,
+      "attempt": 3
+    },
+    {
+      "stage": 12,
+      "attempt": 1
+    }
+  ],
+  "seed": 3804666021,
+  "scripts": [
+    "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+  ],
+  "save": {
+    "version": 1,
+    "clearedStages": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "trophies": 0,
+    "titles": [
+      "패담의 새 전설"
+    ],
+    "nagariCarry": 1
+  },
+  "complete": true,
+  "interruption": {
+    "cause": "120s test-run limit; production game did not throw",
+    "recovered": {
+      "save": {
+        "version": 1,
+        "clearedStages": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "trophies": 0,
+        "titles": [],
+        "nagariCarry": 1
+      },
+      "seed": 3498378958,
+      "game": {
+        "over": false,
+        "turn": 0
+      }
+    },
+    "unobservedSettlementText": [
+      "stage-2-try-2",
+      "stage-3-try-1",
+      "stage-3-try-2",
+      "stage-4-try-1"
+    ]
+  },
+  "records": "나의 기록\n\n시나리오 12 / 12인 돌파 · 토너먼트 트로피 0개\n\n패담의 새 전설\n\n기록은 이 브라우저에만 저장됩니다. 브라우저 데이터를 지우거나 기기를 바꾸면 이어지지 않습니다. 토너먼트는 완료한 판까지 대진·승수를 자동 저장합니다. 진행 중인 한 판의 손패는 저장하지 않습니다.\n\n오리지널 아트와 이야기\n\n12인의 고수, 장소, 키아트, 누아르·코믹·심플 화투패는 이 게임을 위해 만든 오리지널 그림입니다. 특정 작품의 캐릭터를 가져오지 않았습니다.\n\n클래식 화투패 출처\n\nMarcus Richert · Louie Mantia Jr., SVG 최적화 Spenĉjo. CC BY-SA 4.0. 공개 도안을 크롭·WebP 변환하고 한국식11·12월 및 게임의 패 순서를 적용했습니다. 해당 이미지에 같은 라이선스가 적용됩니다.\n\n클래식 원본 ↗ CC BY-SA 4.0 ↗\n\n사용한 외부 에셋\n\nHit Animation · Sinestesia · CC0\n2DFX Impact · Inguz Media / Esteban Díaz · CC0 선택\nAlotofImpacts - 6 Frame Impacts - 4 Additional variations · JoesAlotofthings · CC-BY 4.0\n타격 효과 3종: 투명 여백 크롭·크기·WebP·재생 속도 조정\nCard Game sounds · HaelDB · CC0\nUI Audio / Particle Pack · Kenney · CC0\ntension and distress · allen yatsura · CC0 (음량 조절·OGG 변환)\n\nA 타격 효과 원본 ↗ B 원본 ↗ C 원본 ↗ C 라이선스 CC-BY 4.0 ↗ 효과음 원본 ↗ UI Audio ↗ Particle Pack ↗ 배경음악 ↗\n\n개발판 안내\n\n싱글 플레이 전용. 실제 돈·구매·현금 보상은 없습니다. 규칙과 연출은 검증·개선 중입니다.",
+  "axe": 0
+}

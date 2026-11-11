@@ -1,0 +1,621 @@
+{
+  "rounds": [
+    {
+      "number": 1,
+      "plays": 9,
+      "choices": 0,
+      "goStop": 1,
+      "prior": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "bulkkot",
+          "nakoja",
+          "jeonseol",
+          "binpae",
+          "pado",
+          "baeksuhak",
+          "geoul"
+        ],
+        "history": [],
+        "series": [
+          0,
+          0
+        ],
+        "carry": 1
+      },
+      "result": "승리!\n스톱 · 승자: 나\n광\n4점\n피\n4점\n최종\n8점\n확인",
+      "after": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "bulkkot",
+          "nakoja",
+          "jeonseol",
+          "binpae",
+          "pado",
+          "baeksuhak",
+          "geoul"
+        ],
+        "history": [],
+        "series": [
+          1,
+          0
+        ],
+        "carry": 1
+      }
+    },
+    {
+      "number": 2,
+      "plays": 0,
+      "choices": 0,
+      "goStop": 0,
+      "prior": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "bulkkot",
+          "nakoja",
+          "jeonseol",
+          "binpae",
+          "pado",
+          "baeksuhak",
+          "geoul"
+        ],
+        "history": [],
+        "series": [
+          1,
+          0
+        ],
+        "carry": 1
+      },
+      "result": "승리!\n총통 · 승자: 나\n총통 기본 승리\n7점\n최종\n7점\n확인",
+      "after": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "nakoja",
+          "binpae",
+          "geoul"
+        ],
+        "history": [
+          [
+            {
+              "a": "ME",
+              "b": "bulkkot",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "nakoja",
+              "b": "jeonseol",
+              "winner": "nakoja",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "pado",
+              "winner": "binpae",
+              "score": [
+                2,
+                1
+              ]
+            },
+            {
+              "a": "baeksuhak",
+              "b": "geoul",
+              "winner": "geoul",
+              "score": [
+                1,
+                2
+              ]
+            }
+          ]
+        ],
+        "series": [
+          0,
+          0
+        ],
+        "carry": 1
+      }
+    },
+    {
+      "number": 3,
+      "plays": 10,
+      "choices": 2,
+      "goStop": 1,
+      "prior": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "nakoja",
+          "binpae",
+          "geoul"
+        ],
+        "history": [
+          [
+            {
+              "a": "ME",
+              "b": "bulkkot",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "nakoja",
+              "b": "jeonseol",
+              "winner": "nakoja",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "pado",
+              "winner": "binpae",
+              "score": [
+                2,
+                1
+              ]
+            },
+            {
+              "a": "baeksuhak",
+              "b": "geoul",
+              "winner": "geoul",
+              "score": [
+                1,
+                2
+              ]
+            }
+          ]
+        ],
+        "series": [
+          0,
+          0
+        ],
+        "carry": 1
+      },
+      "result": "승리!\n스톱 · 승자: 나\n열끗\n1점\n피\n6점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n최종\n7점\n확인",
+      "after": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "nakoja",
+          "binpae",
+          "geoul"
+        ],
+        "history": [
+          [
+            {
+              "a": "ME",
+              "b": "bulkkot",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "nakoja",
+              "b": "jeonseol",
+              "winner": "nakoja",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "pado",
+              "winner": "binpae",
+              "score": [
+                2,
+                1
+              ]
+            },
+            {
+              "a": "baeksuhak",
+              "b": "geoul",
+              "winner": "geoul",
+              "score": [
+                1,
+                2
+              ]
+            }
+          ]
+        ],
+        "series": [
+          1,
+          0
+        ],
+        "carry": 1
+      }
+    },
+    {
+      "number": 4,
+      "plays": 10,
+      "choices": 0,
+      "goStop": 1,
+      "prior": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "nakoja",
+          "binpae",
+          "geoul"
+        ],
+        "history": [
+          [
+            {
+              "a": "ME",
+              "b": "bulkkot",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "nakoja",
+              "b": "jeonseol",
+              "winner": "nakoja",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "pado",
+              "winner": "binpae",
+              "score": [
+                2,
+                1
+              ]
+            },
+            {
+              "a": "baeksuhak",
+              "b": "geoul",
+              "winner": "geoul",
+              "score": [
+                1,
+                2
+              ]
+            }
+          ]
+        ],
+        "series": [
+          1,
+          0
+        ],
+        "carry": 1
+      },
+      "result": "승리!\n스톱 · 승자: 나\n열끗\n1점\n띠\n1점\n피\n7점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n최종\n9점\n확인",
+      "after": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "binpae"
+        ],
+        "history": [
+          [
+            {
+              "a": "ME",
+              "b": "bulkkot",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "nakoja",
+              "b": "jeonseol",
+              "winner": "nakoja",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "pado",
+              "winner": "binpae",
+              "score": [
+                2,
+                1
+              ]
+            },
+            {
+              "a": "baeksuhak",
+              "b": "geoul",
+              "winner": "geoul",
+              "score": [
+                1,
+                2
+              ]
+            }
+          ],
+          [
+            {
+              "a": "ME",
+              "b": "nakoja",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "geoul",
+              "winner": "binpae",
+              "score": [
+                2,
+                0
+              ]
+            }
+          ]
+        ],
+        "series": [
+          0,
+          0
+        ],
+        "carry": 1
+      }
+    },
+    {
+      "number": 5,
+      "plays": 9,
+      "choices": 0,
+      "goStop": 1,
+      "prior": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "binpae"
+        ],
+        "history": [
+          [
+            {
+              "a": "ME",
+              "b": "bulkkot",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "nakoja",
+              "b": "jeonseol",
+              "winner": "nakoja",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "pado",
+              "winner": "binpae",
+              "score": [
+                2,
+                1
+              ]
+            },
+            {
+              "a": "baeksuhak",
+              "b": "geoul",
+              "winner": "geoul",
+              "score": [
+                1,
+                2
+              ]
+            }
+          ],
+          [
+            {
+              "a": "ME",
+              "b": "nakoja",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "geoul",
+              "winner": "binpae",
+              "score": [
+                2,
+                0
+              ]
+            }
+          ]
+        ],
+        "series": [
+          0,
+          0
+        ],
+        "carry": 1
+      },
+      "result": "승리!\n스톱 · 승자: 나\n광\n2점\n피\n5점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n최종\n7점\n확인",
+      "after": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "binpae"
+        ],
+        "history": [
+          [
+            {
+              "a": "ME",
+              "b": "bulkkot",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "nakoja",
+              "b": "jeonseol",
+              "winner": "nakoja",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "pado",
+              "winner": "binpae",
+              "score": [
+                2,
+                1
+              ]
+            },
+            {
+              "a": "baeksuhak",
+              "b": "geoul",
+              "winner": "geoul",
+              "score": [
+                1,
+                2
+              ]
+            }
+          ],
+          [
+            {
+              "a": "ME",
+              "b": "nakoja",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "geoul",
+              "winner": "binpae",
+              "score": [
+                2,
+                0
+              ]
+            }
+          ]
+        ],
+        "series": [
+          1,
+          0
+        ],
+        "carry": 1
+      }
+    },
+    {
+      "number": 6,
+      "plays": 6,
+      "choices": 2,
+      "goStop": 1,
+      "prior": {
+        "version": 1,
+        "alive": [
+          "ME",
+          "binpae"
+        ],
+        "history": [
+          [
+            {
+              "a": "ME",
+              "b": "bulkkot",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "nakoja",
+              "b": "jeonseol",
+              "winner": "nakoja",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "pado",
+              "winner": "binpae",
+              "score": [
+                2,
+                1
+              ]
+            },
+            {
+              "a": "baeksuhak",
+              "b": "geoul",
+              "winner": "geoul",
+              "score": [
+                1,
+                2
+              ]
+            }
+          ],
+          [
+            {
+              "a": "ME",
+              "b": "nakoja",
+              "winner": "ME",
+              "score": [
+                2,
+                0
+              ]
+            },
+            {
+              "a": "binpae",
+              "b": "geoul",
+              "winner": "binpae",
+              "score": [
+                2,
+                0
+              ]
+            }
+          ]
+        ],
+        "series": [
+          1,
+          0
+        ],
+        "carry": 1
+      },
+      "result": "승리!\n스톱 · 승자: 나\n광\n2점\n고도리\n5점\n피\n1점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n최종\n8점\n확인",
+      "after": null
+    }
+  ],
+  "seed": 1911008260,
+  "errors": [],
+  "productionTimers": true,
+  "scripts": [
+    "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+  ],
+  "bracket": "토너먼트 · 우승\n타이틀로\n\n각 대진 3판 2승. 다른 AI 대진은 결과를 계산합니다. 토너먼트 도중 나가리는 해당 대진의 다음 판에만 이월됩니다.\n\n8강\n나 2 : 0 불꽃\n승자: 나\n낙오자 2 : 0 전설\n승자: 낙오자\n빈패 2 : 1 파도\n승자: 빈패\n백수학 1 : 2 거울\n승자: 거울\n4강\n나 2 : 0 낙오자\n승자: 나\n빈패 2 : 0 거울\n승자: 빈패\n결승\n나 2 : 0 빈패\n승자: 나\n트로피 1개 · 패담의 챔피언\n대회가 종료되었습니다. 타이틀에서 토너먼트를 선택하면 새 대회를 시작합니다.",
+  "checkpoint": null,
+  "progress": "{\"version\":1,\"clearedStages\":[],\"trophies\":1,\"titles\":[\"패담의 챔피언\"],\"nagariCarry\":1}",
+  "outcome": "champion",
+  "complete": true,
+  "completionReload": true,
+  "axe": 0
+}

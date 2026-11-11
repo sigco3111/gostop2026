@@ -475,3 +475,43 @@ Cues disappear during motion and are recomputed at decision boundaries; they
 never use hidden deck/opponent identities or change single-tap play, choices,
 AI, rules or saves. Six responsive layouts and paired production-timer rounds
 check cue accuracy, 48-card integrity and identical play outcomes.
+
+### Bounded final verification (2026-11-12)
+The agreed closeout is story12/ending, tournament final/champion/records/reload,
+fixes found during that pass, and another difficulty/dialogue/effect check.
+It does not include new features, multiplayer, cloud saves or a human playtest.
+
+On the central-stock public build, story progression naturally reached all12
+stages and the ending across20rounds, then retained12/12 and the ending title
+on reload. A separate new profile naturally won all three tournament pairings
+across6rounds and retained exactly1trophy and its title on reload. The finished
+checkpoint was removed and the menu did not advertise a finished-game resume.
+Both journeys used production timers. A story test-run timeout interrupted its
+long batch after stage4: those already earned stages were recovered from the
+live save and settlement screenshots, not injected. Later batches flush their
+report after every completed game. The two profiles are separate evidence,
+not a claim that a combined12/12+1trophy record was tested in that journey.
+
+The final pass also checks all12intro dialogues at5viewports on the public game,
+all24win/loss result texts at5viewports using local-source layout fixtures,
+and the ending's return button at5viewports. The fixture tests are not earned
+progression evidence. Narrow ending text now wraps at word boundaries, so the
+last syllable of a word does not sit alone on the next line.
+
+The121unit/regression tests passed, including3000mixed-level invariant rounds,
+6000paired-seat AI rounds, and hidden-state permutation checks. AI2beats AI1
+1155:706(draw139), AI3beats AI1 1199:706(draw95), and AI3beats AI2
+1023:946(draw31) in those seeded bot matchups. This is a modest distinction
+between three policies shared by12characters, not12independent personalities
+or proof of human difficulty, fairness in every deal, or fun. No policy changes
+were needed in this closeout pass. Character names/rooms/intro and result lines
+were checked against the roster; story wins use the opponent's loss line and
+losses use its win line, with a separate draw/carry message.
+
+A/B/C public landing-to-hit checks measured2.4–3.1ms and preserved48unique
+cards with no motion ghosts; effect selection/reload and reduced-motion bypass
+also passed. Source JSON evidence is under docs/verification/. Effects are
+visual checks and automated timing, not a sound-listening evaluation. Physical
+phones, screen-reader speech, actual mobile app suspension and human balance
+remain unverified. Saves are local to the browser; unfinished hands are not
+restored, and other tournament AI pairings are calculated rather than played.

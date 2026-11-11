@@ -1,0 +1,883 @@
+{
+  "fixture": true,
+  "localSource": true,
+  "cases": [
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 1,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 1,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 2,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 2,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 3,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 3,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 4,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 4,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 5,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 5,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 6,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 6,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 7,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 7,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 8,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 8,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 9,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 9,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 10,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 10,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 11,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 11,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 12,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "stage": 12,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 320,
+      "h": 568,
+      "ending": true,
+      "reachable": true,
+      "overflow": false
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 1,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 1,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 2,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 2,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 3,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 3,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 4,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 4,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 5,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 5,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 6,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 6,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 7,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 7,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 8,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 8,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 9,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 9,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 10,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 10,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 11,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 11,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 12,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "stage": 12,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 390,
+      "h": 844,
+      "ending": true,
+      "reachable": true,
+      "overflow": false
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 1,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 1,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 2,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 2,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 3,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 3,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 4,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 4,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 5,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 5,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 6,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 6,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 7,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 7,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 8,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 8,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 9,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 9,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 10,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 10,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 11,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 11,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 12,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "stage": 12,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 568,
+      "h": 320,
+      "ending": true,
+      "reachable": true,
+      "overflow": false
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 1,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 1,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 2,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 2,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 3,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 3,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 4,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 4,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 5,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 5,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 6,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 6,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 7,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 7,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 8,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 8,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 9,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 9,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 10,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 10,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 11,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 11,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 12,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "stage": 12,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 844,
+      "h": 390,
+      "ending": true,
+      "reachable": true,
+      "overflow": false
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 1,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 1,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 2,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 2,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 3,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 3,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 4,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 4,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 5,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 5,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 6,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 6,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 7,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 7,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 8,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 8,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 9,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 9,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 10,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 10,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 11,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 11,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 12,
+      "kind": "win",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "stage": 12,
+      "kind": "lose",
+      "correct": true
+    },
+    {
+      "w": 1280,
+      "h": 844,
+      "ending": true,
+      "reachable": true,
+      "overflow": false
+    }
+  ],
+  "errors": [],
+  "axe": 0
+}

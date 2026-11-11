@@ -1,0 +1,666 @@
+{
+  "fixture": "isolated roster-unlock for dialogue layout, not earned progression",
+  "errors": [],
+  "views": [
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 1,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 2,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 3,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 4,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 5,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 6,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 7,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 8,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 9,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 10,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 11,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 320,
+      "height": 568,
+      "stage": 12,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 1,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 2,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 3,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 4,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 5,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 6,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 7,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 8,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 9,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 10,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 11,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "stage": 12,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 1,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 2,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 3,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 4,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 5,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 6,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 7,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 8,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 9,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 10,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 11,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "stage": 12,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 1,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 2,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 3,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 4,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 5,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 6,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 7,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 8,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 9,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 10,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 11,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 844,
+      "height": 320,
+      "stage": 12,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 1,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 2,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 3,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 4,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 5,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 6,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 7,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 8,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 9,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 10,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 11,
+      "lines": 1,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "keyboard Enter",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    },
+    {
+      "width": 1280,
+      "height": 844,
+      "stage": 12,
+      "lines": 2,
+      "portraitAndTextInViewport": true,
+      "progressionInput": "touch next",
+      "scripts": [
+        "https://sigco3111.github.io/gostop2026/assets/index-D2NBQW8P.js"
+      ]
+    }
+  ]
+}

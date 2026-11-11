@@ -1,0 +1,336 @@
+{
+  "url": "https://sigco3111.github.io/gostop2026/",
+  "productionTimers": true,
+  "width": 390,
+  "height": 844,
+  "errors": [],
+  "effects": [
+    {
+      "effect": "a",
+      "id": 44,
+      "landingToImpactMs": 2.700000000069849,
+      "impactBeforeCaptureMs": 427.89999999990687,
+      "trace": [
+        {
+          "kind": "depart",
+          "ms": 56.5,
+          "id": "44",
+          "mode": "motion-card motion-play card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 277.69999999995343,
+          "id": "44",
+          "mode": "motion-card motion-play"
+        },
+        {
+          "kind": "hit",
+          "ms": 280.4000000000233,
+          "effect": "a",
+          "x": 198.5,
+          "y": 418.5,
+          "targets": [
+            {
+              "x": 187,
+              "y": 418.5
+            }
+          ],
+          "first": "66.6667% 0%"
+        },
+        {
+          "kind": "depart",
+          "ms": 281.79999999993015,
+          "id": "1",
+          "mode": "motion-card motion-flip card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 594.5999999999767,
+          "id": "1",
+          "mode": "motion-card motion-flip"
+        },
+        {
+          "kind": "capture",
+          "ms": 708.2999999999302,
+          "id": "44"
+        },
+        {
+          "kind": "capture",
+          "ms": 708.2999999999302,
+          "id": "45"
+        },
+        {
+          "kind": "depart",
+          "ms": 1765.9000000000233,
+          "id": "9",
+          "mode": "motion-card motion-play card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 1977.5999999999767,
+          "id": "9",
+          "mode": "motion-card motion-play"
+        },
+        {
+          "kind": "depart",
+          "ms": 1980.2999999999302,
+          "id": "43",
+          "mode": "motion-card motion-flip card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 2261.29999999993,
+          "id": "43",
+          "mode": "motion-card motion-flip"
+        },
+        {
+          "kind": "hit",
+          "ms": 2263.5,
+          "effect": "a",
+          "x": 198.5,
+          "y": 418.5,
+          "targets": [
+            {
+              "x": 187,
+              "y": 418.5
+            }
+          ],
+          "first": "66.6667% 0%"
+        },
+        {
+          "kind": "capture",
+          "ms": 2374.5999999999767,
+          "id": "43"
+        },
+        {
+          "kind": "capture",
+          "ms": 2374.5999999999767,
+          "id": "40"
+        }
+      ],
+      "state": {
+        "count": 48,
+        "unique": 48,
+        "ghosts": 0
+      }
+    },
+    {
+      "effect": "b",
+      "id": 44,
+      "landingToImpactMs": 3.1000000000931323,
+      "impactBeforeCaptureMs": 445.19999999995343,
+      "trace": [
+        {
+          "kind": "depart",
+          "ms": 26.5,
+          "id": "44",
+          "mode": "motion-card motion-play card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 252.09999999997672,
+          "id": "44",
+          "mode": "motion-card motion-play"
+        },
+        {
+          "kind": "hit",
+          "ms": 255.20000000006985,
+          "effect": "b",
+          "x": 198.5,
+          "y": 418.5,
+          "targets": [
+            {
+              "x": 187,
+              "y": 418.5
+            }
+          ],
+          "first": "42.8571% 0%"
+        },
+        {
+          "kind": "depart",
+          "ms": 257.0999999999767,
+          "id": "1",
+          "mode": "motion-card motion-flip card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 585.5999999999767,
+          "id": "1",
+          "mode": "motion-card motion-flip"
+        },
+        {
+          "kind": "capture",
+          "ms": 700.4000000000233,
+          "id": "44"
+        },
+        {
+          "kind": "capture",
+          "ms": 700.4000000000233,
+          "id": "45"
+        },
+        {
+          "kind": "depart",
+          "ms": 1758,
+          "id": "9",
+          "mode": "motion-card motion-play card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 1968.7000000000698,
+          "id": "9",
+          "mode": "motion-card motion-play"
+        },
+        {
+          "kind": "depart",
+          "ms": 1971,
+          "id": "43",
+          "mode": "motion-card motion-flip card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 2252,
+          "id": "43",
+          "mode": "motion-card motion-flip"
+        },
+        {
+          "kind": "hit",
+          "ms": 2254.4000000000233,
+          "effect": "b",
+          "x": 198.5,
+          "y": 418.5,
+          "targets": [
+            {
+              "x": 187,
+              "y": 418.5
+            }
+          ],
+          "first": "42.8571% 0%"
+        },
+        {
+          "kind": "capture",
+          "ms": 2365.5,
+          "id": "43"
+        },
+        {
+          "kind": "capture",
+          "ms": 2365.5,
+          "id": "40"
+        }
+      ],
+      "state": {
+        "count": 48,
+        "unique": 48,
+        "ghosts": 0
+      }
+    },
+    {
+      "effect": "c",
+      "id": 44,
+      "landingToImpactMs": 2.400000000023283,
+      "impactBeforeCaptureMs": 410.19999999995343,
+      "trace": [
+        {
+          "kind": "depart",
+          "ms": 36,
+          "id": "44",
+          "mode": "motion-card motion-play card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 259,
+          "id": "44",
+          "mode": "motion-card motion-play"
+        },
+        {
+          "kind": "hit",
+          "ms": 261.4000000000233,
+          "effect": "c",
+          "x": 198.5,
+          "y": 418.5,
+          "targets": [
+            {
+              "x": 187,
+              "y": 418.5
+            }
+          ],
+          "first": "0% 0%"
+        },
+        {
+          "kind": "depart",
+          "ms": 262.5999999999767,
+          "id": "1",
+          "mode": "motion-card motion-flip card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 559,
+          "id": "1",
+          "mode": "motion-card motion-flip"
+        },
+        {
+          "kind": "capture",
+          "ms": 671.5999999999767,
+          "id": "44"
+        },
+        {
+          "kind": "capture",
+          "ms": 671.5999999999767,
+          "id": "45"
+        },
+        {
+          "kind": "depart",
+          "ms": 1729.3000000000466,
+          "id": "9",
+          "mode": "motion-card motion-play card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 1942.3000000000466,
+          "id": "9",
+          "mode": "motion-card motion-play"
+        },
+        {
+          "kind": "depart",
+          "ms": 1944.5,
+          "id": "43",
+          "mode": "motion-card motion-flip card-image-loading"
+        },
+        {
+          "kind": "land",
+          "ms": 2225.5999999999767,
+          "id": "43",
+          "mode": "motion-card motion-flip"
+        },
+        {
+          "kind": "hit",
+          "ms": 2227.6999999999534,
+          "effect": "c",
+          "x": 198.5,
+          "y": 418.5,
+          "targets": [
+            {
+              "x": 187,
+              "y": 418.5
+            }
+          ],
+          "first": "0% 0%"
+        },
+        {
+          "kind": "capture",
+          "ms": 2338.6999999999534,
+          "id": "43"
+        },
+        {
+          "kind": "capture",
+          "ms": 2338.6999999999534,
+          "id": "40"
+        }
+      ],
+      "state": {
+        "count": 48,
+        "unique": 48,
+        "ghosts": 0
+      }
+    }
+  ]
+}
