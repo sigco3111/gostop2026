@@ -333,5 +333,7 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 /* Coarse pointers need room for a fingertip without shrinking the playing cards. */
 @media(pointer:coarse){
  .sound-toggle,.capture-toggle,.exit-toggle{min-width:44px;min-height:44px;}
+ .action-bar{gap:8px;flex-shrink:0;}
+ .action-bar .btn{min-width:44px;min-height:44px;}
  .my-hand .hcard:hover{transform:none;}
 }

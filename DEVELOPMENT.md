@@ -204,3 +204,7 @@ GAME_URL=https://sigco3111.github.io/gostop2026/ QA_WIDTH=844 QA_HEIGHT=320 node
 ### 2026-11-11 12:45 - Touch targets and swipe safety
 - Coarse-pointer devices get44px minimum hit areas for sound/capture/exit controls. Mouse-only layout is unchanged. Touch devices no longer retain a lifted hover card.
 - `test/touch-controls.mjs`:320x568/390x844/844x320 real CDP touch swipe starts on hand without playing, last hand is reachable after scrolling when needed, a single tap plays exactly one card. Touch the outer part of sound/capture/return/exit/cancel controls; no game-state change from those controls. Axe0 at each viewport. Seeded fresh test profiles, not physical-device testing.
+
+### 2026-11-11 12:54 - Special action touch targets
+- Extended coarse-pointer44px hit areas to shake/bomb/bomb-pass actions, with8px action spacing and a non-shrinking action bar. Previously these were28px high at320px. Cards, rules, AI, timers, save formats and single-tap actions are unchanged.
+- `test/special-touch-controls.mjs` uses ordinary seeded deals (8 shake,49 bomb), production timers, isolated fresh progress.320x568/390x844/844x320: swipe on action does not play; edge tap performs one shake or three-card bomb; the naturally earned bomb pass spends one pass without another hand card. All targets44px and scroll-reachable, axe0 after the complete turn, no progression writes/runtime errors. This is CDP touch emulation, not physical-phone testing.
