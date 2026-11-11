@@ -1,0 +1,51 @@
+{
+  "errors": [],
+  "rounds": [
+    {
+      "tag": "final-1",
+      "played": 9,
+      "choices": 1,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n광\n2점\n피\n7점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n피박 ×2\n최종\n18점\n확인"
+    },
+    {
+      "tag": "final-2",
+      "played": 9,
+      "choices": 1,
+      "prompts": 1,
+      "text": "승리!\n스톱 · 승자: 나\n광\n2점\n피\n7점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n피박 ×2\n최종\n18점\n확인"
+    }
+  ],
+  "productionTimers": true,
+  "stages": [],
+  "seed": 23,
+  "scripts": [
+    "https://sigco3111.github.io/gostop2026/assets/index-TV1gja6D.js"
+  ],
+  "saveBefore": "{\"version\":1,\"clearedStages\":[1,2,3,4,5,6,7,8,9,10,11,12],\"trophies\":0,\"titles\":[\"패담의 새 전설\"],\"nagariCarry\":1}",
+  "endingViews": [
+    {
+      "width": 320,
+      "height": 568,
+      "returnReachable": true
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "returnReachable": true
+    },
+    {
+      "width": 568,
+      "height": 320,
+      "returnReachable": true
+    },
+    {
+      "width": 844,
+      "height": 390,
+      "returnReachable": true
+    }
+  ],
+  "finalEnding": true,
+  "saveAfter": "{\"version\":1,\"clearedStages\":[1,2,3,4,5,6,7,8,9,10,11,12],\"trophies\":0,\"titles\":[\"패담의 새 전설\"],\"nagariCarry\":1}",
+  "wordBreak": "keep-all"
+}

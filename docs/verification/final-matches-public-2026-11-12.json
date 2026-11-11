@@ -1,0 +1,225 @@
+{
+  "url": "https://sigco3111.github.io/gostop2026/",
+  "productionTimers": true,
+  "cases": [
+    {
+      "inspect": false,
+      "checks": [
+        {
+          "hand": [
+            15,
+            36,
+            41,
+            44
+          ],
+          "months": [
+            4,
+            10,
+            11,
+            12
+          ],
+          "floorCount": 8
+        },
+        {
+          "hand": [
+            0,
+            3,
+            15,
+            36
+          ],
+          "months": [
+            1,
+            4,
+            10
+          ],
+          "floorCount": 8
+        },
+        {
+          "hand": [
+            0,
+            3,
+            33,
+            34,
+            36
+          ],
+          "months": [
+            1,
+            9,
+            10
+          ],
+          "floorCount": 8
+        },
+        {
+          "hand": [
+            0,
+            3
+          ],
+          "months": [
+            1
+          ],
+          "floorCount": 6
+        },
+        {
+          "hand": [
+            3
+          ],
+          "months": [
+            1
+          ],
+          "floorCount": 4
+        },
+        {
+          "hand": [
+            19,
+            36
+          ],
+          "months": [
+            5,
+            10
+          ],
+          "floorCount": 4
+        },
+        {
+          "hand": [
+            19
+          ],
+          "months": [
+            5
+          ],
+          "floorCount": 4
+        },
+        {
+          "hand": [],
+          "months": [],
+          "floorCount": 6
+        }
+      ],
+      "inputs": [
+        "play:41",
+        "play:15",
+        "choice:14",
+        "play:34",
+        "play:0",
+        "choice:24",
+        "play:3",
+        "play:36",
+        "play:19",
+        "play:33",
+        "stop"
+      ],
+      "result": "승리!\n스톱 · 승자: 나\n피\n8점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n피박 ×2\n최종\n16점\n확인",
+      "identical": true,
+      "axe": 0
+    },
+    {
+      "inspect": true,
+      "checks": [
+        {
+          "hand": [
+            15,
+            36,
+            41,
+            44
+          ],
+          "months": [
+            4,
+            10,
+            11,
+            12
+          ],
+          "floorCount": 8
+        },
+        {
+          "hand": [
+            0,
+            3,
+            15,
+            36
+          ],
+          "months": [
+            1,
+            4,
+            10
+          ],
+          "floorCount": 8
+        },
+        {
+          "hand": [
+            0,
+            3,
+            33,
+            34,
+            36
+          ],
+          "months": [
+            1,
+            9,
+            10
+          ],
+          "floorCount": 8
+        },
+        {
+          "hand": [
+            0,
+            3
+          ],
+          "months": [
+            1
+          ],
+          "floorCount": 6
+        },
+        {
+          "hand": [
+            3
+          ],
+          "months": [
+            1
+          ],
+          "floorCount": 4
+        },
+        {
+          "hand": [
+            19,
+            36
+          ],
+          "months": [
+            5,
+            10
+          ],
+          "floorCount": 4
+        },
+        {
+          "hand": [
+            19
+          ],
+          "months": [
+            5
+          ],
+          "floorCount": 4
+        },
+        {
+          "hand": [],
+          "months": [],
+          "floorCount": 6
+        }
+      ],
+      "inputs": [
+        "play:41",
+        "play:15",
+        "choice:14",
+        "play:34",
+        "play:0",
+        "choice:24",
+        "play:3",
+        "play:36",
+        "play:19",
+        "play:33",
+        "stop"
+      ],
+      "result": "승리!\n스톱 · 승자: 나\n피\n8점\n국진: 쌍피 (최종 점수 기준 자동 선택)\n피박 ×2\n최종\n16점\n확인",
+      "identical": true,
+      "axe": 0
+    }
+  ],
+  "errors": []
+}

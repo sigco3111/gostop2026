@@ -515,3 +515,15 @@ visual checks and automated timing, not a sound-listening evaluation. Physical
 phones, screen-reader speech, actual mobile app suspension and human balance
 remain unverified. Saves are local to the browser; unfinished hands are not
 restored, and other tournament AI pairings are calculated rather than played.
+
+The ending wrap fix is public in Pages d0104dc (Actions43122811445,
+success). A cache-disabled public replay of the naturally unlocked final
+opponent reached the ending on index-TV1gja6D.js/index-BLtQtYts.css and
+verified actual keep-all text plus a reachable return button at320portrait,
+390portrait,568landscape and844landscape. Completed progression still matched
+on reload. Six board layouts and another identical normal/focus16point pair
+were repeated after publication. `final-ending-public.mjs` takes QA_OUT pointing
+to a copied, naturally completed story profile; it is a replay check, not a new
+12stage completion. Earlier story/tournament evidence remains labeled by its
+original build. The bounded project scope is now complete; further work needs
+a new request rather than an automatic feature or improvement loop.
