@@ -6,6 +6,7 @@ export type GameEvent =
   | { type: 'dealt' }
   | { type: 'chongtong'; player: number }                       // 총통 즉시 승리
   | { type: 'played'; player: number; card: Card }
+  | { type: 'flipped'; player: number; card: Card }              // 공개된 더미패, 상태 변경 없는 연출 이벤트
   | { type: 'captured'; player: number; cards: Card[]; via: 'play' | 'flip' | 'stack' | 'jjok' | 'ttadak' | 'bomb' }
   | { type: 'placed'; player: number; card: Card }              // 바닥에 내려놓음
   | { type: 'ppeok'; player: number; month: number }            // 뻑(쌌다)
@@ -114,6 +115,7 @@ export class MatgoGame {
  private flip(p:number,info:{card:Card;original:number;pair:Card[]}|null,ev:GameEvent[]){
   const flip=this.deck.shift();
   if(!flip){if(info?.pair.length)this.capture(p,info.pair,'play',ev);this.afterTurn(p,ev);return;}
+  ev.push({type:'flipped',player:p,card:flip});
   if(info&&flip.month===info.card.month){
    if(info.original===0){this.floor=this.floor.filter(c=>c.id!==info.card.id);this.capture(p,[info.card,flip],'jjok',ev);if(this.deck.length)this.stealPi(1-p,p,ev);}
    else if(info.original===1){this.floor.push(...info.pair,flip);this.stacks.push({month:flip.month,owner:p});this.players[p].ppeoks++;ev.push({type:'ppeok',player:p,month:flip.month});if(this.players[p].ppeoks===3){ev.push({type:'threePpeok',player:p});this.specialWin(p,'3뻑',ev);return;}}

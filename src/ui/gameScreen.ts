@@ -11,6 +11,7 @@ import { settle } from '../engine/scoring';
 import { Card } from '../engine/cards';
 import { Opponent } from '../data/opponents';
 import { cardEl, cardBackEl, cardUrl } from './cards';
+import { TableMotion } from './tableMotion';
 
 const BASE = import.meta.env.BASE_URL;
 const delay = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -71,14 +72,13 @@ export class GameScreen {
     while (!this.g.over) {
       if(this.g.awaitingChoice){
         if(this.g.turn===0){this.render();return;}
-        const ev=this.g.choose(1,this.ai.choose(this.g,1));this.render();await this.processEvents(ev);continue;
+        const ev=this.g.choose(1,this.ai.choose(this.g,1));await this.processEvents(ev);continue;
       }
       if (this.g.awaitingGoStop) {
         if (this.g.turn === 1) {
           await delay(900);
           const go = this.ai.decideGoStop(this.g, 1);
           const ev = this.g.answer(1, go);
-          this.render();
           await this.processEvents(ev);
         } else {
           this.showGoStop();
@@ -94,7 +94,6 @@ export class GameScreen {
         } else {
           ev = this.g.play(1, dec.cardId, dec.chooseFloorId, dec.shakeMonth !== undefined ? { shakeMonth: dec.shakeMonth } : undefined);
         }
-        this.render();
         await this.processEvents(ev);
       } else {
         this.awaitingUser = true;
@@ -105,15 +104,20 @@ export class GameScreen {
   }
 
   private async processEvents(events: GameEvent[]) {
+    const motion=new TableMotion(this.el,this.effectLayer);
+    let result:Extract<GameEvent,{type:"gameOver"}>|undefined;
+    this.el.querySelectorAll(".choice-overlay").forEach(node=>node.remove());
+    this.el.inert=true;this.el.setAttribute("aria-busy","true");
+    try {
     for (const e of events) {
       this.announce(e);
       switch (e.type) {
-        case 'captured': case 'stealPi': case 'placed': case 'played':
-          sfx(e.type === 'played' ? 'play' : 'draw');
-          this.render();
-          this.animateCards(e);
+        case 'captured': case 'stealPi': case 'placed': case 'played': case 'flipped':
+          { const status=this.el.querySelector<HTMLElement>('.turn-bar [role=status]');
+            if(status)status.textContent=e.type==='flipped'?'더미패를 뒤집는 중':e.type==='captured'?'짝을 맞춰 패를 가져오는 중':e.type==='stealPi'?'피를 가져오는 중':'패를 내려놓는 중'; }
+          if(e.type!=='placed')sfx(e.type==='played'?'play':'draw');
+          await motion.show(e);
           if (e.type === 'captured' && ['jjok','ttadak','stack','bomb'].includes(e.via)) this.flash(({jjok:'쪽!',ttadak:'따닥!',stack:'뻑 회수!',bomb:'폭탄!'} as Record<string,string>)[e.via]);
-          if (e.type !== 'played') await delay(420);
           break;
         case 'ppeok': this.flash('뻑!'); await delay(900); break;
         case 'threePpeok': this.flash('3뻑 승리!'); await delay(1100); break;
@@ -124,20 +128,22 @@ export class GameScreen {
         case 'stop': this.flash('스톱!'); await delay(800); break;
         case 'nagari': this.flash('나가리'); await delay(1000); break;
         case 'goStopPrompt':
-          this.render();
           break;
         case 'gameOver':
           await delay(600);
-          this.showSettle(e);
+          result=e;
           break;
       }
     }
+    } finally {this.el.inert=false;this.el.removeAttribute("aria-busy");this.render();}
+    if(result)this.showSettle(result);
   }
 
   private announce(e:GameEvent){
     const who=(player:number)=>player===0?'나':this.opponent.name;
     let text='';
     if(e.type==='played')text=`${who(e.player)}: ${cardDescription(e.card)} 냄`;
+    else if(e.type==='flipped')text=`더미에서 ${cardDescription(e.card)} 뒤집음`;
     else if(e.type==='placed')text=`${who(e.player)}: ${cardDescription(e.card)} 바닥에 놓음`;
     else if(e.type==='captured')text=`${who(e.player)}: ${e.cards.map(cardDescription).join(', ')} 가져감`;
     else if(e.type==='stealPi')text=`${who(e.to)}: 피 뺏기, ${cardDescription(e.card)}`;
@@ -152,23 +158,6 @@ export class GameScreen {
     if(!text)return;
     const line=document.createElement('p');line.textContent=text;this.announcements.appendChild(line);
     while(this.announcements.children.length>12)this.announcements.firstElementChild?.remove();
-  }
-
-  private animateCards(e: Extract<GameEvent,{type:'played'|'captured'|'placed'|'stealPi'}>) {
-    if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    const center=(selector:string)=>{const r=this.el.querySelector(selector)?.getBoundingClientRect();return r?{x:r.x+r.width/2,y:r.y+r.height/2}:null;};
-    const floor=center('#floor');if(!floor)return;
-    const cards=e.type==='captured'?e.cards:[e.card];
-    const player=e.type==='stealPi'?e.to:e.player;
-    const destination=e.type==='captured'||e.type==='stealPi'?center(player===0?'.my-captured':'.opp-captured'):floor;
-    const origin=e.type==='played'?center(player===0?'#hand':'.opp-hand'):e.type==='placed'?center('.deck-pile'):floor;
-    if(!origin||!destination)return;
-    for(const [i,c] of cards.entries()){
-      const ghost=document.createElement('img');ghost.className='fx-card';ghost.src=cardUrl(c.id);ghost.alt='';
-      ghost.style.left=`${origin.x-28+i*7}px`;ghost.style.top=`${origin.y-42}px`;
-      ghost.style.setProperty('--flight-x',`${destination.x-origin.x}px`);ghost.style.setProperty('--flight-y',`${destination.y-origin.y}px`);ghost.style.setProperty('--flight-rot',`${(i-1)*7}deg`);
-      this.effectLayer.appendChild(ghost);setTimeout(()=>ghost.remove(),430);
-    }
   }
 
   private flash(text: string) {
@@ -205,7 +194,6 @@ export class GameScreen {
     ov.querySelectorAll('button').forEach((b) => b.addEventListener('click', async () => {
       ov.remove();
       const ev = this.g.answer(0, (b as HTMLElement).dataset.a === 'go');
-      this.render();
       await this.processEvents(ev);
       this.loop();
     }));
@@ -287,7 +275,6 @@ export class GameScreen {
     this.awaitingUser = false;
     try {
       const ev = this.g.play(0, cardId, chooseFloorId, opts);
-      this.render();
       await this.processEvents(ev);
       await this.loop();
     } finally {
@@ -390,7 +377,7 @@ export class GameScreen {
       const chooser=document.createElement('div');chooser.className='choice-overlay';chooser.setAttribute('aria-label','가져올 패 선택');
       const label=document.createElement('div');label.textContent='가져올 패를 선택하세요';chooser.appendChild(label);
       const row=document.createElement('div');row.className='choice-row';
-      g.awaitingChoice.forEach(c=>{const ce=cardEl(c,{big:true,interactive:true});ce.addEventListener('click',async()=>{if(this.busy)return;this.busy=true;try{const ev=g.choose(0,c.id);this.render();await this.processEvents(ev);await this.loop();}finally{this.busy=false;}});row.appendChild(ce);});
+      g.awaitingChoice.forEach(c=>{const ce=cardEl(c,{big:true,interactive:true});ce.addEventListener('click',async()=>{if(this.busy)return;this.busy=true;try{const ev=g.choose(0,c.id);await this.processEvents(ev);await this.loop();}finally{this.busy=false;}});row.appendChild(ce);});
       chooser.appendChild(row);this.el.appendChild(chooser);focusDialog(chooser);
     }
     // 액션 바: 흔들기/폭탄

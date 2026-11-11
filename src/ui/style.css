@@ -294,3 +294,21 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;border:0}
 
 .stop-breakdown,.stop-designation{max-width:340px;margin:8px auto;color:#d6c7df;font-size:12px;line-height:1.8;word-break:keep-all;overflow-wrap:anywhere;}.stop-designation{color:#f0cb86;}
+
+/* Short, ordered table feedback. No board shake or flashing background. */
+.motion-card{position:absolute;width:56px;height:84px;perspective:600px;filter:drop-shadow(0 5px 7px #0008);}
+.motion-card img,.motion-card .motion-back{position:absolute;inset:0;width:100%;height:100%;border-radius:3px;backface-visibility:hidden;object-fit:cover;}
+.motion-play{animation:table-play .19s cubic-bezier(.18,.7,.2,1) both;}
+.motion-flip{animation:table-reveal .28s ease-out both;}
+.motion-flip .motion-face{animation:reveal-face .28s ease-out both;}
+.motion-flip .motion-back{animation:reveal-back .28s ease-out both;}
+.motion-capture{animation:table-capture .3s cubic-bezier(.5,0,.65,1) both;}
+.motion-match{outline:2px solid #f3dca2;outline-offset:2px;filter:brightness(1.15);}
+.motion-impact{position:absolute;transform:translate(-50%,-115%);padding:5px 9px;background:#17110eeb;border:1px solid #d8b773;color:#ffe1a1;font-weight:700;font-size:12px;white-space:nowrap;border-radius:4px;animation:table-impact .41s ease-out both;}
+@keyframes table-play{from{transform:translate(0,0) rotate(-6deg) scale(1.08)}to{transform:translate(var(--dx),var(--dy)) rotate(0) scale(1)}}
+@keyframes table-reveal{from{transform:translate(0,0) scale(.8)}to{transform:translate(var(--dx),var(--dy)) scale(1)}}
+@keyframes reveal-face{0%,40%{transform:rotateY(-180deg)}100%{transform:rotateY(0)}}
+@keyframes reveal-back{0%,40%{transform:rotateY(0)}100%{transform:rotateY(180deg)}}
+@keyframes table-capture{0%{transform:translate(0,0) scale(1.04)}100%{transform:translate(var(--dx),var(--dy)) scale(.48);opacity:0}}
+@keyframes table-impact{from{opacity:0;scale:.85}25%,75%{opacity:1;scale:1}to{opacity:0;scale:1}}
+@media(prefers-reduced-motion:reduce){.motion-card,.motion-impact{display:none;}.motion-match{filter:none;}}
