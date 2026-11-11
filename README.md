@@ -306,3 +306,14 @@ settlement, saved progress and reloaded record must match the touch baseline.
 The optional `GO_FIRST=1` run chooses Go at the first prompt, then Stop at the
 next prompt. This checks that a held Go key does not play the returned hand or
 answer the next prompt. Its touch/Enter/Space runs must still match in full.
+
+`node test/special-action-input.mjs` compares emulated touch with held Enter and
+Space on naturally dealt shake (seed 8) and bomb (seed 49) actions at 320×568
+and 568×320. It checks 44px/reachable action buttons, one declaration, hand and
+bomb-pass counts, whole-state equality, unchanged save, and axe. Bomb cases
+also use one of the two earned blank passes, retaining seven hand cards and
+one remaining pass. Production timers stay enabled. This is an input-boundary
+check, not a full-round or hardware-keyboard test. `SPECIAL_ONLY=bomb` limits
+the run to bomb and blank-pass cases; `GAME_URL` and `QA_OUT` override the public
+URL and output directory. Empty captured-panel jumps were separately inspected
+at 320, 568 and 844 widths; no defect was found.
