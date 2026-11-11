@@ -1,5 +1,5 @@
 import { deckSettingsScreen } from './deckSettings';
-import { musicEnabled, setMusic } from './audio';
+import { audioSaveWarning, musicEnabled, setMusic } from './audio';
 import { guideScreen } from './guide';
 import { loadSave, refreshSave, store } from '../data/save';
 import { loadTournament, tournamentSession } from '../data/tournamentSave';
@@ -46,8 +46,8 @@ export class App {
         <button class="btn" id="m-tournament">${loadTournament()?'토너먼트 이어하기':'토너먼트'}</button>
         <button class="btn" id="m-free">자유 대국</button>
         <button class="btn small" id="m-settings">설정 · 화투패</button><button class="btn small" id="m-guide">게임 방법 · 패 도감 · 기록</button><button class="btn small music-choice" id="m-music" aria-pressed="${musicEnabled()}">배경음악 ${musicEnabled()?'켬':'끔'}</button>
-      </div></div>`;
-    el.querySelector('#m-music')!.addEventListener('click',()=>{setMusic(!musicEnabled());this.showTitle();(this.root.querySelector('#m-music') as HTMLElement)?.focus();});
+      <p class="audio-save-status" role="status" aria-live="polite">${audioSaveWarning()}</p></div></div>`;
+    el.querySelector('#m-music')!.addEventListener('click',(event)=>{setMusic(!musicEnabled());const button=event.currentTarget as HTMLButtonElement;button.textContent=`배경음악 ${musicEnabled()?'켬':'끔'}`;button.setAttribute('aria-pressed',String(musicEnabled()));el.querySelector('.audio-save-status')!.textContent=audioSaveWarning();});
     el.querySelector('#m-scenario')!.addEventListener('click', () => this.showScenario());
     el.querySelector('#m-tournament')!.addEventListener('click', () => this.showTournament());
     el.querySelector('#m-free')!.addEventListener('click', () => this.showFreePlay());

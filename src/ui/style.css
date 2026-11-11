@@ -400,3 +400,8 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 
 /* Reserve the settings column before card images resolve. */
 .settings-wrap{width:100%;}
+
+/* Audio preference failures stay readable without covering cards or controls. */
+.audio-save-status{flex-shrink:0;color:#ffd299;background:#321b20;font-size:12px;line-height:1.5;padding:6px 10px;overflow-wrap:anywhere;}
+.audio-save-status:empty{display:none;}
+.menu .audio-save-status{width:min(360px,92vw);border-radius:4px;}

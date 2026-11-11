@@ -4,7 +4,7 @@ import { ScoreBreakdown } from '../engine/scoring';
 import { scoreDescription, scoreItems } from '../data/scoreDescription';
 import { cardDescription } from '../data/cardDescription';
 import { focusDialog } from './dialog';
-import { sfx, soundEnabled, setSound } from './audio';
+import { audioSaveWarning, sfx, soundEnabled, setSound } from './audio';
 import { MatgoGame, GameEvent } from '../engine/game';
 import { AI } from '../engine/ai';
 import { settle } from '../engine/scoring';
@@ -325,6 +325,7 @@ export class GameScreen {
         <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
       </div>
       <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':'내 차례 · 손패를 내세요'):`${this.opponent.name}의 차례`}</span><div class="turn-actions"><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button><button class="exit-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''} aria-label="대국 나가기">나가기</button></div></div>
+      <p class="audio-save-status" role="status" aria-live="polite">${audioSaveWarning()}</p>
       <div class="table-area">
         <div class="opp-zone">
           <div class="opp-hand" role="img" aria-label="${this.opponent.name} 손패 ${opp.hand.length}장, 뒷면">${opp.hand.map(() => '<div class="card-back"></div>').join('')}</div>
@@ -344,6 +345,7 @@ export class GameScreen {
       const button=event.currentTarget as HTMLButtonElement;
       button.textContent=soundEnabled()?'소리 켬':'소리 끔';
       button.setAttribute('aria-pressed',String(soundEnabled()));
+      this.el.querySelector('.audio-save-status')!.textContent=audioSaveWarning();
     });
     this.el.querySelector('.capture-toggle')?.addEventListener('click',()=>this.showCaptured());
     this.el.querySelector('.exit-toggle')?.addEventListener('click',()=>this.showExit());

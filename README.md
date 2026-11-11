@@ -221,3 +221,14 @@ or progress. Inputs, every input-boundary state, final state, settlement and
 saved/reloaded records must agree. Images are released after settlement; normal
 art must return without changing the settled game. This covers controlled browser
 requests, not a real network incident, physical phone or every opponent.
+
+### Audio preference save feedback (2026-11-11)
+If a sound or music preference cannot be saved, the title/game shows which choice
+is temporary and warns that reload restores the previous choice. The current tab
+still honors it. A successful write clears only that preference's warning. Music
+also updates in place instead of rebuilding the title screen. Progress, game
+rules, AI, audio files and playback levels are unchanged.
+`test/audio-save-feedback.mjs` checks normal, failed and recovered audio writes
+at five viewports, title identity, current choices, warning placement and turn
+survival, unchanged progress, reload, axe and runtime errors. Failures are injected
+in an isolated browser; this does not prove a real storage outage or speaker sound.
