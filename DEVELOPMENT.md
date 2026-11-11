@@ -180,3 +180,18 @@ Motion now awaits the actual CSS animation completion, starts the selected sprit
 
 ### Contact cleanup at choice boundary, Nov11 11:57
 The next normal-timer opponent10 audit caught one remaining contact node with a valid47-card pending choice. The hand contact was correctly early, but the short played→needChoice batch redrew the floor before its400ms sprite ended. Motion now finishes only still-active contact animations before unlocking/redrawing. Ordinary410ms capture sequences already outlast the sprite, so this is not a new fixed400ms delay per turn. A two-card choice after a direct hand contact waits for the remaining visible contact, then opens on a clean board. Two tests verify delayed removal until finish and no timer for an empty contact list. The existing natural-opponent settled-card/motion invariant reproduces the old fault and passes the same opponent10 seed with one choice after the change.
+
+### Post-contact fault and effect regression, Nov11 12:29 (QA only)
+Same published `index-Cvf5uwZk.js` now completed all12opponent normal-timer checks at12:04. Opponent2's seeded opening chongtong ends immediately; the remaining audit covered14player choices and10go/stop prompts overall, with47/48unique cards as appropriate, no settled motion leftovers/runtime errors and no progression writes. These seeded reruns supersede the mixed-build11:14coverage, not human difficulty review.
+
+`test/effect-fallback.mjs` compares A/B/C under normal, all3atlas image requests actually blocked, and reduced-motion conditions, with production timers and a single seeded player+opponent turn. Nine conditions reach identical engine state,48unique cards, no input lock, leftovers, runtime errors, horizontal overflow or progression writes. Healthy mode emits2contacts; missing images emit none; reduced motion emits neither flights nor contacts. This verifies safe skipping, not all image-failure timing combinations.
+
+`EFFECT=b|c` on `test/natural-opponents.mjs` sets and verifies the actual contact-node effect, while preserving existing defaults. Opponent10 B/C complete one choice and go/stop each to18point settlement,20observed correct-effect contacts each and clean input boundaries. Same-seed repeats are not counted as unique new games. Opening chongtong may legitimately have no contacts.
+
+`QA_WIDTH`/`QA_HEIGHT` on `test/contact-timing.mjs` add responsive production-speed capture without changing the default390×844. The short844×320 case passes A/B/C with effect creation2.2–4.8ms after the measured hand landing, two contacts/no duplicate and48unique final cards. Actual-speed clip frames were inspected; phone performance/touch/audio/screen-reader speech/subjective feel remain unverified. Unit117tests still pass. These script/document changes do not change the public executable and do not require a Pages build.
+
+```sh
+GAME_URL=https://sigco3111.github.io/gostop2026/ node test/effect-fallback.mjs
+GAME_URL=https://sigco3111.github.io/gostop2026/ EFFECT=b QA_START=10 QA_END=10 node test/natural-opponents.mjs
+GAME_URL=https://sigco3111.github.io/gostop2026/ QA_WIDTH=844 QA_HEIGHT=320 node test/contact-timing.mjs
+```

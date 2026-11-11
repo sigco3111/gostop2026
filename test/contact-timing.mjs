@@ -1,13 +1,16 @@
 import puppeteer from 'puppeteer-core';
 import {spawn} from 'node:child_process';
 import {mkdirSync,writeFileSync} from 'node:fs';
+const width=Number(process.env.QA_WIDTH??390),height=Number(process.env.QA_HEIGHT??844);
+if(process.env.EFFECT&&!['a','b','c'].includes(process.env.EFFECT))throw Error('EFFECT must be a, b, or c');
+if(!Number.isInteger(width)||!Number.isInteger(height)||width<240||height<240)throw Error('invalid QA viewport');
 const url=process.env.GAME_URL??'http://localhost:4173/gostop2026/',out=process.env.QA_OUT??'/tmp/contact-timing';mkdirSync(out,{recursive:true});
 const server=url.startsWith('http://localhost')?spawn('node',['node_modules/vite/bin/vite.js','preview','--port','4173'],{stdio:'ignore'}):null;
-let b;const report={url,productionTimers:true,errors:[],effects:[]};
+let b;const report={url,productionTimers:true,width,height,errors:[],effects:[]};
 try{
  await new Promise(r=>setTimeout(r,700));b=await puppeteer.launch({executablePath:process.env.CHROME_PATH??'/usr/bin/google-chrome',args:['--no-sandbox']});
  for(const effect of process.env.EFFECT?[process.env.EFFECT]:['a','b','c']){
-  const p=await b.newPage();await p.setViewport({width:390,height:844});p.on('pageerror',e=>report.errors.push(e.message));
+  const p=await b.newPage();await p.setViewport({width,height});p.on('pageerror',e=>report.errors.push(e.message));
   await p.evaluateOnNewDocument(({effect,seed})=>{let n=seed;Math.random=()=>{n=(Math.imul(n,1664525)+1013904223)>>>0;return n/4294967296;};localStorage.setItem('gostop2026-impact',effect);},{effect,seed:process.env.BOMB==='1'?49:23});
   await p.goto(url,{waitUntil:'networkidle0'});await p.click('#m-free');await p.click('.stage-card');await p.waitForSelector('#hand [role=button]');await p.evaluate(()=>Promise.all([...document.images].map(i=>i.decode().catch(()=>{}))));
   await p.evaluate(()=>{

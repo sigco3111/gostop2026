@@ -2,17 +2,19 @@ import puppeteer from 'puppeteer-core';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const start=Number(process.env.QA_START??1),end=Number(process.env.QA_END??12);
 if(!Number.isInteger(start)||!Number.isInteger(end)||start<1||end>12||end<start)throw Error('QA_START/QA_END must be an ordered range within1..12');
+const effect=process.env.EFFECT;if(effect&&!['a','b','c'].includes(effect))throw Error('EFFECT must be a, b, or c');
 const url=process.env.GAME_URL??'http://localhost:4173/gostop2026/';
 const out=process.env.QA_OUT??`/tmp/natural-opponents-${start}-${end}`;mkdirSync(out,{recursive:true});
-let browser;const report={url,normalTimers:true,start,end,errors:[],rounds:[],story:null,tournament:null};
+let browser;const report={url,normalTimers:true,effect:effect??'default',start,end,errors:[],rounds:[],story:null,tournament:null};
 const pause=ms=>new Promise(r=>setTimeout(r,ms));
 try{
  await pause(800);browser=await puppeteer.launch({executablePath:process.env.CHROME_PATH??'/usr/bin/google-chrome',headless:true,timeout:10000,protocolTimeout:15000,args:['--no-sandbox','--no-zygote','--disable-gpu','--renderer-process-limit=2'],defaultViewport:{width:390,height:844,isMobile:true,hasTouch:true}});
  const page=await browser.newPage();page.on('pageerror',e=>report.errors.push(e.message));
- await page.evaluateOnNewDocument(()=>{
+ await page.evaluateOnNewDocument(effect=>{
+  if(effect)localStorage.setItem('gostop2026-impact',effect);
   let n=23;Math.random=()=>{n=(Math.imul(n,1664525)+1013904223)>>>0;return n/4294967296;};
   // Production timers retained, no accelerated animation or AI waits.
- });
+ },effect);
  const click=async selector=>{const el=await page.$(selector);if(el)await el.click().catch(()=>{});};
  async function playRound(tag){
   let played=0,choices=0,prompts=0;
@@ -41,8 +43,10 @@ try{
  }
  await page.goto(url,{waitUntil:'networkidle0'});
  const before=await page.evaluate(()=>localStorage.getItem('gostop2026-save-v1'));report.opponents=[];
+ await page.evaluate(()=>{window.__observedEffects=[];new MutationObserver(rs=>{for(const r of rs)for(const n of r.addedNodes)if(n.nodeType===1&&n.matches('.motion-contact'))window.__observedEffects.push(n.dataset.effect);}).observe(document,{subtree:true,childList:true});});
  for(let i=start-1;i<end;i++){
   await click('#m-free');const el=await page.$(`.stage-card:nth-child(${i+1})`);const name=await el.evaluate(e=>e.textContent);await el.evaluate(e=>e.scrollIntoView({block:'center'}));await el.click();const text=await playRound(`free-${i+1}`);await page.waitForSelector('#title-screen');report.opponents.push({i:i+1,name,text});console.log(`opponent ${i+1} complete`);
  }
+ report.observedEffects=await page.evaluate(()=>window.__observedEffects);if(effect&&((report.rounds.some(r=>r.played>0)&&!report.observedEffects.length)||report.observedEffects.some(x=>x!==effect)))throw Error('selected effect was not observed on actual contacts');
  const after=await page.evaluate(()=>localStorage.getItem('gostop2026-save-v1'));report.saveUnchanged=before===after;if(!report.saveUnchanged||report.errors.length)throw Error('freeplay modified progress or errored');console.log(JSON.stringify(report));
 }finally{writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));if(browser)await browser.close();}
