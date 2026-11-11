@@ -396,3 +396,12 @@ widths with touch/Enter/Space (108 entries). A held roster key must not play a
 card when focus moves into the game; cancel preserves the full state, confirmed
 exit returns to title and preserves progress. This is entry/exit coverage, not
 108 completed rounds or a human difficulty evaluation.
+
+`pending-records-normal-timers.mjs` naturally earns one win with production
+animation timers while an isolated progress-write failure is installed. At
+four sizes, section browsing keeps the unsaved1/12 record and warning. Reload
+must show the actual persisted0/12 instead of false success. `RECOVER_SAVE=1`
+restores writes without reloading, naturally wins against the second rival,
+and requires both stages to persist together, the warning to clear and reload
+to retain2/12. It never injects wins/cards/progress. This simulates storage
+failure and recovery, not a real public outage or user-record loss.
