@@ -260,3 +260,12 @@ the simple navigation. `test/scenario-jump.mjs` checks five viewport sizes acros
 0/1/5/11/12 cleared-stage fixtures: unlocks, touch targets, visible focused target,
 keyboard dialogue, reload, progress invariance, overflow and axe/runtime checks.
 These isolated fixtures do not establish naturally earned wins or phone usability.
+
+### Month lookup in the 48-card guide (2026-11-11)
+The deck tab adds a pinned, labelled month selector and a separate Move button.
+Changing selection alone does not jump. Move scrolls to that month's heading and
+moves keyboard focus without changing the month order, 48 cards or saved progress.
+Other guide tabs hide these controls. `test/deck-month-navigation.mjs` checks all
+12 months at five viewport sizes, touch targets, target visibility, keyboard
+activation, tab changes, reload/save invariance, overflow and axe/runtime checks.
+Browser emulation is not a physical-phone or screen-reader speech test.

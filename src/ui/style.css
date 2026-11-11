@@ -405,3 +405,6 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .audio-save-status{flex-shrink:0;color:#ffd299;background:#321b20;font-size:12px;line-height:1.5;padding:6px 10px;overflow-wrap:anywhere;}
 .audio-save-status:empty{display:none;}
 .menu .audio-save-status{width:min(360px,92vw);border-radius:4px;}
+
+/* A month lookup stays reachable while reading the 48-card guide. */
+.deck-month-navigation:not([hidden]){display:flex;align-items:center;gap:8px;margin-top:8px;}.deck-month-navigation label{font-size:12px;color:#c1b6c7;white-space:nowrap;}.deck-month-navigation select{min-width:0;flex:1;min-height:44px;background:#19121f;color:#eee6f2;border:1px solid #65516f;border-radius:5px;padding:6px;font:inherit;font-size:13px;}.deck-month-navigation button{min-height:44px;min-width:56px;}.deck-guide h3:focus{outline:2px solid #4ee8ff;outline-offset:3px;}

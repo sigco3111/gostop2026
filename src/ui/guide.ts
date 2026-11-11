@@ -8,9 +8,11 @@ import { cardEl } from './cards';
 export function guideScreen(back:()=>void, sessionSave?:SaveData, saved=true):HTMLElement {
  const el=document.createElement('div');el.className='screen guide-screen';el.id='guide-screen';
  el.innerHTML=`<div class="guide-wrap"><header><p class="eyebrow">HOW TO PLAY</p><h2>판에 들어가기 전에</h2><p class="guide-lead">같은 월의 패를 모아 7점. 더 갈지, 지금 멈출지.</p></header>
- <div class="guide-navigation"><div class="guide-nav-head"><span>안내 항목</span><button class="btn small guide-back">← 타이틀</button></div><nav class="guide-tabs" aria-label="안내 항목"><button class="btn small" data-tab="rules">게임 방법</button><button class="btn small" data-tab="deck">48장 도감</button><button class="btn small" data-tab="rivals">고수 열전</button><button class="btn small" data-tab="credits">제작·기록</button></nav></div><div id="guide-content"></div></div>`;
+ <div class="guide-navigation"><div class="guide-nav-head"><span>안내 항목</span><button class="btn small guide-back">← 타이틀</button></div><nav class="guide-tabs" aria-label="안내 항목"><button class="btn small" data-tab="rules">게임 방법</button><button class="btn small" data-tab="deck">48장 도감</button><button class="btn small" data-tab="rivals">고수 열전</button><button class="btn small" data-tab="credits">제작·기록</button></nav><div class="deck-month-navigation" hidden><label for="deck-month">찾을 월</label><select id="deck-month">${Array.from({length:12},(_,i)=>`<option value="${i+1}">${i+1}월 · ${MONTH_NAME[i+1]}</option>`).join('')}</select><button class="btn small" id="deck-month-go">이동</button></div></div><div id="guide-content"></div></div>`;
  const content=el.querySelector('#guide-content')!;
+ const monthNavigation=el.querySelector<HTMLElement>('.deck-month-navigation')!;
  const show=(tab:string)=>{
+  monthNavigation.hidden=tab!=='deck';
   const openRival=(index:number,origin:HTMLElement)=>{
   const ov=document.createElement('div');ov.className='rival-overlay';ov.setAttribute('aria-label','고수 열전');
   const render=()=>{const o=OPPONENTS[index],p=PROFILES[index];ov.innerHTML=`<div class="rival-dossier"><div class="rival-controls"><button class="btn small" data-action="prev" aria-label="이전 고수">◀</button><span>${index+1} / 12</span><button class="btn small" data-action="next" aria-label="다음 고수">▶</button><button class="btn small" data-action="close">닫기</button></div><div class="rival-detail"><img src="${BASE}assets/characters/fullbody/opp-${String(o.stage).padStart(2,'0')}.webp" alt="${o.name} 전신 일러스트"><section><p class="eyebrow">${p[0]}</p><h3>${o.name} <small>${o.title}</small></h3><p>${p[1]}</p><p class="guide-note">${p[2]}</p><blockquote>"${o.intro[0]}"</blockquote></section></div></div>`;
@@ -23,7 +25,7 @@ export function guideScreen(back:()=>void, sessionSave?:SaveData, saved=true):HT
    content.innerHTML=`<p class="guide-note">같은 월은 네 장씩입니다. 화투 고유의 붉은색·검정·초록 도상을 사용합니다. 월별 도상과 광·열끗·띠·피 구성을 함께 확인하세요.</p><div class="deck-guide"></div>`;
    const deck=buildDeck(),grid=content.querySelector('.deck-guide')!;
    for(let m=1;m<=12;m++){
-    const section=document.createElement('section');section.innerHTML=`<h3>${m}월 · ${MONTH_NAME[m]}</h3><div class="deck-row"></div>`;
+    const section=document.createElement('section');section.dataset.month=String(m);section.innerHTML=`<h3 tabindex="-1">${m}월 · ${MONTH_NAME[m]}</h3><div class="deck-row"></div>`;
     for(const c of deck.filter(c=>c.month===m)){const card=cardEl(c);card.removeAttribute('tabindex');section.querySelector('.deck-row')!.appendChild(card);}grid.appendChild(section);
    }
   }else if(tab==='rivals'){
@@ -51,5 +53,12 @@ export function guideScreen(back:()=>void, sessionSave?:SaveData, saved=true):HT
   el.scrollTop+=content.getBoundingClientRect().top-navigation.offsetHeight-20;
   (b as HTMLElement).focus({preventScroll:true});
  }));
+ el.querySelector('#deck-month-go')!.addEventListener('click',()=>{
+  const month=(el.querySelector('#deck-month') as HTMLSelectElement).value;
+  const heading=content.querySelector<HTMLElement>(`[data-month="${month}"] h3`);
+  if(!heading)return;
+  heading.focus({preventScroll:true});
+  el.scrollTop+=heading.getBoundingClientRect().top-el.querySelector<HTMLElement>('.guide-navigation')!.getBoundingClientRect().bottom-8;
+ });
  el.querySelector('.guide-back')!.addEventListener('click',back);show('rules');return el;
 }
