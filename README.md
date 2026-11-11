@@ -325,3 +325,11 @@ not game state or saved progress. It checks intact labels, reachable sound,
 no horizontal overflow and state/save equality. This does not claim those Go
 and score combinations were earned in real play. Header CSS keeps narrow Go
 and sound labels intact; Go badges use a lighter red for dark-surface contrast.
+
+The active turn hint is a 44px hand shortcut. It only scrolls/focuses the hand
+group, never plays a card. Tab then enters the first card; End still reaches
+the last card. `node test/hand-jump.mjs` checks five viewport sizes with touch,
+held Enter and held Space, state/save invariance, capture-dialog return,
+next-turn availability and axe. `HAND_JUMP=1 node test/capture-touch-round.mjs`
+also uses the shortcut at each ordinary turn in the touch-inspection run,
+which must match the baseline through settlement, saved progress and records.

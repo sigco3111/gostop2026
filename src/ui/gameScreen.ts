@@ -330,7 +330,7 @@ export class GameScreen {
         <div class="score-pill">${this.opponent.name} <b>${oppScore.total}</b>점</div>
         <div class="score-pill">나 <b>${myScore.total}</b>점${me.goCount ? ` <span class="go-badge">고×${me.goCount}</span>` : ''}</div>
       </div>
-      <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':'내 차례 · 손패를 내세요'):`${this.opponent.name}의 차례`}</span><div class="turn-actions"><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button><button class="exit-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''} aria-label="대국 나가기">나가기</button></div></div>
+      <div class="turn-bar"><span role="status" aria-live="polite">${g.turn===0?(g.awaitingChoice?'가져올 패를 고르세요':g.awaitingGoStop?'고 / 스톱을 결정하세요':'<button class="hand-jump" aria-controls="hand">내 차례 · 손패 보기</button>'):`${this.opponent.name}의 차례`}</span><div class="turn-actions"><button class="capture-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''}>먹은 패 · 점수</button><button class="exit-toggle" ${g.turn!==0||g.awaitingChoice||g.awaitingGoStop?'disabled':''} aria-label="대국 나가기">나가기</button></div></div>
       <p class="audio-save-status" role="status" aria-live="polite">${audioSaveWarning()}</p>
       <div class="table-area">
         <div class="opp-zone">
@@ -343,7 +343,7 @@ export class GameScreen {
           <div class="my-captured">${capGroup(me.captured,myScore)}</div>
         </div>
         <div class="action-bar" id="actionbar"></div>
-        <div class="my-hand" id="hand" role="group" aria-label="내 손패 ${me.hand.length}장"></div>
+        <div class="my-hand" id="hand" tabindex="-1" role="group" aria-label="내 손패 ${me.hand.length}장"></div>
       </div>`;
 
     this.el.querySelector('.sound-toggle')?.addEventListener('click', (event) => {
@@ -352,6 +352,11 @@ export class GameScreen {
       button.textContent=soundEnabled()?'소리 켬':'소리 끔';
       button.setAttribute('aria-pressed',String(soundEnabled()));
       this.el.querySelector('.audio-save-status')!.textContent=audioSaveWarning();
+    });
+    this.el.querySelector('.hand-jump')?.addEventListener('click',()=>{
+      const hand=this.el.querySelector<HTMLElement>('#hand');
+      hand?.focus({preventScroll:true});
+      hand?.scrollIntoView({block:'end',behavior:'instant'});
     });
     this.el.querySelector('.capture-toggle')?.addEventListener('click',()=>this.showCaptured());
     this.el.querySelector('.exit-toggle')?.addEventListener('click',()=>this.showExit());

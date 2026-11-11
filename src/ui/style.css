@@ -426,3 +426,9 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 }
 /* Go badges stay readable on both dark header surfaces. */
 .go-badge{color:#ff6363;}
+
+/* The turn hint is also a safe shortcut to the hand on a scrolled board. */
+.turn-bar>[role=status]{min-width:0;}
+.hand-jump{min-height:44px;min-width:44px;padding:6px 4px;border:0;border-radius:4px;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;}
+.hand-jump:hover{background:#ffffff0c;}
+.hand-jump:focus-visible,#hand:focus-visible{outline:2px solid #4ee8ff;outline-offset:-2px;}
