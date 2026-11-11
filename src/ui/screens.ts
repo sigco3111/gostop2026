@@ -145,14 +145,14 @@ export class App {
 
   private showEnding() {
     const el=this.mk('ending-screen');el.style.backgroundImage=`linear-gradient(#08060d66,#08060df5),url(${BASE}assets/keyart.webp)`;
-    el.innerHTML=`<div class="ending-copy"><p class="eyebrow">THE LAST HAND</p><h2>전설은 자리를 비웠다.</h2><p>열두 개의 판을 지나, 마지막 패를 내려놓았다.<br>처음 이 골목에 들어왔을 때처럼, 두 손은 가벼웠다.</p><p>남은 것은 빚도, 왕관도 아니다.<br>다음 판 앞에서도 떨리지 않는 손.</p><strong>12인의 고수 돌파 · 패담의 새 전설</strong><button class="btn primary" id="ending-back">기록으로 돌아가기</button></div>`;
+    el.innerHTML=`<div class="ending-copy"><p class="eyebrow">THE LAST HAND</p><h2>전설은 자리를 비웠다.</h2><p>열두 개의 판을 지나, 마지막 패를 내려놓았다.<br>처음 이 골목에 들어왔을 때처럼, 두 손은 가벼웠다.</p><p>남은 것은 빚도, 왕관도 아니다.<br>다음 판 앞에서도 떨리지 않는 손.</p><strong>12인의 고수 돌파 · 패담의 새 전설</strong><button class="btn primary" id="ending-back">시나리오 목록으로</button></div>`;
     el.querySelector('#ending-back')!.addEventListener('click',()=>this.showScenario());this.setScreen(el);
   }
 
   showFreePlay() {
     const el = this.mk('free-screen');
     el.innerHTML = `<div class="setup-panel"><h2>자유 대국</h2>
-      <div class="sub" style="color:var(--dim);font-size:13px">상대를 고르세요 (시나리오에서 만난 고수와 다시 대국)</div><nav class="roster-navigation" aria-label="자유 대국 이동"><span>상대 선택</span><button class="btn small" id="back">← 타이틀</button></nav>
+      <div class="sub" style="color:var(--dim);font-size:13px;word-break:keep-all">12명 모두 선택할 수 있습니다. 시나리오 진행과 별개입니다.</div><nav class="roster-navigation" aria-label="자유 대국 이동"><span>상대 선택</span><button class="btn small" id="back">← 타이틀</button></nav>
       <div class="stage-grid" style="margin-top:16px"></div></div>`;
     const grid = el.querySelector('.stage-grid')!;
     for (const o of OPPONENTS) {

@@ -242,3 +242,11 @@ while browsing. Both normal-timer, fixed-shuffle rounds must have identical inpu
 boundaries, final state, settlement and earned/reloaded records. No captures,
 wins or progress are injected. This does not test taps during momentum, a physical
 phone, all opponents or human balance. GAME_URL and QA_OUT select target/output.
+
+### Menu copy matches the destination (2026-11-11)
+Free play states that all 12 opponents are available separately from story
+progress. The final-scene return button names the story list it actually opens.
+Only wording changes. `test/menu-copy.mjs` checks both at five sizes, enters the
+last free-play opponent without changing progress, and verifies the ending return
+destination. The ending uses a deliberate isolated test completion fixture, not a
+naturally earned win or user progress. Axe/runtime errors and overflow are checked.
