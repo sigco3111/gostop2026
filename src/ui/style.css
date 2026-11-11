@@ -442,3 +442,11 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .guide-controls{margin:16px 0 0;display:grid;gap:0;}
 .guide-controls dt{font-size:14px;color:#e6ca9e;font-weight:600;margin-top:14px;}
 .guide-controls dd{font-size:14px;color:#c6becf;line-height:1.8;margin:5px 0 0;word-break:keep-all;overflow-wrap:anywhere;}
+
+/* Every roster is a scroll surface, including wide phones and landscape. */
+#free-screen{overflow-y:auto;overscroll-behavior-y:contain;-webkit-overflow-scrolling:touch;}
+#free-screen>.setup-panel{flex-shrink:0;}
+/* A pending picture is a red card back, never a white text face. Failed
+   downloads keep the readable public-card fallback and accessible identity. */
+.card-image-loading>.card-fallback{background:repeating-linear-gradient(45deg,#3d0d12,#3d0d12 4px,#59121a 4px,#59121a 8px);box-shadow:inset 0 0 0 2px #7a1f28;}
+.card-image-loading>.card-fallback>*{visibility:hidden;}

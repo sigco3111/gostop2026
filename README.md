@@ -425,3 +425,20 @@ checkpoint or crediting a trophy. Other AI pairings are calculated by the game,
 not played as hidden full rounds. This is not a naturally won championship or
 human difficulty test. Bracket history and current pairings remain scrollable
 on short screens.
+
+### User-reported roster and pending-card defects (2026-11-12)
+The free roster now scrolls at every viewport width, not only below650px.
+The previous wide/landscape screen clipped its overflowing content against the
+non-scrolling document. `free-roster-touch-scroll.mjs` uses native emulated
+finger swipes, never focus or programmatic scroll, to reach and enter rival12
+at320/390/568/844/1280 widths while preserving progress. On short screens a
+portrait may extend above the viewport; its name and entry area stay reachable.
+
+Pending card pictures now use the traditional red patterned back. They no longer
+show an ivory text identity face during a normal download. Accessible public
+card names remain available. Actual download failure still shows the readable
+month/scoring fallback, which disappears when the picture recovers. Four-deck
+loading checks assert the red pattern and hidden visual text; failed-download
+checks still cover readable fallbacks, recovery and unchanged turns/saves.
+These are defect fixes, not the larger mobile board redesign requested by the
+user, which is being investigated separately using current game references.
