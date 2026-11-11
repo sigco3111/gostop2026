@@ -173,3 +173,13 @@ injected preference-write failures show deck feedback and reload as Classic/A.
 Progress remains unchanged; axe and runtime errors are checked. This is a
 controlled test browser and does not alter the user's progress or prove a real
 network/storage/device failure. GAME_URL and QA_OUT select the target/output.
+
+`test/rotation-round.mjs` compares one fixed-shuffle, normal-timer story round
+with an identical run that changes viewport sizes during both capture choices,
+capture browsing, Go/Stop and settlement. Five sizes at each of five boundaries
+check unchanged game/save/choice state and reachable 44px-or-larger targets.
+Both runs must have identical inputs, all input-boundary states, settlement,
+final state and earned progress/records after reload. Axe runs only after the
+round so its random draws cannot contaminate the seeded AI stream. These are
+emulated viewport changes, not physical-device rotation or a balance verdict.
+Set GAME_URL and QA_OUT for the target and output directory.
