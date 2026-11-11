@@ -6,14 +6,21 @@ export const EFFECTS=[
 export type EffectId=typeof EFFECTS[number]['id'];
 const KEY='gostop2026-impact';
 let session:EffectId|undefined;
+let unsaved=false;
+export function effectSaveWarning(){return unsaved?'현재 화면에만 적용했습니다. 효과 선택을 저장하지 못해 새로 열면 이전 설정으로 돌아갑니다.':'';}
 export function selectedEffect():EffectId{if(session)return session;try{return EFFECTS.find(e=>e.id===localStorage.getItem(KEY))?.id??'a';}catch{return 'a';}}
 export function effectUrl(file:string){return `${import.meta.env.BASE_URL}assets/effects/${file}.webp`;}
 export function effectDefinition(){return EFFECTS.find(e=>e.id===selectedEffect())!;}
-export function saveEffect(id:EffectId){session=id;try{localStorage.setItem(KEY,id);return true;}catch{return false;}}
+export function saveEffect(id:EffectId){session=id;try{localStorage.setItem(KEY,id);unsaved=false;return true;}catch{unsaved=true;return false;}}
 export function effectSettingsPanel():HTMLElement{
  const section=document.createElement('section');section.className='effect-settings';section.setAttribute('aria-labelledby','impact-title');
- const render=()=>{
-  section.innerHTML=`<h3 id="impact-title">타격 이펙트</h3><p>기본값은 A입니다. 효과만 바뀌며 규칙과 턴 길이는 같습니다. 움직임 줄이기 설정에서는 모두 생략합니다.</p><div class="effect-options" role="group" aria-label="타격 이펙트 선택">${EFFECTS.map(e=>`<button class="effect-option ${e.id===selectedEffect()?'selected':''}" data-effect="${e.id}" aria-pressed="${e.id===selectedEffect()}"><span class="effect-thumb" aria-hidden="true" style="background-image:url('${effectUrl(e.file)}');background-size:${e.columns*100}% ${e.rows*100}%;background-position:${e.peak%e.columns*100/(e.columns-1)}% ${Math.floor(e.peak/e.columns)*100/(e.rows-1)}%"></span><strong>${e.name}</strong><span>${e.description}</span><small>${e.author} · ${e.license}</small></button>`).join('')}</div><p id="impact-status" role="status" aria-live="polite"></p><p class="deck-credit">패 주변에서만 재생합니다. 각 효과의 원본·라이선스는 게임 방법의 제작·기록에서 확인할 수 있습니다.</p>`;
-  section.querySelectorAll<HTMLElement>('[data-effect]').forEach(b=>b.addEventListener('click',()=>{const id=b.dataset.effect as EffectId,saved=saveEffect(id);render();section.querySelector<HTMLElement>(`[data-effect=${id}]`)?.focus();section.querySelector('#impact-status')!.textContent=saved?'선택한 효과를 저장했습니다. 다음 대국부터 적용됩니다.':'현재 화면에만 적용했습니다. 효과 선택을 저장하지 못해 새로 열면 이전 설정으로 돌아갑니다.';}));
- };render();return section;
+  section.innerHTML=`<h3 id="impact-title">타격 이펙트</h3><p>기본값은 A입니다. 효과만 바뀌며 규칙과 턴 길이는 같습니다. 움직임 줄이기 설정에서는 모두 생략합니다.</p><div class="effect-options" role="group" aria-label="타격 이펙트 선택">${EFFECTS.map(e=>`<button class="effect-option ${e.id===selectedEffect()?'selected':''}" data-effect="${e.id}" aria-pressed="${e.id===selectedEffect()}"><span class="effect-thumb" aria-hidden="true" style="background-image:url('${effectUrl(e.file)}');background-size:${e.columns*100}% ${e.rows*100}%;background-position:${e.peak%e.columns*100/(e.columns-1)}% ${Math.floor(e.peak/e.columns)*100/(e.rows-1)}%"></span><strong>${e.name}</strong><span>${e.description}</span><small>${e.author} · ${e.license}</small></button>`).join('')}</div><p id="impact-status" role="status" aria-live="polite">${effectSaveWarning()}</p><p class="deck-credit">패 주변에서만 재생합니다. 각 효과의 원본·라이선스는 게임 방법의 제작·기록에서 확인할 수 있습니다.</p>`;
+  const buttons=[...section.querySelectorAll<HTMLButtonElement>('[data-effect]')];
+  buttons.forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.effect as EffectId,saved=saveEffect(id);
+    buttons.forEach(button=>{const selected=button.dataset.effect===id;button.classList.toggle('selected',selected);button.setAttribute('aria-pressed',String(selected));});
+    section.querySelector('#impact-status')!.textContent=saved?'선택한 효과를 저장했습니다. 다음 대국부터 적용됩니다.':effectSaveWarning();
+    b.focus();
+  }));
+ return section;
 }
