@@ -52,7 +52,7 @@ export class App {
     el.querySelector('#m-tournament')!.addEventListener('click', () => this.showTournament());
     el.querySelector('#m-free')!.addEventListener('click', () => this.showFreePlay());
     el.querySelector('#m-settings')!.addEventListener('click',()=>this.setScreen(deckSettingsScreen(()=>this.showTitle())));
-    el.querySelector('#m-guide')!.addEventListener('click',()=>this.setScreen(guideScreen(()=>this.showTitle())));
+    el.querySelector('#m-guide')!.addEventListener('click',()=>this.setScreen(guideScreen(()=>this.showTitle(),refreshSave(this.save,!this.saveAvailable),this.saveAvailable)));
     this.setScreen(el);
   }
 

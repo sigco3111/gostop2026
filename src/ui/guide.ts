@@ -2,10 +2,10 @@ import { OPPONENTS } from '../data/opponents';
 import { PROFILES } from '../data/profiles';
 import { focusDialog } from './dialog';
 const BASE=import.meta.env.BASE_URL;
-import { loadSave } from '../data/save';
+import { loadSave, SaveData } from '../data/save';
 import { buildDeck, MONTH_NAME } from '../engine/cards';
 import { cardEl } from './cards';
-export function guideScreen(back:()=>void):HTMLElement {
+export function guideScreen(back:()=>void, sessionSave?:SaveData, saved=true):HTMLElement {
  const el=document.createElement('div');el.className='screen guide-screen';el.id='guide-screen';
  el.innerHTML=`<div class="guide-wrap"><header><p class="eyebrow">HOW TO PLAY</p><h2>판에 들어가기 전에</h2><p class="guide-lead">같은 월의 패를 모아 7점. 더 갈지, 지금 멈출지.</p></header>
  <nav class="guide-tabs" aria-label="안내 항목"><button class="btn small" data-tab="rules">게임 방법</button><button class="btn small" data-tab="deck">48장 도감</button><button class="btn small" data-tab="rivals">고수 열전</button><button class="btn small" data-tab="credits">제작·기록</button></nav><div id="guide-content"></div><button class="btn small guide-back">← 타이틀</button></div>`;
@@ -31,8 +31,8 @@ export function guideScreen(back:()=>void):HTMLElement {
    const gallery=content.querySelector('.rival-gallery')!;
    OPPONENTS.forEach((o,i)=>{const button=document.createElement('button');button.className='rival-entry';button.innerHTML=`<img loading="lazy" src="${BASE}assets/characters/fullbody/opp-${String(o.stage).padStart(2,'0')}.webp" alt="${o.name} 전신"><span>${o.stage}. ${o.name}</span><small>${o.title}</small>`;button.addEventListener('click',()=>openRival(i,button));gallery.appendChild(button);});
   }else if(tab==='credits'){
-   const saved=loadSave();
-   content.innerHTML=`<section class="guide-block"><h3>나의 기록</h3><p>시나리오 ${saved.clearedStages?.length??0} / 12인 돌파 · 토너먼트 트로피 ${saved.trophies??0}개</p><p>${saved.titles?.join(' · ')||'아직 얻은 칭호가 없습니다.'}</p><p class="guide-note">기록은 이 브라우저에만 저장됩니다. 브라우저 데이터를 지우거나 기기를 바꾸면 이어지지 않습니다. 토너먼트는 완료한 판까지 대진·승수를 자동 저장합니다. 진행 중인 한 판의 손패는 저장하지 않습니다.</p></section>
+   const records=sessionSave??loadSave();
+   content.innerHTML=`<section class="guide-block"><h3>나의 기록</h3>${!saved?'<p role="alert" class="pending-record-warning">저장되지 않은 세션 기록입니다. 저장하지 못한 최신 기록은 새로고침하거나 닫으면 사라질 수 있습니다.</p>':''}<p>시나리오 ${records.clearedStages?.length??0} / 12인 돌파 · 토너먼트 트로피 ${records.trophies??0}개</p><p>${records.titles?.join(' · ')||'아직 얻은 칭호가 없습니다.'}</p><p class="guide-note">기록은 이 브라우저에만 저장됩니다. 브라우저 데이터를 지우거나 기기를 바꾸면 이어지지 않습니다. 토너먼트는 완료한 판까지 대진·승수를 자동 저장합니다. 진행 중인 한 판의 손패는 저장하지 않습니다.</p></section>
    <section class="guide-block"><h3>오리지널 아트와 이야기</h3><p>12인의 고수, 장소, 키아트, 누아르·코믹·심플 화투패는 이 게임을 위해 만든 오리지널 그림입니다. 특정 작품의 캐릭터를 가져오지 않았습니다.</p></section>
    <section class="guide-block"><h3>클래식 화투패 출처</h3><p>Marcus Richert · Louie Mantia Jr., SVG 최적화 Spenĉjo. CC BY-SA 4.0. 공개 도안을 크롭·WebP 변환하고 한국식11·12월 및 게임의 패 순서를 적용했습니다. 해당 이미지에 같은 라이선스가 적용됩니다.</p><p class="guide-links"><a href="https://commons.wikimedia.org/wiki/File:Hwatu_overview.svg" target="_blank" rel="noopener">클래식 원본 ↗</a> <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0 ↗</a></p></section><section class="guide-block"><h3>사용한 외부 에셋</h3><p>Card Game sounds · HaelDB · CC0<br>UI Audio / Particle Pack · Kenney · CC0<br>tension and distress · allen yatsura · CC0 (음량 조절·OGG 변환)</p><p class="guide-links"><a href="https://opengameart.org/content/card-game-sounds" target="_blank" rel="noopener">효과음 원본 ↗</a> <a href="https://kenney.nl/assets/ui-audio" target="_blank" rel="noopener">UI Audio ↗</a> <a href="https://kenney.nl/assets/particle-pack" target="_blank" rel="noopener">Particle Pack ↗</a> <a href="https://opengameart.org/content/tension-and-distress" target="_blank" rel="noopener">배경음악 ↗</a></p></section>
    <section class="guide-block"><h3>개발판 안내</h3><p>싱글 플레이 전용. 실제 돈·구매·현금 보상은 없습니다. 규칙과 연출은 검증·개선 중입니다.</p></section>`;
