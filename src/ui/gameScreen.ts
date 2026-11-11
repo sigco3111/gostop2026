@@ -30,6 +30,7 @@ export class GameScreen {
   private ai: AI;
   private el!: HTMLElement;
   private effectLayer!: HTMLElement;
+  private motion!: TableMotion;
   private announcements!: HTMLElement;
   private busy = false;
   private awaitingUser = false;
@@ -61,7 +62,7 @@ export class GameScreen {
     this.root.innerHTML = '';
     this.root.appendChild(this.el);
     this.announcements=document.createElement('div');this.announcements.className='sr-only';this.announcements.setAttribute('role','log');this.announcements.setAttribute('aria-live','polite');this.announcements.setAttribute('aria-relevant','additions');this.announcements.setAttribute('aria-label','대국 진행');this.root.appendChild(this.announcements);
-    this.effectLayer=document.createElement('div');this.effectLayer.className='fx-layer';this.effectLayer.setAttribute('aria-hidden','true');this.root.appendChild(this.effectLayer);
+    this.effectLayer=document.createElement('div');this.effectLayer.className='fx-layer';this.effectLayer.setAttribute('aria-hidden','true');this.root.appendChild(this.effectLayer);this.motion=new TableMotion(this.el,this.effectLayer);
     const ev = this.g.deal(); this.dbg(); sfx('shuffle');
     this.render();
     await this.processEvents(ev);
@@ -104,7 +105,7 @@ export class GameScreen {
   }
 
   private async processEvents(events: GameEvent[]) {
-    const motion=new TableMotion(this.el,this.effectLayer);
+    const motion=this.motion;
     let result:Extract<GameEvent,{type:"gameOver"}>|undefined;
     this.el.querySelectorAll(".choice-overlay").forEach(node=>node.remove());
     this.el.inert=true;this.el.setAttribute("aria-busy","true");

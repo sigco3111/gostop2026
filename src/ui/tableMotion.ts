@@ -11,7 +11,21 @@ type Point={x:number;y:number};
 // public event has been shown, then GameScreen renders the authoritative state.
 const atlases=new Map(EFFECTS.map(e=>{const image=new Image();image.src=effectUrl(e.file);return [e.id,image] as const;}));
 export class TableMotion {
+  private contacted=new Set<number>();
   constructor(private board:HTMLElement,private layer:HTMLElement){}
+  private async landed(node:HTMLElement,duration:number){
+    const animations=node.getAnimations();
+    if(animations.length)await Promise.all(animations.map(a=>a.finished.catch(()=>{})));
+    else await wait(duration);
+  }
+  private hitAtLanding(card:Card,target:Point){
+    const matches=[...this.board.querySelectorAll<HTMLElement>('.floor-cell [data-card-id]')].filter(el=>Number(el.dataset.cardId)!==card.id&&Math.floor(Number(el.dataset.cardId)/4)===card.month-1);
+    if(!matches.length)return;
+    const match=this.center(matches.reduce((a,b)=>Math.abs(this.center(a).x-target.x)<Math.abs(this.center(b).x-target.x)?a:b));
+    this.contact({x:(target.x+match.x)/2,y:(target.y+match.y)/2});
+    matches.forEach(el=>el.classList.add('motion-match'));
+    this.contacted.add(card.id);
+  }
   private center(el:Element|null):Point {const r=(el??this.board).getBoundingClientRect();return {x:r.x+r.width/2,y:r.y+r.height/2};}
   private capturePoint(player:number){
     const el=this.board.querySelector(player===0?'.my-captured':'.opp-captured');const r=el?.getBoundingClientRect();
@@ -30,7 +44,7 @@ export class TableMotion {
     if(this.find(card))return;
     const cell=document.createElement('div');cell.className='floor-cell motion-landed';
     const floor=this.board.querySelector<HTMLElement>('#floor');if(!floor)return;
-    const r=floor.getBoundingClientRect();cell.style.cssText=`position:absolute;left:${point.x-r.x-28}px;top:${point.y-r.y-42}px;z-index:3`;
+    const r=floor.getBoundingClientRect();cell.style.cssText=`position:absolute;display:block;width:56px;height:84px;min-height:0;left:${point.x-r.x-28}px;top:${point.y-r.y-42}px;z-index:3`;
     const face=cardEl(card);face.style.width='56px';face.style.height='84px';cell.appendChild(face);floor.appendChild(cell);
   }
   private ghost(card:Card,from:Point,to:Point,kind:string,offset=0){
@@ -45,14 +59,17 @@ export class TableMotion {
     const effect=effectDefinition(),atlas=atlases.get(effect.id)!;
     if(!atlas.complete||!atlas.naturalWidth)return null;
     const node=document.createElement('div');node.className='motion-contact';
-    node.style.left=`${Math.max(80,Math.min(innerWidth-80,point.x))}px`;
-    node.style.top=`${Math.max(80,Math.min(innerHeight-80,point.y))}px`;
+    const size=Math.min(160,2*Math.min(point.x,innerWidth-point.x,point.y,innerHeight-point.y));
+    node.style.left=`${point.x}px`;node.style.top=`${point.y}px`;
+    node.style.width=`${size}px`;node.style.height=`${size}px`;
     node.dataset.effect=effect.id;
     node.style.backgroundImage=`url(${atlas.src})`;node.style.backgroundSize=`${effect.columns*100}% ${effect.rows*100}%`;
     this.layer.appendChild(node);
-    const frames=Array.from({length:effect.frames},(_,i)=>({backgroundPosition:`${i%effect.columns*100/(effect.columns-1)}% ${Math.floor(i/effect.columns)*100/(effect.rows-1)}%`,offset:i/effect.frames,easing:'steps(1,end)'}));
-    frames.push({...frames[effect.frames-1],offset:1});
-    node.animate(frames,{duration:400,easing:'linear',fill:'forwards'});
+    const count=effect.frames-effect.firstFrame;
+    const frames=Array.from({length:count},(_,index)=>{const i=index+effect.firstFrame;return {backgroundPosition:`${i%effect.columns*100/(effect.columns-1)}% ${Math.floor(i/effect.columns)*100/(effect.rows-1)}%`,offset:index/count,easing:'steps(1,end)'};});
+    frames.push({...frames[count-1],offset:1});
+    const animation=node.animate(frames,{duration:400,easing:'linear',fill:'forwards'});
+    animation.finished.catch(()=>{}).finally(()=>node.remove());
     return node;
   }
   async show(e:MotionEvent){
@@ -63,13 +80,26 @@ export class TableMotion {
       if(e.type==='played'||e.type==='flipped'){
         const target=this.spot(e.card);
         const source=e.type==='played'?this.board.querySelector(e.player===0?`#hand [data-card-id="${e.card.id}"]`:'.opp-hand .card-back'):this.board.querySelector('.deck-pile');
-        garbage.push(this.ghost(e.card,this.center(source),target,e.type==='played'?'play':'flip'));
+        const moving=this.ghost(e.card,this.center(source),target,e.type==='played'?'play':'flip');garbage.push(moving);
         if(e.type==='played'&&source instanceof HTMLElement)source.style.visibility='hidden';
-        await wait(e.type==='played'?190:280);this.place(e.card,target);
+        await this.landed(moving,e.type==='played'?190:280);this.hitAtLanding(e.card,target);this.place(e.card,target);
       }else if(e.type==='placed'){
         if(!this.find(e.card))this.place(e.card,this.spot(e.card));
       }else{
         const cards=e.type==='captured'?e.cards:[e.card];
+        if(e.type==='captured'&&e.via==='bomb'){
+          const landing=this.spot(cards[0]);
+          const flights=cards.slice(0,3).map((card,i)=>{
+            const source=e.player===0?this.board.querySelector<HTMLElement>(`#hand [data-card-id="${card.id}"]`):this.board.querySelectorAll<HTMLElement>('.opp-hand .card-back')[i];
+            const moving=this.ghost(card,this.center(source),landing,'play',i*3);
+            if(source)source.style.visibility='hidden';
+            return moving;
+          });
+          garbage.push(...flights);await Promise.all(flights.map(node=>this.landed(node,190)));
+          this.hitAtLanding(cards[0],landing);
+          cards.slice(0,3).forEach((card,i)=>this.place(card,{x:landing.x+i*3,y:landing.y}));
+          flights.forEach(node=>node.remove());
+        }
         const target=this.capturePoint(e.type==='captured'?e.player:e.to);
         const sources=cards.map((card,i)=>{
           if(e.type==='stealPi')return null;
@@ -79,7 +109,12 @@ export class TableMotion {
         const point=this.center(cards.map(card=>this.find(card)).find(Boolean)??this.board.querySelector('#floor'));
         const impact=document.createElement('div');impact.className='motion-impact';impact.style.left=`${Math.max(80,Math.min(innerWidth-80,point.x))}px`;impact.style.top=`${Math.max(80,Math.min(innerHeight-80,point.y))}px`;impact.textContent=e.type==='stealPi'?'피 가져감':`${cards[0].month}월 · ${cards.length}장 획득`;this.layer.appendChild(impact);garbage.push(impact);
         sources.forEach(el=>el?.classList.add('motion-match'));
-        if(e.type==='captured'){const contact=this.contact(point);if(contact)garbage.push(contact);}
+        if(e.type==='captured'){
+          // Ordinary hits already fired at real landing, before later flip/capture events.
+          // Non-moving fallback captures still need their own contact.
+          if(!cards.some(card=>this.contacted.has(card.id)))this.contact(point);
+          cards.forEach(card=>this.contacted.delete(card.id));
+        }
         await wait(110);
         cards.forEach((card,i)=>{garbage.push(this.ghost(card,origins[i],target,'capture',i*3));const el=sources[i];if(el){const cell=el.closest('.floor-cell');if(cell){el.remove();if(!cell.children.length)cell.remove();}else el.style.visibility='hidden';}});
         await wait(300);

@@ -1,7 +1,7 @@
 export const EFFECTS=[
- {id:'a',name:'A 금빛 파열',description:'날카로운 금빛 타격과 잔광.',author:'Sinestesia',license:'CC0',source:'https://opengameart.org/content/hit-animation-frame-by-frame',file:'sinestesia-hit',frames:16,columns:4,rows:4,peak:7},
- {id:'b',name:'B 광구·불꽃',description:'둥근 충격파와 불꽃 파편.',author:'Inguz Media / Esteban Díaz',license:'CC0',source:'https://opengameart.org/content/2dfx-impact-spritesheets',file:'inguz-impact',frames:64,columns:8,rows:8,peak:17},
- {id:'c',name:'C 짧은 섬광',description:'흰빛 코어가 강하게 터지는 짧은 섬광.',author:'JoesAlotofthings',license:'CC-BY 4.0',source:'https://opengameart.org/content/alotofimpacts-6-frame-impacts-4-additional-variations',file:'joes-yellow',frames:6,columns:3,rows:2,peak:3},
+ {id:'a',name:'A 금빛 파열',description:'날카로운 금빛 타격과 잔광.',author:'Sinestesia',license:'CC0',source:'https://opengameart.org/content/hit-animation-frame-by-frame',file:'sinestesia-hit',frames:16,firstFrame:2,columns:4,rows:4,peak:7},
+ {id:'b',name:'B 광구·불꽃',description:'둥근 충격파와 불꽃 파편.',author:'Inguz Media / Esteban Díaz',license:'CC0',source:'https://opengameart.org/content/2dfx-impact-spritesheets',file:'inguz-impact',frames:64,firstFrame:3,columns:8,rows:8,peak:17},
+ {id:'c',name:'C 짧은 섬광',description:'흰빛 코어가 강하게 터지는 짧은 섬광.',author:'JoesAlotofthings',license:'CC-BY 4.0',source:'https://opengameart.org/content/alotofimpacts-6-frame-impacts-4-additional-variations',file:'joes-yellow',frames:6,firstFrame:0,columns:3,rows:2,peak:3},
 ] as const;
 export type EffectId=typeof EFFECTS[number]['id'];
 const KEY='gostop2026-impact';

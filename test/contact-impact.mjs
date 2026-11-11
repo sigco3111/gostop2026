@@ -16,6 +16,7 @@ try{
   await page.screenshot({path:`${out}/impact-${choice}-${width}.png`});
   if(!effect.advances||effect.choice!==choice||effect.frames<7||!effect.bounce||effect.ariaHidden!=='true'||!effect.locked)throw Error('contact feedback missing or interactive');
   if(effect.ring.x<0||effect.ring.x+effect.ring.width>width+1)throw Error('contact ring clipped');
+  await page.$$eval('.motion-contact',nodes=>nodes.forEach(n=>n.getAnimations().forEach(a=>a.play())));
   await page.waitForFunction(()=>!document.querySelector('#game-screen').inert&&!document.querySelector('.motion-card,.motion-contact'),{timeout:12000});
   const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);if(overflow)throw Error('horizontal overflow');report.views.push({width,...effect,overflow});await page.close();
  }
