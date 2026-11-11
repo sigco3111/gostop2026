@@ -269,3 +269,13 @@ Other guide tabs hide these controls. `test/deck-month-navigation.mjs` checks al
 12 months at five viewport sizes, touch targets, target visibility, keyboard
 activation, tab changes, reload/save invariance, overflow and axe/runtime checks.
 Browser emulation is not a physical-phone or screen-reader speech test.
+
+### Visible scoring labels in the card guide (2026-11-11)
+Only the guide adds captions below its 48 card images: scoring kind, ribbon set,
+godori membership, and gukjin's yeol/pi designation. Captions come from the same
+public card definitions as failed-image labels. Pictures and in-game cards are
+unchanged. Accessible image names retain the full description without repeating
+the visible caption. `test/deck-captions.mjs` checks all 48 labels at five sizes,
+uncropped image proportions, caption placement, reachable short-landscape text,
+progress invariance, overflow and axe/runtime checks. A 320px-tall screen scrolls
+to see captions below the card images.

@@ -5,6 +5,7 @@ const BASE=import.meta.env.BASE_URL;
 import { loadSave, SaveData } from '../data/save';
 import { buildDeck, MONTH_NAME } from '../engine/cards';
 import { cardEl } from './cards';
+import { cardFallbackLines } from '../data/cardFallback';
 export function guideScreen(back:()=>void, sessionSave?:SaveData, saved=true):HTMLElement {
  const el=document.createElement('div');el.className='screen guide-screen';el.id='guide-screen';
  el.innerHTML=`<div class="guide-wrap"><header><p class="eyebrow">HOW TO PLAY</p><h2>판에 들어가기 전에</h2><p class="guide-lead">같은 월의 패를 모아 7점. 더 갈지, 지금 멈출지.</p></header>
@@ -26,7 +27,13 @@ export function guideScreen(back:()=>void, sessionSave?:SaveData, saved=true):HT
    const deck=buildDeck(),grid=content.querySelector('.deck-guide')!;
    for(let m=1;m<=12;m++){
     const section=document.createElement('section');section.dataset.month=String(m);section.innerHTML=`<h3 tabindex="-1">${m}월 · ${MONTH_NAME[m]}</h3><div class="deck-row"></div>`;
-    for(const c of deck.filter(c=>c.month===m)){const card=cardEl(c);card.removeAttribute('tabindex');section.querySelector('.deck-row')!.appendChild(card);}grid.appendChild(section);
+    for(const c of deck.filter(c=>c.month===m)){
+     const figure=document.createElement('figure');figure.className='deck-card-entry';figure.dataset.cardId=String(c.id);
+     const card=cardEl(c);card.removeAttribute('tabindex');figure.appendChild(card);
+     const caption=document.createElement('figcaption');caption.setAttribute('aria-hidden','true');
+     const lines=cardFallbackLines(c);for(const text of lines.slice(1,3).filter(Boolean)){const line=document.createElement('span');line.textContent=text;caption.appendChild(line);}
+     figure.appendChild(caption);section.querySelector('.deck-row')!.appendChild(figure);
+    }grid.appendChild(section);
    }
   }else if(tab==='rivals'){
    content.innerHTML='<p class="guide-note">열두 개의 판, 열두 명의 고수. 인물을 눌러 전신 일러스트와 이야기를 보세요. 모두 오리지널 캐릭터입니다. 같은 난이도의 상대는 공통 AI 규칙을 사용하며 아래 배경은 이야기 설정입니다.</p><div class="rival-gallery"></div>';

@@ -408,3 +408,7 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 
 /* A month lookup stays reachable while reading the 48-card guide. */
 .deck-month-navigation:not([hidden]){display:flex;align-items:center;gap:8px;margin-top:8px;}.deck-month-navigation label{font-size:12px;color:#c1b6c7;white-space:nowrap;}.deck-month-navigation select{min-width:0;flex:1;min-height:44px;background:#19121f;color:#eee6f2;border:1px solid #65516f;border-radius:5px;padding:6px;font:inherit;font-size:13px;}.deck-month-navigation button{min-height:44px;min-width:56px;}.deck-guide h3:focus{outline:2px solid #4ee8ff;outline-offset:3px;}
+
+/* Guide captions explain scoring groups without painting over the hwatu art. */
+.deck-card-entry{width:60px;min-width:0;flex-shrink:0;}.deck-row .deck-card-entry .hcard{width:100%;height:auto;aspect-ratio:2/3;}.deck-card-entry figcaption{font-size:12px;line-height:1.5;color:#d8cce2;text-align:center;margin-top:7px;word-break:keep-all;}.deck-card-entry figcaption span{display:block;}
+@media(max-width:650px){.deck-card-entry{width:calc((100% - 18px)/4);max-width:78px;}.deck-row .deck-card-entry .hcard{max-width:none;}}
