@@ -374,3 +374,10 @@ held key start the highlighted roster card. `story-key-repeat.mjs` checks both
 keys at320/568/1280 widths,30repeats at each boundary, fresh-press continuation,
 cancel/exit, and unchanged progress. `RESULT_HOLD=1 capture-touch-round.mjs`
 checks the result return after a naturally completed paired normal-speed round.
+
+`story-readability.mjs` opens all12 introductions using an isolated unlocked
+navigation fixture (not12 earned wins), checks all14 actual lines at320x568,
+568x240 and568x320, decodes portraits/backgrounds, checks visible dialogue
+bounds/no horizontal overflow/axe0 and unchanged fixture progress. The story
+repeat harness also decodes CSS backgrounds and fixes seed23 to avoid random
+instant-ending deals when testing cancel/exit, without changing production.
