@@ -304,7 +304,7 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 .motion-flip .motion-back{animation:reveal-back .28s ease-out both;}
 .motion-capture{animation:table-capture .3s cubic-bezier(.5,0,.65,1) both;}
 .motion-match{outline:2px solid #f3dca2;outline-offset:2px;filter:brightness(1.15);}
-.motion-impact{position:absolute;transform:translate(-50%,-115%);padding:5px 9px;background:#17110eeb;border:1px solid #d8b773;color:#ffe1a1;font-weight:700;font-size:12px;white-space:nowrap;border-radius:4px;animation:table-impact .41s ease-out both;}
+.motion-impact{position:absolute;transform:translate(-50%,-240%);padding:5px 9px;background:#17110eeb;border:1px solid #d8b773;color:#ffe1a1;font-weight:700;font-size:12px;white-space:nowrap;border-radius:4px;animation:table-impact .41s ease-out both;}
 @keyframes table-play{from{transform:translate(0,0) rotate(-6deg) scale(1.08)}to{transform:translate(var(--dx),var(--dy)) rotate(0) scale(1)}}
 @keyframes table-reveal{from{transform:translate(0,0) scale(.8)}to{transform:translate(var(--dx),var(--dy)) scale(1)}}
 @keyframes reveal-face{0%,40%{transform:rotateY(-180deg)}100%{transform:rotateY(0)}}
@@ -312,3 +312,13 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 @keyframes table-capture{0%{transform:translate(0,0) scale(1.04)}100%{transform:translate(var(--dx),var(--dy)) scale(.48);opacity:0}}
 @keyframes table-impact{from{opacity:0;scale:.85}25%,75%{opacity:1;scale:1}to{opacity:0;scale:1}}
 @media(prefers-reduced-motion:reduce){.motion-card,.motion-impact{display:none;}.motion-match{filter:none;}}
+
+/* A local contact accent. It runs inside the existing capture wait, never
+   shakes the board, and does not extend the turn. */
+.motion-contact{position:absolute;width:88px;height:70px;pointer-events:none;transform:translate(-50%,-50%);border:2px solid #f5cc78;border-radius:50%;background:radial-gradient(ellipse,#ffe8b524,transparent 65%);box-shadow:0 0 12px #e2ba5540;animation:contact-ring .24s ease-out both;}
+.motion-contact i{position:absolute;left:50%;top:50%;width:3px;height:18px;border-radius:2px;background:linear-gradient(#fff2ce,#e2b057);transform:translate(-50%,-50%) rotate(var(--angle)) translateY(-56px);animation:contact-ray .22s ease-out both;}
+.motion-match img{animation:contact-card .1s ease-out both;}
+@keyframes contact-ring{0%{opacity:0;scale:.45;}24%{opacity:.95;scale:.8;}100%{opacity:0;scale:1.18;}}
+@keyframes contact-ray{0%{opacity:0;}22%{opacity:.95;}100%{opacity:0;translate:0 -3px;}}
+@keyframes contact-card{0%,100%{scale:1;translate:0 0;}35%{scale:1.055;translate:0 -3px;}65%{scale:.99;translate:0 1px;}}
+@media(prefers-reduced-motion:reduce){.motion-contact{display:none;}.motion-match img{animation:none;}}

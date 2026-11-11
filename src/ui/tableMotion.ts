@@ -39,6 +39,13 @@ export class TableMotion {
     if(kind==='flip'){const back=document.createElement('div');back.className='card-back motion-back';node.appendChild(back);}
     this.layer.appendChild(node);return node;
   }
+  private contact(point:Point){
+    const node=document.createElement('div');node.className='motion-contact';
+    node.style.left=`${Math.max(76,Math.min(innerWidth-76,point.x))}px`;
+    node.style.top=`${Math.max(80,Math.min(innerHeight-80,point.y))}px`;
+    for(let i=0;i<8;i++){const line=document.createElement('i');line.style.setProperty('--angle',`${i*45}deg`);node.appendChild(line);}
+    this.layer.appendChild(node);return node;
+  }
   async show(e:MotionEvent){
     if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
     this.layer.dataset.phase=e.type;
@@ -63,6 +70,7 @@ export class TableMotion {
         const point=this.center(cards.map(card=>this.find(card)).find(Boolean)??this.board.querySelector('#floor'));
         const impact=document.createElement('div');impact.className='motion-impact';impact.style.left=`${point.x}px`;impact.style.top=`${point.y}px`;impact.textContent=e.type==='stealPi'?'피 가져감':`${cards[0].month}월 · ${cards.length}장 획득`;this.layer.appendChild(impact);garbage.push(impact);
         sources.forEach(el=>el?.classList.add('motion-match'));
+        if(e.type==='captured')garbage.push(this.contact(point));
         await wait(110);
         cards.forEach((card,i)=>{garbage.push(this.ghost(card,origins[i],target,'capture',i*3));const el=sources[i];if(el){const cell=el.closest('.floor-cell');if(cell){el.remove();if(!cell.children.length)cell.remove();}else el.style.visibility='hidden';}});
         await wait(300);

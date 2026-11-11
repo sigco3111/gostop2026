@@ -3,7 +3,7 @@ import {spawn} from 'node:child_process';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const out=process.env.QA_OUT??'/tmp/bomb-motion',url=process.env.GAME_URL??'http://localhost:4173/gostop2026/';mkdirSync(out,{recursive:true});
 const server=url.startsWith('http://localhost')?spawn('node',['node_modules/vite/bin/vite.js','preview','--port','4173'],{stdio:'ignore'}):null;
-const pause=ms=>new Promise(r=>setTimeout(r,ms));let browser;const report={errors:[],views:[],opponent:null};
+const pause=ms=>new Promise(r=>setTimeout(r,ms));let browser;const report={errors:[],views:[],opponent:null,reduced:null};
 try{
  await pause(600);browser=await puppeteer.launch({executablePath:'/usr/bin/google-chrome',args:['--no-sandbox']});
  for(const width of [320,390,1280]){
@@ -33,5 +33,13 @@ try{
  if(!backs.every((b,i)=>Math.abs(b.x-origins[i].x)<1&&Math.abs(b.y-origins[i].y)<1))throw Error('opponent bomb did not start from face-down hand slots');
  await page.waitForFunction(()=>!document.querySelector('#game-screen').inert&&!document.querySelector('.motion-card'),{timeout:20000});
  report.opponent={seed:43,backs,origins,correct:true};await page.close();
+ const reduced=await browser.newPage();await reduced.emulateMediaFeatures([{name:'prefers-reduced-motion',value:'reduce'}]);
+ await reduced.evaluateOnNewDocument(()=>{let n=49;Math.random=()=>{n=(Math.imul(n,1664525)+1013904223)>>>0;return n/4294967296;};});
+ await reduced.goto(url,{waitUntil:'networkidle0'});await reduced.click('#m-free');await reduced.click('.stage-card');await reduced.waitForSelector('#actionbar .danger');
+ await reduced.evaluate(()=>{window.__motionNodes=0;new MutationObserver(rs=>{for(const r of rs)for(const n of r.addedNodes)if(n instanceof Element&&n.matches('.motion-card,.motion-impact'))window.__motionNodes++;}).observe(document.querySelector('.fx-layer'),{childList:true});const b=document.querySelector('#actionbar .danger');for(let i=0;i<12;i++)b.dispatchEvent(new MouseEvent('click',{bubbles:true}));});
+ await reduced.waitForFunction(()=>window.__game.players[0].hand.length===7&&!document.querySelector('#game-screen').inert&&window.__game.turn===0,{timeout:10000});
+ report.reduced=await reduced.evaluate(()=>{const g=window.__game,all=[...g.deck,...g.floor,...g.players.flatMap(p=>[...p.hand,...p.captured])];return {spatial:window.__motionNodes,count:all.length,unique:new Set(all.map(c=>c.id)).size,bombPasses:g.players[0].bombPasses};});
+ if(report.reduced.spatial||report.reduced.count!==48||report.reduced.unique!==48||report.reduced.bombPasses!==2)throw Error('reduced/rapid bomb regression');
+ await reduced.close();
  if(report.errors.length)throw Error(report.errors.join(';'));console.log(JSON.stringify(report));
 }finally{writeFileSync(`${out}/report.json`,JSON.stringify(report,null,2));await browser?.close();server?.kill();}
