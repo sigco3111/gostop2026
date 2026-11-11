@@ -1,0 +1,23 @@
+Source: https://opengameart.org/content/alotofimpacts-6-frame-impacts-4-additional-variations
+Title: AlotofImpacts - 6 Frame Impacts - 4 Additional variations
+Author: JoesAlotofthings (OpenGameArt.org submitter)
+License(s) listed on the page: CC-BY 4.0
+License chosen by the collector: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+Page date: 2021-01-14
+Collected: 2026-11-08
+
+Chosen license: CC-BY 4.0 (sole license listed on the page). Attribution required.
+Attribution text given on the page: see CREDITS.txt.
+Page note: All of my OPengameart posts are usable for commercial and non-commercial projects. If you use in a project, please credit: JoesAlotofthings. A link back to this site is not required but would be helpful to the community.
+This file was written by the collector from the page's license statement; it is not an original license file from the author.
+
+Credits for: AlotofImpacts - 6 Frame Impacts - 4 Additional variations
+Author: JoesAlotofthings
+Source: https://opengameart.org/content/alotofimpacts-6-frame-impacts-4-additional-variations
+License: CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/)
+
+Credit text (given by the page):
+JoesAlotofthings — "AlotofImpacts - 6 Frame Impacts - 4 Additional variations" (https://opengameart.org/content/alotofimpacts-6-frame-impacts-4-additional-variations), CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Page asks: "please credit: JoesAlotofthings"
+
+Game changes: Common transparent-margin crop, proportionally resize into192px cells, WebP lossless,400ms playback.
+OriginalSHA256:6ede86f867e56973e3f8a774f76a38a06f5978567bac3be5f4214ba0f671b226

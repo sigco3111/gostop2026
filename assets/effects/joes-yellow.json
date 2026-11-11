@@ -1,0 +1,10 @@
+{
+  "sourceFolder": "alotofimpacts-6-frame-impacts-4-additional-variations",
+  "frames": 6,
+  "columns": 3,
+  "rows": 2,
+  "cell": 192,
+  "originalSha256": "6ede86f867e56973e3f8a774f76a38a06f5978567bac3be5f4214ba0f671b226",
+  "derivedSha256": "3d6f5a1280ac59a4e461d41eac5d9874531db0f5d7a62c7e7c051c5514f84e52",
+  "changes": "Common transparent-margin crop, proportionally resize into192px cells, WebP lossless,400ms playback."
+}
