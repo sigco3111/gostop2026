@@ -136,7 +136,7 @@ export class GameScreen {
           break;
       }
     }
-    } finally {this.el.inert=false;this.el.removeAttribute("aria-busy");this.render();}
+    } finally {await motion.finishContacts();this.el.inert=false;this.el.removeAttribute("aria-busy");this.render();}
     if(result)this.showSettle(result);
   }
 

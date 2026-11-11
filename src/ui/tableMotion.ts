@@ -13,6 +13,11 @@ const atlases=new Map(EFFECTS.map(e=>{const image=new Image();image.src=effectUr
 export class TableMotion {
   private contacted=new Set<number>();
   constructor(private board:HTMLElement,private layer:HTMLElement){}
+  async finishContacts(){
+    const nodes=[...this.layer.querySelectorAll<HTMLElement>('.motion-contact')];
+    await Promise.all(nodes.flatMap(node=>node.getAnimations().map(animation=>animation.finished.catch(()=>{}))));
+    nodes.forEach(node=>node.remove());
+  }
   private async landed(node:HTMLElement,duration:number){
     const animations=node.getAnimations();
     if(animations.length)await Promise.all(animations.map(a=>a.finished.catch(()=>{})));
