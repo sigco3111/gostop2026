@@ -350,3 +350,12 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 @media (max-height:480px) and (orientation:landscape){
   .dialogue-portrait{height:72vh;height:72dvh;width:auto;max-width:40vw;object-fit:contain;}
 }
+
+/* Keep apply and return within reach while inspecting the full deck. */
+.deck-setting-actions{position:sticky;top:0;z-index:5;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;padding:8px 0;background:#0d0a12;border-bottom:1px solid #42354b;}
+.deck-setting-actions .btn{min-width:0;min-height:44px;padding:10px 14px;}
+.deck-setting-actions #deck-apply{flex:1;}
+.deck-setting-actions #settings-back{flex-shrink:0;}
+.settings-wrap .deck-setting-actions #deck-status{position:absolute;top:100%;left:0;right:0;margin:0;min-height:0;background:#0d0a12;}
+.settings-wrap .deck-setting-actions #deck-status:not(:empty){padding:6px 0 8px;border-bottom:1px solid #42354b;}
+.deck-preview-grid img,.effect-options button{scroll-margin-top:140px;}
