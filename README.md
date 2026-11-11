@@ -250,3 +250,13 @@ Only wording changes. `test/menu-copy.mjs` checks both at five sizes, enters the
 last free-play opponent without changing progress, and verifies the ending return
 destination. The ending uses a deliberate isolated test completion fixture, not a
 naturally earned win or user progress. Axe/runtime errors and overflow are checked.
+
+### Current story opponent shortcut (2026-11-11)
+After at least one cleared stage, the sticky story navigation names the next
+unlocked opponent and jumps to that card without starting the match or changing
+progress. Keyboard focus follows the jump; Enter on the card opens its dialogue.
+After all 12 stages it points to the final opponent for replay. Fresh games retain
+the simple navigation. `test/scenario-jump.mjs` checks five viewport sizes across
+0/1/5/11/12 cleared-stage fixtures: unlocks, touch targets, visible focused target,
+keyboard dialogue, reload, progress invariance, overflow and axe/runtime checks.
+These isolated fixtures do not establish naturally earned wins or phone usability.

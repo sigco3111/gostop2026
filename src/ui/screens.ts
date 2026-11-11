@@ -60,7 +60,8 @@ export class App {
     this.save=refreshSave(this.save,!this.saveAvailable);
     const el = this.mk('scenario-screen');
     const maxOpen = Math.max(1, ...this.save.clearedStages.map((s) => s + 1), 1);
-    el.innerHTML = `<div class="screen-head"><h2>시나리오 - 밑바닥에서 전설로</h2><span class="sub">12인의 고수를 순서대로 꺾어라</span></div><nav class="roster-navigation" aria-label="시나리오 이동"><span>시나리오</span><button class="btn small" id="back">← 타이틀</button></nav>
+    const nextOpponent = OPPONENTS.find(o=>o.stage===Math.min(maxOpen,12))!;
+    el.innerHTML = `<div class="screen-head"><h2>시나리오 - 밑바닥에서 전설로</h2><span class="sub">12인의 고수를 순서대로 꺾어라</span></div><nav class="roster-navigation" aria-label="시나리오 이동">${maxOpen>1?`<button class="btn small" id="scenario-current" aria-label="${maxOpen>12?'마지막':'도전'} 상대 ${nextOpponent.stage}번 ${nextOpponent.name} 카드로 이동">${nextOpponent.stage}번 ${nextOpponent.name} ↓</button>`:'<span>시나리오</span>'}<button class="btn small" id="back">← 타이틀</button></nav>
       <div class="stage-grid"></div>`;
     const grid = el.querySelector('.stage-grid')!;
     for (const o of OPPONENTS) {
@@ -68,6 +69,7 @@ export class App {
       const cleared = this.save.clearedStages.includes(o.stage);
       const card = document.createElement('div');
       card.className = `stage-card${locked ? ' locked' : ''}`;
+      card.dataset.stage=String(o.stage);
       card.setAttribute('role','button');card.tabIndex=locked?-1:0;card.setAttribute('aria-disabled',String(locked));
       card.addEventListener('keydown',e=>{if(!locked&&(e.key==='Enter'||e.key===' ')){e.preventDefault();card.click();}});
       card.innerHTML = `<div class="num">${o.stage}</div>${cleared ? '<div class="cleared">CLEARED</div>' : ''}
@@ -76,6 +78,12 @@ export class App {
       if (!locked) card.addEventListener('click', () => this.showDialogue(o, () => this.startMatch(o, 'scenario')));
       grid.appendChild(card);
     }
+    el.querySelector('#scenario-current')?.addEventListener('click',()=>{
+      const card=el.querySelector<HTMLElement>(`[data-stage="${nextOpponent.stage}"]`)!;
+      card.focus({preventScroll:true});
+      const top=card.getBoundingClientRect().top-el.getBoundingClientRect().top+el.scrollTop;
+      el.scrollTop=top-el.querySelector<HTMLElement>('.roster-navigation')!.offsetHeight-8;
+    });
     el.querySelector('#back')!.addEventListener('click', () => this.showTitle());
     this.setScreen(el);
   }
