@@ -32,7 +32,7 @@
 
 | 도입 대사 | 대국 화면 |
 | --- | --- |
-| ![대사](docs/screenshots/dialogue.webp) | ![대국](docs/screenshots/match.webp) |
+| ![대사](docs/screenshots/dialogue.webp) | ![대국](docs/screenshots/match-settled.webp) |
 
 | 설정 · 화투패와 이펙트 |
 | --- |
