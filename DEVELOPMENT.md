@@ -257,3 +257,9 @@ GAME_URL=https://sigco3111.github.io/gostop2026/ QA_WIDTH=844 QA_HEIGHT=320 node
 
 ### 2026-11-11 15:17 - Normal-timer tournament checkpoint
 - `test/tournament-normal.mjs` on current publicindex-KwDxDD7t.js uses unmodified production timers and actual touch UI at320x568, fixed shuffle only. Nine single-card plays, zero capture choices, one go/stop:8point win. Checkpoint1:0/carry1 persisted through title return/reload and an unfinished next-hand exit; ordinary progression save unchanged, axe0/runtime0. Actual settlement/checkpoint pixels inspected. No game/progress fixture or win injection. One browser case, not whole tournament, roster balance or real-device proof. QA only, no production change.
+
+### 2026-11-13 - Mobile bottom-hand safe-area fix
+- 사용자 실기기 제보: iOS Safari 하단 도구 막대가 보일 때 화면 아래 손패가 가려짐. 원인은 height:100vh가 도구 막대 뒤까지 늘어나고 viewport-fit=cover 부재로 safe-area 처리가 불가했던 것, 그리고 게임 화면 손패 하단 여백 0.
+- 수정: #app을 100dvh로(구형 브라우저 100vh 폴백 유지), viewport-fit=cover 추가, 게임 손패·일반 손패·하단 고정 배너에 env(safe-area-inset-bottom) 하단 여백 추가.
+- 검증: 빌드 + 121단위 테스트 통과. 통제 환경(로컬 서버) 390x700(도구 막대 표시 상당 축소 높이)·390x844에서 손패 10장 전체가 뷰포트 안에 표시됨을 픽셀로 확인. dvh가 실제 Safari 도구 막대에 반응하는 것은 실기기 확인 대상으로 남김.
+- 배포: main 7ba37df(viewport), 939b851(css), gh-pages 게시 완료 및 공개 URL 재검증(JS/CSS 200, 타이틀 렌더, dvh·safe-area 반영). 배포 순서 규칙 확립: 구 assets 보존 + 신규 assets 먼저 게시, index는 마지막(이번에는 index가 약 60초 먼저 게시되어 일시적 404가 있었음).
