@@ -17,7 +17,7 @@
 }
 * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html, body { height: 100%; background: var(--bg); color: var(--ink); font-family: var(--font); overflow: hidden; }
-#app { height: 100vh; width: 100vw; position: relative; }
+#app { height: 100vh; height: 100dvh; width: 100vw; position: relative; } /* dvh: iOS Safari 하단 도구 막대가 보일 때 게임 화면이 그 아래로 깔리지 않도록 */
 .screen { position: absolute; inset: 0; display: flex; flex-direction: column; }
 
 /* ===== 타이틀 ===== */
@@ -94,7 +94,7 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); font-family
 .floor-cell.target { outline: 2px dashed var(--neon-c); cursor: pointer; background: rgba(34,211,238,.08); }
 .deck-pile { position: absolute; right: 12px; bottom: 12px; }
 
-.my-hand { display: flex; gap: 6px; justify-content: center; padding: 8px 4px 12px; flex-wrap: wrap; }
+.my-hand { display: flex; gap: 6px; justify-content: center; padding: 8px 4px 12px; flex-wrap: wrap; padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px)); }
 
 /* 카드 */
 .hcard { position: relative; width: 64px; height: 94px; border-radius: 6px; overflow: hidden; background: #efe9dc; border: 2px solid #222;
@@ -192,7 +192,7 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); font-family
   .floor-zone {grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;min-height:200px;padding:8px 8px 38px;align-content:center;}
   .floor-cell {min-height:72px;}
   .floor-cell .hcard {width:47px;height:70px;}
-  .my-hand {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;padding:5px;justify-items:center;}
+  .my-hand {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;padding:5px;justify-items:center;padding-bottom:calc(5px + env(safe-area-inset-bottom, 0px));}
   .hcard.big {width:57px;height:84px;}
   .table-area {padding:5px 7px;gap:3px;overflow-y:auto;}
   .action-bar {min-height:27px;font-size:11px;flex-wrap:wrap;}
@@ -219,11 +219,11 @@ html, body { height: 100%; background: var(--bg); color: var(--ink); font-family
 .bracket-match{padding:10px 13px;border:1px solid #3c2a51;background:#15101d;margin:6px 0;display:flex;justify-content:space-between;gap:12px;border-radius:4px;font-size:14px;}
 .bracket-match b{color:#d4ad5e;margin:0 10px;}.bracket-match small{color:#9c91a8;}
 .tourney-actions{display:flex;gap:15px;flex-wrap:wrap;margin:20px 0;}.champion-label{color:#efc35b;margin:25px 0;}
-.series{color:#c9a4ec;font-size:15px;}.save-warning{position:fixed;bottom:3px;left:3px;z-index:60;color:#ffd299;background:#321b20;padding:5px 9px;border-radius:4px;font-size:11px;}
+.series{color:#c9a4ec;font-size:15px;}.save-warning{position:fixed;bottom:calc(3px + env(safe-area-inset-bottom, 0px));left:3px;z-index:60;color:#ffd299;background:#321b20;padding:5px 9px;border-radius:4px;font-size:11px;}
 @media(max-width:650px){
  .floor-zone{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;align-content:center;min-height:244px;}
  .floor-cell{min-height:98px;}.floor-cell .hcard{width:64px;height:96px;}
- .my-hand{gap:5px;padding:4px;}.hcard.big{width:61px;height:91px;}
+ .my-hand{gap:5px;padding:4px 4px calc(4px + env(safe-area-inset-bottom, 0px));}.hcard.big{width:61px;height:91px;}
  .choice-row .hcard{width:120px;height:180px;}
  .table-area>.opp-zone:last-of-type{min-height:30px;}
  .floor-zone{background:radial-gradient(ellipse,#14231fd9,#09110ded);border-color:#3e5146;}
@@ -253,7 +253,7 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
  .opp-zone{min-height:32px;}.opp-hand .card-back{width:22px;height:32px;}
  .floor-zone{min-height:112px;padding:6px;gap:4px;flex-shrink:0;}.floor-cell{min-height:94px;}
  .floor-cell .hcard{width:60px;height:90px;}.deck-pile .card-back{width:20px;height:29px;}.deck-pile{right:5px;bottom:4px;}
- .my-hand{padding:3px;gap:5px;}.my-hand .hcard.big{width:60px;height:90px;}
+ .my-hand{padding:3px 3px calc(3px + env(safe-area-inset-bottom, 0px));gap:5px;}.my-hand .hcard.big{width:60px;height:90px;}
  .table-area{gap:3px;}.action-bar{min-height:32px;padding:1px;}.action-bar .btn{padding:5px 9px;font-size:12px;}
 }
 #title-screen{overflow-y:auto;}.title-inner{flex-shrink:0;}.menu .btn{width:min(360px,90vw);padding-left:15px;padding-right:15px;}
@@ -477,7 +477,7 @@ button:focus-visible,[role=button]:focus-visible,a:focus-visible{outline:3px sol
 #game-screen .player-summary{display:flex;align-items:center;justify-content:space-between;gap:7px;padding:2px 4px;min-height:24px;border-bottom:1px solid #87714966;}
 #game-screen .my-score{font-size:13px;white-space:nowrap;color:#eee5ce;}
 #game-screen .my-score>b{font-size:20px;color:#f2ce75;}
-#game-screen .my-hand{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));justify-items:center;align-content:end;gap:4px;padding:2px 0 0;min-height:0;background:linear-gradient(#17130b00,#211c12cc);border-radius:7px;}
+#game-screen .my-hand{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));justify-items:center;align-content:end;gap:4px;padding:2px 0 env(safe-area-inset-bottom, 0px);min-height:0;background:linear-gradient(#17130b00,#211c12cc);border-radius:7px;}
 #game-screen .my-hand .hcard.big{width:min(58px,100%);height:auto;aspect-ratio:2/3;}
 #game-screen .action-bar{min-height:0;gap:4px;padding:0;flex-wrap:wrap;}
 #game-screen .action-bar .btn{min-height:44px;padding:4px 9px;font-size:12px;}
